@@ -1,0 +1,42 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--pewter);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 4px 20px;
+  border: none;
+  border-radius: 4px;
+  background: var(--ash);
+  color: var(--graphite);
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+}
+
+.chip:hover { background: var(--cloud); }
+
+.selected,
+.selected:hover {
+  background: var(--blue);
+  color: var(--white);
+}

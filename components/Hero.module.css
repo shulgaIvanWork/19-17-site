@@ -1,0 +1,76 @@
+/* Hero — the one authorised gradient, and the only absolutely positioned row
+   in the system. Ported from .hero / .hero-sm / .herocta in the prototype. */
+
+.hero {
+  position: relative;
+  min-height: max(680px, min(86vh, 840px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 92px var(--gut) 176px;
+  overflow: hidden;
+  background: var(--grad);
+}
+
+.short {
+  min-height: max(560px, min(66vh, 680px));
+  padding-top: 84px;
+  padding-bottom: 160px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.cta {
+  position: absolute;
+  left: var(--gut);
+  right: var(--gut);
+  bottom: clamp(48px, 6vw, 80px);
+  z-index: 2;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* The cursor highlight — the second authorised gradient. --mx/--my/--mo are
+   written by HeroCursorHighlight; with no pointer the opacity is 0 and nothing
+   paints, so the hero is unchanged for keyboard and touch users. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0) 68%
+  );
+  opacity: var(--mo, 0);
+  transition: opacity var(--t);
+}
+
+/* Lift hero content above the highlight and the canvas. The two exclusions
+   matter: .cta must stay absolutely positioned, and .object must stay behind
+   the type — a blanket `.hero > *` silently overrides both, because it has the
+   same specificity and simply comes later in the file. */
+.hero > *:not(.object):not(.cta) { position: relative; z-index: 1; }
+
+/* The wireframe object sits behind the type. */
+.object {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 76px var(--gut) 184px; }
+}

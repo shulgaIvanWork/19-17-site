@@ -1,0 +1,31 @@
+.drawer {
+  position: sticky;
+  top: 56px;
+  z-index: 19;
+  background: var(--white);
+  padding: 8px var(--gut) 24px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  border-bottom: 1px solid var(--cloud);
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--pewter);
+  transition: color var(--t);
+}
+
+.row:hover { color: var(--carbon); }
+
+.active { color: var(--carbon); }
+
+.utility {
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+}

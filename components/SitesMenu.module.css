@@ -1,0 +1,28 @@
+.wrap {
+  position: relative;
+}
+
+.list {
+  margin: 0;
+  list-style: none;
+}
+
+.name {
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+/* Electric Blue marks the route you are already on — one of the accent's
+   authorised jobs, and the only colour in the panel. */
+.current { color: var(--blue); }
+
+.note {
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--pewter);
+}

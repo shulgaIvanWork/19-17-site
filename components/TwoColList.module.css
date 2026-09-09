@@ -1,0 +1,7 @@
+.key {
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--carbon);
+}

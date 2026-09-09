@@ -1,0 +1,29 @@
+.column {
+  max-width: 70ch;
+}
+
+/* Разделы отделяются линией и воздухом — как всё остальное на сайте. */
+.block {
+  padding-top: 28px;
+  margin-top: 28px;
+  border-top: 1px solid var(--cloud);
+}
+
+.block:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+.block p {
+  margin-top: 12px;
+}
+
+.list {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.list li {
+  margin-top: 6px;
+}

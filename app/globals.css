@@ -1,0 +1,260 @@
+/* ---------------------------------------------------------------------------
+   19x17 — global tokens and the shared class vocabulary.
+
+   Ported from the approved prototype's <style> block ("Meridian Site v3.dc.html",
+   lines 14-81), which the handoff names as the source of truth. Two deliberate
+   changes, both authorised by the handoff:
+     - the prototype's container queries become plain media queries at the same
+       widths (1120 nav, 1024 g4, 768 everything else);
+     - 9cqw / 3.4cqw / 6cqw become the vw equivalents.
+   Where the design system's tokens/ disagree with the prototype (frost .75 vs
+   .72) the prototype wins, per the handoff.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* colour */
+  --blue: #3e6ae1;
+  --blue-press: #3457b8;
+  --carbon: #171a20;
+  --graphite: #393c41;
+  --pewter: #5c5e62;
+  --fog: #8e8e8e;
+  --cloud: #eeeeee;
+  --pale: #d0d1d2;
+  --ash: #f4f4f4;
+  --white: #ffffff;
+  --frost: rgba(255, 255, 255, 0.72);
+  --overlay: rgba(128, 128, 128, 0.65);
+
+  /* type — both variables are injected by next/font in app/layout.tsx.
+     Swapping the display face is this one line. */
+  --display: var(--font-unbounded), var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --text: var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  /* motion — the only transition in the system */
+  --t: 0.33s cubic-bezier(0.5, 0, 0, 0.75);
+
+  /* layout */
+  --gut: clamp(20px, 4vw, 56px);
+  --max: 1383px;
+
+  /* the one authorised gradient */
+  --grad: linear-gradient(180deg, #c9d5e4 0%, #d6dde7 28%, #e4e5e6 58%, #ebeae7 80%, #dddcda 100%);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--carbon);
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+a { color: var(--blue); text-decoration: none; transition: color var(--t); }
+a:hover { color: var(--blue-press); }
+
+h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 500; letter-spacing: normal; }
+p { margin: 0; }
+img { display: block; max-width: 100%; }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+::selection { background: rgba(62, 106, 225, 0.2); }
+
+/* ---- layout ------------------------------------------------------------- */
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gut); }
+.section { padding: clamp(64px, 9vw, 140px) 0; }
+.section-ash { background: var(--ash); }
+
+/* ---- type --------------------------------------------------------------- */
+
+.h1 { font-family: var(--display); font-size: 40px; line-height: 48px; font-weight: 500; }
+.h2 { font-family: var(--display); font-size: 32px; line-height: 40px; font-weight: 500; }
+/* The explicit text-face override matters: the element selector `h1, h2, h3`
+   above would otherwise capture every <h3 class="h3"> and force item headings
+   into the caps-only display face. */
+.h3 { font-family: var(--text); font-size: 17px; line-height: 20px; font-weight: 500; }
+/* Promotional numeral. Text face, always — the display face has no usable digits. */
+.figure { font-family: var(--text); font-size: 40px; line-height: 48px; font-weight: 400; color: var(--blue); }
+.lede { font-size: 22px; line-height: 30px; font-weight: 400; color: var(--graphite); }
+.body { font-size: 14px; line-height: 20px; font-weight: 400; color: var(--graphite); }
+.label { font-size: 14px; line-height: 20px; font-weight: 400; color: var(--pewter); }
+.footnote { font-size: 12px; line-height: 18px; color: var(--fog); }
+
+/* ---- controls ----------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 4px 24px;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+}
+.btn-blue { background: var(--blue); color: #fff; }
+.btn-blue:hover { background: var(--blue-press); color: #fff; }
+.btn-white { background: #fff; color: var(--graphite); }
+.btn-white:hover { background: var(--cloud); color: var(--graphite); }
+.btn-ash { background: var(--ash); color: var(--graphite); }
+.btn-ash:hover { background: var(--cloud); color: var(--graphite); }
+.btn-hero { min-width: 200px; }
+
+.navbtn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 14px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--pewter);
+  cursor: pointer;
+  transition: background-color var(--t), color var(--t);
+  white-space: nowrap;
+}
+.navbtn:hover { background: rgba(255, 255, 255, 0.6); color: var(--pewter); }
+.navbtn-active { background: var(--cloud); color: var(--carbon); }
+.navbtn-active:hover { background: var(--cloud); color: var(--carbon); }
+
+.tlink {
+  display: inline-block;
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--pewter);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--t);
+}
+.tlink:hover { color: var(--carbon); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---- grids -------------------------------------------------------------- */
+
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3.4vw, 48px); }
+.g4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2.5vw, 32px); }
+.gcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3.2vw, 48px); }
+
+.divrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--cloud);
+  align-items: baseline;
+}
+.divrow-head { border-top: none; }
+
+.tworow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--pale);
+  align-items: baseline;
+}
+
+/* ---- responsive --------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gcards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .g2 { grid-template-columns: 1fr; }
+  .g3 { grid-template-columns: 1fr; gap: 44px; }
+  .gcards { grid-template-columns: 1fr; gap: 44px; }
+  .h1 { font-size: 28px; line-height: 34px; }
+  .h2 { font-size: 24px; line-height: 30px; }
+  .lede { font-size: 17px; line-height: 24px; }
+  .divrow { grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .tworow { grid-template-columns: 1fr; }
+  .section { padding: 64px 0; }
+}
+
+/* ---- Products hover panel ------------------------------------------------
+   The 10px offset below the trigger is transparent padding INSIDE the panel,
+   not a margin: a real gap leaves a dead strip that closes the menu before the
+   pointer reaches it. */
+
+.menupanel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: min(420px, 78vw);
+  padding-top: 10px;
+  z-index: 30;
+}
+
+.menuinner {
+  background: var(--white);
+  border: 1px solid var(--cloud);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.menurow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+
+.menurow:hover { background: var(--ash); }
+
+/* ---- Typographic product card -------------------------------------------
+   container-type lets the service name size against the CARD rather than the
+   page, so it stays proportional at every grid width. */
+
+.mediacard {
+  position: relative;
+  container-type: inline-size;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 2 / 1;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(20px, 3cqw, 36px);
+  background: var(--ash);
+  transition: background-color var(--t);
+}
+
+.mediacard:hover { background: var(--cloud); }
+
+.cardname {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(26px, 15cqw, 34px);
+  line-height: 1.06;
+  color: var(--carbon);
+  max-width: 14ch;
+}

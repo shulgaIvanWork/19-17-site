@@ -1,0 +1,31 @@
+/* The band label: an .h3 set in pewter at weight 400 — quieter than a heading,
+   which is why it is not an .h2. */
+.bandLabel {
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--pewter);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 24px;
+}
+
+.item {
+  padding: 10px 0;
+  border-top: 1px solid var(--cloud);
+}
+
+/* Pins the CTA to the bottom of the column, whatever the item count. */
+.action {
+  margin-top: auto;
+  align-self: flex-start;
+}

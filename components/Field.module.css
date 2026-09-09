@@ -1,0 +1,35 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--pewter);
+}
+
+.input {
+  min-height: 32px;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid var(--pale);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--carbon);
+  transition: border-color var(--t), color var(--t);
+}
+
+.input::placeholder { color: var(--fog); }
+
+/* The focus affordance is the rule turning blue — not an outline ring, which
+   would double up with the underline on a borderless field. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--blue);
+}

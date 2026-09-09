@@ -1,0 +1,75 @@
+.row {
+  display: flex;
+}
+
+/* Настоящий чекбокс: с клавиатуры и для скринридера работает он, визуально
+   его заменяет .box. Не display:none — иначе он выпадает из фокуса. */
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.box {
+  flex: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 4px;
+  background: var(--ash);
+  transition: background-color var(--t);
+}
+
+.label:hover .box { background: var(--cloud); }
+
+/* Отмеченное состояние — синяя заливка, как у выбранного чипа. */
+.input:checked + .label .box,
+.input:checked + .label:hover .box {
+  background: var(--blue);
+}
+
+/* Галочка на CSS: набора иконок в системе нет, а состояние не должно
+   передаваться одним цветом. */
+.input:checked + .label .box::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.input:focus-visible + .label .box {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.text {
+  font-family: var(--text);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--pewter);
+}
+
+.link {
+  color: var(--pewter);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--t);
+}
+
+.link:hover { color: var(--carbon); }
