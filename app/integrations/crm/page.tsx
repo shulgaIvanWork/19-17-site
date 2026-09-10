@@ -1,5 +1,0 @@
-import { HashRedirect } from '@/components/HashRedirect';
-
-export default function CrmRedirect() {
-  return <HashRedirect to="/websites#crm" />;
-}
