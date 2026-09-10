@@ -390,27 +390,35 @@ img { display: block; max-width: 100%; }
   );
 }
 
+/* Темная тема: на темном фоне белый круг читается краем, поэтому радиус больше,
+   яркость ниже, а затухание идет по нескольким точкам до самого края. */
 html[data-theme='dark'] [data-cursor-glow]::after {
   background: radial-gradient(
-    240px circle at var(--mx, 50%) var(--my, 30%),
-    rgba(255, 255, 255, 0.12),
-    rgba(255, 255, 255, 0) 70%
+    360px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(255, 255, 255, 0.015) 62%,
+    rgba(255, 255, 255, 0) 100%
   );
 }
 
 html[data-theme='dark'] [data-cursor-glow='scene']::after {
   background: radial-gradient(
-    180px circle at var(--mx, 50%) var(--my, 30%),
-    rgba(255, 255, 255, 0.045),
-    rgba(255, 255, 255, 0) 72%
+    260px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(255, 255, 255, 0.02) 30%,
+    rgba(255, 255, 255, 0.007) 62%,
+    rgba(255, 255, 255, 0) 100%
   );
 }
 
 html[data-theme='dark'] [data-cursor-glow='soft']::after {
   background: radial-gradient(
-    140px circle at var(--mx, 50%) var(--my, 30%),
-    rgba(255, 255, 255, 0.07),
-    rgba(255, 255, 255, 0) 72%
+    220px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.028) 30%,
+    rgba(255, 255, 255, 0.01) 62%,
+    rgba(255, 255, 255, 0) 100%
   );
 }
 

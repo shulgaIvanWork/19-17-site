@@ -28,6 +28,18 @@ function loadMesh(shape: HeroShape, count: number) {
  *   - IntersectionObserver pauses the loop off-screen;
  *   - prefers-reduced-motion skips idle motion but still allows drag. */
 
+/** Общий размер моделей в героях: рамка модели вписывается в прямоугольник
+ *  FIT_HEIGHT x FIT_WIDTH от холста, центр рамки - на FIT_CENTER_Y высоты.
+ *  Поправки отдельных моделей - в SHAPE_FIT (scale - множитель размера,
+ *  dy - сдвиг центра в долях высоты). Глобус главной сюда не входит. */
+const FIT_HEIGHT = 0.58;
+const FIT_WIDTH = 0.62;
+// Уже 768 px модель упирается в ширину: даем ей почти всю, как было до общего правила.
+const FIT_WIDTH_NARROW = 0.88;
+const FIT_CENTER_Y = 0.47;
+// Пример: pages: { scale: 1.1, dy: -0.02 }. Сейчас общего правила хватает всем.
+const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; dy?: number }>> = {};
+
 type Props = {
   nodes?: number;
   /** Line/node colour as an "r,g,b" triple. Electric Blue by default. */
@@ -101,6 +113,10 @@ function startHero(
   }
   const meshWidth = Math.max(0.001, maxX - minX);
   const meshHeight = Math.max(0.001, maxY - minY);
+  // Модель вращается и вписывается вокруг центра своей рамки, а не начала координат.
+  const midX = letters ? (minX + maxX) / 2 : 0;
+  const midY = letters ? (minY + maxY) / 2 : 0;
+  const fit = SHAPE_FIT[shape];
 
   const projectedX = new Float32Array(points.length);
   const projectedY = new Float32Array(points.length);
@@ -136,12 +152,17 @@ function startHero(
   const draw = (drawYaw: number, drawPitch: number) => {
     if (!w || !h) return;
     applyHeroScroll(shape, points, parts, along, scrollShown, live, basis);
-    const cx = w / 2;
-    const cy = letters ? h * 0.42 : h / 2;
-    const globe = Math.min(w, h) * 0.44;
-    const scale = letters ? globe / (Math.max(meshWidth, meshHeight) / 2) : globe;
     const focal = 2.6;
     const camZ = 3.4;
+    const cx = w / 2;
+    const cy = letters ? h * (FIT_CENTER_Y + (fit?.dy ?? 0)) : h / 2;
+    // focal / camZ - перспектива в плоскости z = 0: на нее делится, чтобы рамка
+    // модели на экране совпала с прямоугольником FIT.
+    const scale = letters
+      ? (Math.min((h * FIT_HEIGHT) / meshHeight, (w * (w < 768 ? FIT_WIDTH_NARROW : FIT_WIDTH)) / meshWidth) /
+          (focal / camZ)) *
+        (fit?.scale ?? 1)
+      : Math.min(w, h) * 0.44;
     const sy = Math.sin(drawYaw);
     const cyw = Math.cos(drawYaw);
     const sp = Math.sin(drawPitch);
@@ -149,8 +170,8 @@ function startHero(
 
     for (let i = 0; i < points.length; i++) {
       if (live.hide[i]) continue;
-      const x = live.x[i];
-      const y = live.y[i];
+      const x = live.x[i] - midX;
+      const y = live.y[i] - midY;
       const z = live.z[i];
       const x1 = x * cyw - z * sy;
       const z1 = x * sy + z * cyw;

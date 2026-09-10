@@ -59,11 +59,15 @@
   transition: opacity var(--t);
 }
 
+/* Темная тема: больший радиус, ниже яркость и затухание по нескольким точкам до
+   края, иначе на темном фоне виден край круга. */
 :global(html[data-theme='dark']) .hero::after {
   background: radial-gradient(
-    240px circle at var(--mx, 50%) var(--my, 30%),
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0) 70%
+    480px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.035) 30%,
+    rgba(255, 255, 255, 0.012) 62%,
+    rgba(255, 255, 255, 0) 100%
   );
 }
 

@@ -468,11 +468,11 @@ function starPath(cx: number, cy: number, outer: number, inner: number): Poly {
   return points;
 }
 
+/** Курсор лендинга. Сечение 4 грани и шаг по умолчанию: при 6 гранях и шаге
+ *  0.06 сетка была самой плотной из всех моделей и читалась как сложная. */
 const SITES_SHAPE: StrokeShape = {
   width: 1,
   tubeRadius: 0.038,
-  ringSides: 6,
-  alongStep: 0.06,
   strokes: [
     {
       closed: true,
@@ -975,6 +975,19 @@ function addTube(
  *  every open end gets a complete rounded cap and every loop closes ring to
  *  ring. This keeps the point rhythm of the approved letters without the
  *  fragile cleanup heuristics their bespoke junctions require. */
+/** Замкнутый контур начинается с середины первого ребра, а не с вершины.
+ *  fillet() скругляет только внутренние вершины, и контур, начатый в углу,
+ *  оставлял этот угол острым, а кольца трубки на стыке шли с разными
+ *  касательными: у замка VPN был кривой нижний левый угол. */
+function closedFromEdgeMidpoint(pts: Poly): Poly {
+  const ring = pts.length > 2 && pts[0][0] === pts[pts.length - 1][0] && pts[0][1] === pts[pts.length - 1][1]
+    ? pts.slice(0, -1)
+    : pts;
+  if (ring.length < 2) return [...ring, ring[0]];
+  const mid: [number, number] = [(ring[0][0] + ring[1][0]) / 2, (ring[0][1] + ring[1][1]) / 2];
+  return [mid, ...ring.slice(1), ring[0], mid];
+}
+
 function addSafeStroke(
   points: Point[],
   edges: [number, number][],
@@ -993,7 +1006,7 @@ function addSafeStroke(
     for (let i = 0; i < count; i++) alongOut.push(v);
   };
   if (stroke.points.length < 2) return;
-  const source = stroke.closed ? [...stroke.points, stroke.points[0]] : stroke.points;
+  const source = stroke.closed ? closedFromEdgeMidpoint(stroke.points) : stroke.points;
   const shaped = stroke.fillet ? fillet(source, stroke.fillet) : source;
   const samples = densify(shaped, alongStep);
   if (
