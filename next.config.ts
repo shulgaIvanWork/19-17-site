@@ -9,14 +9,6 @@ const nextConfig: NextConfig = {
     imageSizes: [256, 384, 640],
     minimumCacheTTL: 60 * 60 * 24 * 30,
   },
-  async headers() {
-    return [
-      {
-        source: '/photos/:path*',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
-      },
-    ];
-  },
 };
 
 export default nextConfig;

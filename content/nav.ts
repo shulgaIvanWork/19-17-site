@@ -69,10 +69,6 @@ export const infraHubPaths = ['/vpn-ai'];
 
 export const infraTabHref = '/vpn-ai';
 
-export const infraServiceHrefs = infraHubPaths;
-
-export const siteServiceHrefs = siteHubPaths;
-
 /** Если якоря нет, считаем активным первый раздел хаба. */
 export const hashFallbacks: Record<string, string> = {
   '/websites': 'landing',
@@ -116,12 +112,6 @@ export function hubStops(pathname: string): NavItem[] | null {
 
 export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';
-
-/** Вкладки шапки. «Сайты» разворачивается панелью, остальные — обычные ссылки. */
-export const headerTabs: NavItem[] = [
-  { href: '/', label: 'Главная' },
-  { href: '/about', label: 'О нас' },
-];
 
 /** Правовые ссылки. Живут отдельно от навигации: это не разделы сайта. */
 export const legalLinks: NavItem[] = [

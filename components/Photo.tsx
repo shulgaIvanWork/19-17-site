@@ -3,7 +3,6 @@ import type { ImageSlot } from '@/content/products';
 import styles from './Photo.module.css';
 
 const photos: Record<string, string> = {
-  'home-photo': '/photos/home-photo.webp',
   'founder-1': '/photos/founder-black.webp',
   'founder-2': '/photos/founder-jacket.webp',
 };

@@ -60,6 +60,8 @@ function parse(body: unknown): ParseResult {
     return { ok: false, error: 'Выберите хотя бы одно направление.' };
   }
 
+  // Согласие проверяется на сервере отдельно: клиентскую галочку можно обойти,
+  // а принимать данные без правового основания нельзя.
   if (value.consent !== true) return { ok: false, error: consentCopy.error };
 
   return {

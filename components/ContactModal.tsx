@@ -110,6 +110,9 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
 
   return (
     <Overlay onClose={onClose} labelledBy={titleId} focusOn="form">
+      {/* noValidate: нативные подсказки браузера - это та самая красная рамка,
+          которой в дизайн-системе нет. Проверяем сами и отвечаем предложением;
+          атрибуты required оставлены для скринридера. */}
       <form onSubmit={send} noValidate>
         <div className={styles.head}>
           <h2 className="h2" id={titleId} style={{ fontSize: 24, lineHeight: '30px', marginRight: 'auto' }}>
