@@ -56,8 +56,16 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // data-scroll-behavior: в globals.css плавная прокрутка для якорей. С Next 16 роутер
+  // сбрасывает ее на время перехода между страницами только при этом атрибуте,
+  // иначе каждый переход прокручивал бы новую страницу к началу плавно.
   return (
-    <html lang="ru" className={`${manrope.variable} ${unbounded.variable}`} suppressHydrationWarning>
+    <html
+      lang="ru"
+      className={`${manrope.variable} ${unbounded.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
         <Script id="theme-boot" strategy="beforeInteractive">
           {`(function(){try{if(localStorage.getItem('theme')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}})();`}
