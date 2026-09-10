@@ -9,34 +9,55 @@ type Props = {
 };
 
 /** The .divrow comparison table: a borderless header row, then 1px cloud rules.
- *  Kept as a grid rather than a <table> because the design collapses it to two
- *  columns under 768px; the ARIA roles carry the semantics a table would. */
+ *  On a phone the four-column grid is unreadable, so the same data is stacked
+ *  as labeled pairs instead of wrapping into a 2×2 scramble. */
 export function CompareTable({ headers, rows, headerStyle = 'label', caption }: Props) {
   return (
-    <div role="table" aria-label={caption}>
-      <div className={['divrow', 'divrow-head'].join(' ')} role="row">
-        {headers.map((header, index) => (
-          <div
-            key={`${header}-${index}`}
-            role="columnheader"
-            className={headerStyle === 'h3' ? 'h3' : 'label'}
-          >
-            {header || ' '}
-          </div>
-        ))}
-      </div>
-      {rows.map((row) => (
-        <div className="divrow" role="row" key={row[0]}>
-          <div role="rowheader" className={styles.key}>
-            {row[0]}
-          </div>
-          {row.slice(1).map((cell, index) => (
-            <div role="cell" className="body" key={`${row[0]}-${index}`}>
-              {cell}
+    <div className={styles.table} role="table" aria-label={caption}>
+      <div className={styles.wide}>
+        <div className={['divrow', 'divrow-head'].join(' ')} role="row">
+          {headers.map((header, index) => (
+            <div
+              key={`${header}-${index}`}
+              role="columnheader"
+              className={[headerStyle === 'h3' ? 'h3' : 'label', styles.header].join(' ')}
+            >
+              {header || ' '}
             </div>
           ))}
         </div>
-      ))}
+        {rows.map((row) => (
+          <div className="divrow" role="row" key={row[0]}>
+            <div role="rowheader" className={styles.key}>
+              {row[0]}
+            </div>
+            {row.slice(1).map((cell, index) => (
+              <div role="cell" className={['body', styles.cell].join(' ')} key={`${row[0]}-${index}`}>
+                {cell}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div className={styles.narrow}>
+        {rows.map((row) => (
+          <div className={styles.card} role="row" key={row[0]}>
+            <div role="rowheader" className={styles.key}>
+              {row[0]}
+            </div>
+            {row.slice(1).map((cell, index) => {
+              const label = headers[index + 1];
+              return (
+                <div className={styles.pair} role="cell" key={`${row[0]}-${index}`}>
+                  {label ? <span className={styles.pairHead}>{label}</span> : null}
+                  <span className={['body', styles.cell, styles.pairVal].join(' ')}>{cell}</span>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

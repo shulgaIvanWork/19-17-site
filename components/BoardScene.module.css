@@ -1,0 +1,403 @@
+.frame {
+  --scene-p: 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 16px;
+  color: var(--blue);
+  background:
+    radial-gradient(110% 80% at 12% -8%, var(--scene-spot), transparent 52%),
+    radial-gradient(80% 70% at 92% 108%, rgba(62, 106, 225, 0.1), transparent 46%),
+    linear-gradient(165deg, var(--scene-1) 0%, var(--scene-2) 48%, var(--scene-3) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 18px 44px rgba(62, 106, 225, 0.1);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.line,
+.soft,
+.panel {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.soft { opacity: 0.34; }
+.panel {
+  fill: currentColor;
+  fill-opacity: 0.06;
+}
+
+.glass {
+  fill: var(--frost);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.3;
+}
+
+.glassInk {
+  fill: rgba(62, 106, 225, 0.16);
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-width: 1.1;
+}
+
+.fakeBtn {
+  cursor: default;
+}
+
+.fakeBtn .hit {
+  transition: fill var(--t), stroke var(--t);
+}
+
+.fakeBtn:hover .hit {
+  fill: rgba(62, 106, 225, 0.38);
+  stroke: rgba(255, 255, 255, 0.95);
+}
+
+.rest {
+  transition: opacity var(--t);
+}
+
+.frame:hover .rest {
+  opacity: 0;
+}
+
+.rowHit {
+  cursor: default;
+}
+
+.wash {
+  fill: rgba(62, 106, 225, 0.38);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t);
+}
+
+.rowHit:hover .wash {
+  opacity: 1;
+}
+
+html[data-theme='dark'] .frame {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(62, 106, 225, 0.1),
+    0 18px 44px rgba(0, 0, 0, 0.38);
+}
+
+html[data-theme='dark'] .glassSoft,
+html[data-theme='dark'] .glass {
+  stroke: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme='dark'] .glassSoft {
+  fill: rgba(255, 255, 255, 0.07);
+}
+
+.glassSoft {
+  fill: rgba(255, 255, 255, 0.38);
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 1;
+}
+
+.hair {
+  fill: none;
+  stroke: currentColor;
+  stroke-opacity: 0.16;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.win {
+  fill: currentColor;
+  stroke: none;
+}
+
+.header,
+.colL,
+.colR,
+.cta,
+.stray,
+.scribble,
+.lock,
+.body,
+.armL,
+.armR {
+  transform-box: view-box;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scene-p) * -1s);
+}
+
+.header { transform-origin: 330px 94px; animation-name: sortHeader; }
+.colL { transform-origin: 246px 204px; animation-name: sortLeft; }
+.colR { transform-origin: 410px 155px; animation-name: sortRight; }
+.cta { transform-origin: 410px 247px; animation-name: sortCta; }
+.stray { transform-origin: 412px 114px; animation-name: sortStray; }
+.scribble { animation-name: sortScribble; }
+.lock { animation-name: sortLock; }
+.body { transform-origin: 78px 246px; animation-name: lean; }
+.armL { transform-origin: 64px 200px; animation-name: rummageL; }
+.armR { transform-origin: 92px 200px; animation-name: rummage; }
+
+.gaze {
+  transform-box: view-box;
+  transform-origin: 78px 168px;
+  transform: rotate(calc(var(--look-x, 0.35) * 20deg)) translate(calc(var(--look-x, 0.35) * 3px), calc(var(--look-y, 0) * 5px));
+  transition: transform 0.18s ease-out;
+}
+
+.wave {
+  transform-box: view-box;
+  transform-origin: 64px 200px;
+}
+
+.flap {
+  transform-box: view-box;
+  transform-origin: 50px 236px;
+}
+
+.sway {
+  transform-box: view-box;
+  transform-origin: 78px 246px;
+}
+
+.frame[data-hello] .wave {
+  animation: helloRaise 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+}
+
+.frame[data-hello] .flap {
+  animation: helloFlap 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+}
+
+.frame[data-hello] .sway {
+  animation: helloSway 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+}
+
+.copy,
+.copyLead,
+.copySub {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+}
+
+.copy {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.copyLead {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.copySub {
+  font-size: 10px;
+  font-weight: 400;
+  fill-opacity: 0.55;
+}
+
+.writeA,
+.writeB,
+.writeC,
+.writeD {
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scene-p) * -1s);
+}
+
+.writeA { animation-name: writeA; }
+.writeB { animation-name: writeB; }
+.writeC { animation-name: writeC; }
+.writeD { animation-name: writeD; }
+
+@keyframes sortHeader {
+  0% { transform: rotate(-18deg) translate(34px, 56px); }
+  10% { transform: rotate(-14deg) translate(26px, 42px); }
+  22% { transform: rotate(-9deg) translate(16px, 28px); }
+  34% { transform: rotate(-5deg) translate(8px, 14px); }
+  48% { transform: rotate(-2deg) translate(3px, 4px); }
+  60%, 100% { transform: none; }
+}
+
+@keyframes sortLeft {
+  0% { transform: rotate(20deg) translate(-22px, -42px) scale(0.74); }
+  12% { transform: rotate(16deg) translate(-16px, -30px) scale(0.8); }
+  26% { transform: rotate(10deg) translate(-10px, -16px) scale(0.88); }
+  40% { transform: rotate(4deg) translate(-4px, -6px) scale(0.96); }
+  56%, 100% { transform: none; }
+}
+
+@keyframes sortRight {
+  0% { transform: rotate(-26deg) translate(52px, 78px) scale(0.86); }
+  14% { transform: rotate(-18deg) translate(36px, 52px) scale(0.9); }
+  28% { transform: rotate(-10deg) translate(20px, 28px) scale(0.94); }
+  42% { transform: rotate(-4deg) translate(8px, 10px) scale(0.98); }
+  58%, 100% { transform: none; }
+}
+
+@keyframes sortCta {
+  0% { transform: rotate(14deg) translate(-78px, -34px) scale(1.16); }
+  16% { transform: rotate(9deg) translate(-52px, -20px) scale(1.1); }
+  32% { transform: rotate(5deg) translate(-28px, -10px) scale(1.05); }
+  48% { transform: rotate(2deg) translate(-10px, -4px) scale(1.02); }
+  64%, 100% { transform: none; }
+}
+
+@keyframes sortStray {
+  0% { transform: rotate(32deg) translate(-24px, 48px); opacity: 1; }
+  16% { transform: rotate(22deg) translate(4px, 72px) scale(0.86); opacity: 0.9; }
+  32% { transform: rotate(12deg) translate(28px, 108px) scale(0.7); opacity: 0.6; }
+  48% { transform: rotate(4deg) translate(52px, 148px) scale(0.5); opacity: 0.25; }
+  64%, 100% { transform: rotate(0deg) translate(76px, 176px) scale(0.4); opacity: 0; }
+}
+
+@keyframes sortScribble {
+  0%, 8% { opacity: 0.5; }
+  22% { opacity: 0.32; }
+  40% { opacity: 0.12; }
+  54%, 100% { opacity: 0; }
+}
+
+@keyframes sortLock {
+  0%, 28% { opacity: 0; }
+  44% { opacity: 0.45; }
+  62%, 100% { opacity: 1; }
+}
+
+@keyframes rummage {
+  0% { transform: rotate(12deg); }
+  10% { transform: rotate(-8deg); }
+  20% { transform: rotate(16deg); }
+  32% { transform: rotate(-14deg); }
+  44% { transform: rotate(10deg); }
+  56% { transform: rotate(-8deg); }
+  70%, 100% { transform: rotate(-6deg); }
+}
+
+@keyframes rummageL {
+  0% { transform: rotate(0deg); }
+  12% { transform: rotate(12deg); }
+  24% { transform: rotate(-10deg); }
+  38% { transform: rotate(12deg); }
+  52% { transform: rotate(-6deg); }
+  68%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes lean {
+  0% { transform: rotate(5deg); }
+  16% { transform: rotate(8deg); }
+  34% { transform: rotate(4deg); }
+  52% { transform: rotate(2deg); }
+  70%, 100% { transform: rotate(-2deg); }
+}
+
+@keyframes helloRaise {
+  0% { transform: none; }
+  16% { transform: rotate(-158deg); }
+  72% { transform: rotate(-158deg); }
+  88%, 100% { transform: none; }
+}
+
+@keyframes helloFlap {
+  0%, 14% { transform: none; }
+  22% { transform: rotate(-32deg); }
+  30% { transform: rotate(24deg); }
+  38% { transform: rotate(-34deg); }
+  46% { transform: rotate(22deg); }
+  54% { transform: rotate(-28deg); }
+  62% { transform: rotate(10deg); }
+  70%, 100% { transform: none; }
+}
+
+@keyframes helloSway {
+  0%, 100% { transform: none; }
+  16% { transform: rotate(7deg); }
+  22% { transform: rotate(3deg); }
+  30% { transform: rotate(8deg); }
+  38% { transform: rotate(2deg); }
+  46% { transform: rotate(8deg); }
+  54% { transform: rotate(3deg); }
+  62% { transform: rotate(6deg); }
+  72% { transform: rotate(5deg); }
+  88% { transform: none; }
+}
+
+@keyframes writeA {
+  0%, 38% { opacity: 0; }
+  58%, 100% { opacity: 1; }
+}
+
+@keyframes writeB {
+  0%, 44% { opacity: 0; }
+  62%, 100% { opacity: 1; }
+}
+
+@keyframes writeC {
+  0%, 50% { opacity: 0; }
+  66%, 100% { opacity: 1; }
+}
+
+@keyframes writeD {
+  0%, 56% { opacity: 0; }
+  72%, 100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .colL,
+  .colR,
+  .cta,
+  .stray,
+  .armL,
+  .armR,
+  .body,
+  .scribble,
+  .lock {
+    animation: none;
+    transform: none;
+  }
+  .scribble { opacity: 0; }
+  .stray { opacity: 0; }
+  .lock { opacity: 1; }
+  .gaze {
+    transition: none;
+    transform: none;
+  }
+  .wave,
+  .flap,
+  .sway {
+    animation: none;
+    transform: none;
+  }
+  .rest,
+  .wash {
+    transition: none;
+  }
+  .writeA,
+  .writeB,
+  .writeC,
+  .writeD {
+    animation: none;
+    opacity: 1;
+  }
+}

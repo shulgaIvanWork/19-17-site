@@ -1,36 +1,158 @@
 'use client';
 
 import Link from 'next/link';
-import { drawerLinks, nav } from '@/content/nav';
+import { useRouter } from 'next/navigation';
+import { ContactSalesButton } from './ContactSalesButton';
+import { drawerLinks, infraMenuGroups, isHashCurrent, jumpHash, siteMenuGroups } from '@/content/nav';
+import { interestFromLocation } from '@/content/site';
 import styles from './MobileMenu.module.css';
 
-type Props = { pathname: string; onNavigate: () => void };
+type Props = { pathname: string; hash: string; onNavigate: () => void };
 
-/** Мобильное меню: строки во всю ширину под шапкой, затем служебные ссылки.
- *  У этих трёх пунктов пока нет назначения — они неактивны, пока оно не появится. */
-export function MobileMenu({ pathname, onNavigate }: Props) {
+const rest: { href: string; label: string; badge?: string }[] = [
+  { href: '/about', label: 'О нас' },
+  { href: '/pricing', label: 'Цены' },
+];
+
+/** Меню: те же группы, что у вкладок «Сайты» и «VPN/AI», затем служебные. */
+export function MobileMenu({ pathname, hash, onNavigate }: Props) {
+  const router = useRouter();
+  const goGroup = (href: string) => {
+    if (!jumpHash(href, pathname)) router.push(href);
+    onNavigate();
+  };
+
   return (
     <div className={styles.drawer} id="mobile-menu">
-      {nav.map((item) => (
+      <div className={styles.cta} onClick={onNavigate}>
+        <ContactSalesButton interest={interestFromLocation(pathname, hash)} />
+      </div>
+      <Link
+        href="/"
+        className={[styles.row, pathname === '/' ? styles.active : ''].filter(Boolean).join(' ')}
+        onClick={onNavigate}
+      >
+        Главная
+        <span className="label" aria-hidden="true">
+          ›
+        </span>
+      </Link>
+      {siteMenuGroups.map((group) => (
+        <div
+          key={group.title}
+          className={styles.group}
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest('a')) return;
+            goGroup(group.href);
+          }}
+        >
+          <Link
+            href={group.href}
+            className={styles.heading}
+            onClick={(event) => {
+              if (jumpHash(group.href, pathname)) event.preventDefault();
+              onNavigate();
+            }}
+          >
+            {group.title}
+          </Link>
+          {group.items.map((item) => (
+            <Link
+              key={`${item.href}:${item.label}`}
+              href={item.href}
+              className={[styles.row, styles.sub, isHashCurrent(pathname, hash, item.href) ? styles.current : '']
+                .filter(Boolean)
+                .join(' ')}
+              onClick={(event) => {
+                if (jumpHash(item.href, pathname)) event.preventDefault();
+                onNavigate();
+              }}
+            >
+              {item.label}
+              <span className="label" aria-hidden="true">
+                ›
+              </span>
+            </Link>
+          ))}
+        </div>
+      ))}
+      {infraMenuGroups.map((group) => (
+        <div
+          key={group.title}
+          className={styles.group}
+          onClick={(event) => {
+            if ((event.target as HTMLElement).closest('a')) return;
+            goGroup(group.href);
+          }}
+        >
+          <Link
+            href={group.href}
+            className={styles.heading}
+            onClick={(event) => {
+              if (jumpHash(group.href, pathname)) event.preventDefault();
+              onNavigate();
+            }}
+          >
+            {group.title}
+          </Link>
+          {group.items.map((item, index) => (
+            <Link
+              key={`${item.href}:${item.label}`}
+              href={item.href}
+              className={[styles.row, styles.sub, isHashCurrent(pathname, hash, item.href) ? styles.current : '']
+                .filter(Boolean)
+                .join(' ')}
+              onClick={(event) => {
+                if (jumpHash(item.href, pathname)) event.preventDefault();
+                onNavigate();
+              }}
+              aria-label={index === 0 ? `${item.label}, ХИТ!` : undefined}
+            >
+              <span className={styles.label}>
+                {item.label}
+                {index === 0 ? (
+                  <span className="hitbadge" aria-hidden="true">
+                    ХИТ!
+                  </span>
+                ) : null}
+              </span>
+              <span className="label" aria-hidden="true">
+                ›
+              </span>
+            </Link>
+          ))}
+        </div>
+      ))}
+      {rest.map((item) => (
         <Link
           key={item.href}
           href={item.href}
           className={[styles.row, pathname === item.href ? styles.active : ''].filter(Boolean).join(' ')}
           onClick={onNavigate}
+          aria-label={item.badge ? `${item.label}, ${item.badge}` : undefined}
         >
-          {item.label}
+          <span className={styles.label}>
+            {item.label}
+            {item.badge ? (
+              <span className="hitbadge" aria-hidden="true">
+                {item.badge}
+              </span>
+            ) : null}
+          </span>
           <span className="label" aria-hidden="true">
             ›
           </span>
         </Link>
       ))}
-      <div className={styles.utility}>
-        {drawerLinks.map((label) => (
-          <span key={label} className="tlink">
-            {label}
-          </span>
-        ))}
-      </div>
+      {drawerLinks.length > 0 && (
+        <div className={styles.utility}>
+          {drawerLinks.map((label) => (
+            <span key={label} className="tlink">
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

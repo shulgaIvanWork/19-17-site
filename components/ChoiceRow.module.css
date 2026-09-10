@@ -33,6 +33,13 @@
   transition: background-color var(--t), color var(--t);
 }
 
+@media (max-width: 768px) {
+  .chip {
+    min-height: 36px;
+    padding: 4px 14px;
+  }
+}
+
 .chip:hover { background: var(--cloud); }
 
 .selected,

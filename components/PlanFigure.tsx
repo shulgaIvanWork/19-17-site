@@ -24,7 +24,7 @@ export function PlanFigure({ figure, unit, name, body, interest }: Props) {
         {body}
       </p>
       <div style={{ marginTop: 16 }}>
-        <EnquireLink interest={interest} />
+        <EnquireLink interest={interest} className="actionlink" />
       </div>
     </div>
   );

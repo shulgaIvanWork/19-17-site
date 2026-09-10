@@ -7,7 +7,7 @@ import { useContact } from './ContactContext';
 /** Синяя основная кнопка. Одна на полосу — второй основной кнопки система не допускает. */
 export function ContactSalesButton({
   hero,
-  label = 'Оставить заявку',
+  label = 'Обсудить задачу',
   interest,
 }: {
   hero?: boolean;
@@ -40,8 +40,20 @@ export function ContactQuietButton({
   );
 }
 
-/** Текстовая ссылка «Обсудить» рядом с каждым тарифом и карточкой. */
-export function EnquireLink({ interest, label = 'Обсудить' }: { interest?: string; label?: string }) {
+/** Текстовая ссылка рядом с тарифом или карточкой. */
+export function EnquireLink({
+  interest,
+  label = 'Обсудить задачу',
+  className,
+}: {
+  interest?: string;
+  label?: string;
+  className?: string;
+}) {
   const { open } = useContact();
-  return <TextButton onClick={() => open(interest)}>{label}</TextButton>;
+  return (
+    <TextButton className={className} onClick={() => open(interest)}>
+      {label}
+    </TextButton>
+  );
 }

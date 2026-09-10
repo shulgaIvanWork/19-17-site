@@ -18,3 +18,16 @@
   max-height: calc(100vh - 48px);
   overflow-y: auto;
 }
+
+@media (max-width: 768px) {
+  .backdrop {
+    padding: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .panel {
+    padding: 20px;
+    max-height: none;
+    border-radius: 4px;
+  }
+}

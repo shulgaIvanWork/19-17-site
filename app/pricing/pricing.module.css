@@ -21,7 +21,8 @@
 
 .item {
   padding: 10px 0;
-  border-top: 1px solid var(--cloud);
+  border-top: 1.5px solid var(--pale);
+  color: var(--pewter);
 }
 
 /* Pins the CTA to the bottom of the column, whatever the item count. */

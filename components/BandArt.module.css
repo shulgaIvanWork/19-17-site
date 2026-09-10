@@ -1,0 +1,313 @@
+.lead {
+  margin: 0;
+}
+
+.frame {
+  --scene-p: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  aspect-ratio: 5 / 4;
+  content-visibility: auto;
+  contain-intrinsic-size: 640px 512px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 1px 0 rgba(62, 106, 225, 0.05),
+    0 18px 44px rgba(62, 106, 225, 0.12);
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  color: var(--blue);
+  background:
+    radial-gradient(120% 80% at 8% -10%, var(--scene-spot), transparent 52%),
+    radial-gradient(90% 70% at 110% 110%, rgba(62, 106, 225, 0.12), transparent 48%),
+    linear-gradient(165deg, var(--scene-1) 0%, var(--scene-2) 46%, var(--scene-3) 100%);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.glass {
+  fill: var(--frost);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.3;
+}
+
+.glassLift {
+  fill: var(--frost);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.3;
+}
+
+.glassInk {
+  fill: rgba(62, 106, 225, 0.16);
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-width: 1.1;
+}
+
+.fakeBtn {
+  cursor: default;
+}
+
+.fakeBtn .hit {
+  transition: fill var(--t), stroke var(--t);
+}
+
+.fakeBtn:hover .hit {
+  fill: rgba(62, 106, 225, 0.38);
+  stroke: rgba(255, 255, 255, 0.95);
+}
+
+.rest {
+  transition: opacity var(--t);
+}
+
+.frame:hover .rest {
+  opacity: 0;
+}
+
+.rowHit {
+  cursor: default;
+}
+
+.wash {
+  fill: rgba(62, 106, 225, 0.38);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 1.1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t);
+}
+
+.rowHit:hover .wash {
+  opacity: 1;
+}
+
+html[data-theme='dark'] .frame {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(62, 106, 225, 0.1),
+    0 18px 44px rgba(0, 0, 0, 0.38);
+}
+
+html[data-theme='dark'] .glassSoft,
+html[data-theme='dark'] .glass,
+html[data-theme='dark'] .glassLift {
+  stroke: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme='dark'] .glassSoft {
+  fill: rgba(255, 255, 255, 0.045);
+}
+
+html[data-theme='dark'] .shine {
+  fill: rgba(255, 255, 255, 0.04);
+  opacity: 0;
+}
+
+html[data-theme='dark'] .nodeRing {
+  fill: rgba(255, 255, 255, 0.12);
+}
+
+.glassSoft {
+  fill: rgba(255, 255, 255, 0.34);
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1;
+}
+
+.shine {
+  fill: rgba(255, 255, 255, 0.42);
+  stroke: none;
+  pointer-events: none;
+}
+
+.line {
+  fill: none;
+  stroke: currentColor;
+  stroke-opacity: 0.28;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hair {
+  fill: none;
+  stroke: currentColor;
+  stroke-opacity: 0.14;
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+
+.nodeRing {
+  fill: rgba(255, 255, 255, 0.78);
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.win {
+  fill: currentColor;
+  fill-opacity: 0.38;
+  stroke: none;
+}
+
+.type,
+.typeLead,
+.typeSub {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+}
+
+.type {
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.typeLead {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.typeSub {
+  font-size: 10px;
+  font-weight: 400;
+  fill-opacity: 0.55;
+}
+
+.piece {
+  transform-box: view-box;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scene-p) * -1s);
+}
+
+.sortL { animation-name: sortL; }
+.sortR { animation-name: sortR; }
+.sortM { animation-name: sortM; }
+.sortC { animation-name: sortC; }
+.stray { animation-name: sortStray; }
+.scribble { animation-name: sortScribble; }
+.lock { animation-name: sortLock; }
+
+.writeA,
+.writeB,
+.writeC,
+.writeD {
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scene-p) * -1s);
+}
+
+.writeA { animation-name: writeA; }
+.writeB { animation-name: writeB; }
+.writeC { animation-name: writeC; }
+.writeD { animation-name: writeD; }
+
+@keyframes sortL {
+  0% { transform: rotate(18deg) translate(-24px, -36px) scale(0.78); }
+  14% { transform: rotate(12deg) translate(-16px, -22px) scale(0.86); }
+  30% { transform: rotate(6deg) translate(-8px, -10px) scale(0.93); }
+  46% { transform: rotate(2deg) translate(-3px, -3px) scale(0.98); }
+  62%, 100% { transform: none; }
+}
+
+@keyframes sortR {
+  0% { transform: rotate(-22deg) translate(36px, 58px) scale(0.84); }
+  14% { transform: rotate(-14deg) translate(22px, 36px) scale(0.9); }
+  30% { transform: rotate(-7deg) translate(10px, 16px) scale(0.95); }
+  46% { transform: rotate(-2deg) translate(3px, 5px) scale(0.99); }
+  62%, 100% { transform: none; }
+}
+
+@keyframes sortM {
+  0% { transform: rotate(-12deg) translate(18px, 42px) scale(0.88); }
+  16% { transform: rotate(-7deg) translate(10px, 24px) scale(0.93); }
+  32% { transform: rotate(-3deg) translate(4px, 10px) scale(0.97); }
+  50%, 100% { transform: none; }
+}
+
+@keyframes sortC {
+  0% { transform: rotate(10deg) translate(-40px, -18px) scale(1.08); }
+  18% { transform: rotate(6deg) translate(-22px, -10px) scale(1.04); }
+  36% { transform: rotate(2deg) translate(-8px, -4px) scale(1.01); }
+  54%, 100% { transform: none; }
+}
+
+@keyframes sortStray {
+  0% { transform: rotate(28deg) translate(-16px, 36px); opacity: 1; }
+  20% { transform: rotate(16deg) translate(10px, 72px) scale(0.8); opacity: 0.8; }
+  40% { transform: rotate(6deg) translate(36px, 120px) scale(0.58); opacity: 0.4; }
+  60%, 100% { transform: translate(64px, 168px) scale(0.4); opacity: 0; }
+}
+
+@keyframes sortScribble {
+  0%, 10% { opacity: 0.45; }
+  28% { opacity: 0.24; }
+  46% { opacity: 0.08; }
+  60%, 100% { opacity: 0; }
+}
+
+@keyframes sortLock {
+  0%, 28% { opacity: 0; }
+  46% { opacity: 0.5; }
+  64%, 100% { opacity: 1; }
+}
+
+@keyframes writeA {
+  0%, 36% { opacity: 0; }
+  54%, 100% { opacity: 1; }
+}
+
+@keyframes writeB {
+  0%, 44% { opacity: 0; }
+  60%, 100% { opacity: 1; }
+}
+
+@keyframes writeC {
+  0%, 52% { opacity: 0; }
+  68%, 100% { opacity: 1; }
+}
+
+@keyframes writeD {
+  0%, 60% { opacity: 0; }
+  76%, 100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piece,
+  .writeA,
+  .writeB,
+  .writeC,
+  .writeD {
+    animation: none;
+    transform: none;
+  }
+  .scribble { opacity: 0; }
+  .stray { opacity: 0; }
+  .lock { opacity: 1; }
+  .rest,
+  .wash {
+    transition: none;
+  }
+  .writeA,
+  .writeB,
+  .writeC,
+  .writeD {
+    opacity: 1;
+  }
+}

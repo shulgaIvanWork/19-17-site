@@ -8,7 +8,7 @@ import styles from './pricing.module.css';
 
 export const metadata: Metadata = {
   title: 'Цены',
-  description: 'Сайт, магазин, поддержка, интеграции, корпоративный VPN и локальный AI — по одному договору.',
+  description: 'Как рассчитывается стоимость сайта, поддержки, интеграций, корпоративного VPN и локального AI.',
 };
 
 export default function PricingPage() {
@@ -25,7 +25,7 @@ export default function PricingPage() {
 
       <section style={{ paddingBottom: 'clamp(48px, 7vw, 104px)' }}>
         <div className="wrap">
-          <h2 className={styles.bandLabel}>Создание сайта</h2>
+          <h2 className={styles.bandLabel}>Сайты</h2>
           <div className="g3" style={{ marginTop: 32 }}>
             {webPlans.map((plan) => (
               <div className={styles.column} key={plan.name}>
@@ -46,7 +46,7 @@ export default function PricingPage() {
                   ))}
                 </div>
                 <div className={styles.action}>
-                  <ContactSalesButton hero interest="Сайт" />
+                  <ContactSalesButton hero interest="Создание сайта" />
                 </div>
               </div>
             ))}
@@ -61,7 +61,7 @@ export default function PricingPage() {
             <CompareTable
               headers={table.headers}
               rows={table.rows}
-              caption={`${table.heading} — цены`}
+              caption={`${table.heading}: ориентиры по стоимости`}
             />
           </div>
           {index === pricingTables.length - 1 && (

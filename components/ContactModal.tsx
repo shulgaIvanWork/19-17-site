@@ -2,27 +2,28 @@
 
 import { useId, useState } from 'react';
 import { Button } from './Button';
-import { ChoiceRow } from './ChoiceRow';
 import { Consent } from './Consent';
+import { ChoiceRow } from './ChoiceRow';
 import { Field } from './Field';
 import { Overlay } from './Overlay';
 import { consentCopy, policyVersion } from '@/content/legal';
+import { phoneHref, phoneLabel } from '@/content/nav';
 import { contactCopy } from '@/content/site';
 import styles from './ContactModal.module.css';
 
 type Props = {
-  interest: string;
-  onInterestChange: (value: string) => void;
+  interests: string[];
+  onInterestsChange: (value: string[]) => void;
   onClose: () => void;
 };
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
-export function ContactModal({ interest, onInterestChange, onClose }: Props) {
+export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
   const titleId = useId();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
+  const [phone, setPhone] = useState('');
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
@@ -30,7 +31,30 @@ export function ContactModal({ interest, onInterestChange, onClose }: Props) {
   async function send(event: React.FormEvent) {
     event.preventDefault();
 
-    // Правовое основание обработки. Проверяется и здесь, и на сервере.
+    if (interests.length === 0) {
+      setMessage('Выберите хотя бы одно направление.');
+      setStatus('error');
+      return;
+    }
+
+    if (!email.trim() && !phone.trim()) {
+      setMessage('Укажите почту или номер телефона — достаточно одного.');
+      setStatus('error');
+      return;
+    }
+
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setMessage('Проверьте адрес электронной почты.');
+      setStatus('error');
+      return;
+    }
+
+    if (phone.trim() && (phone.trim().length < 6 || phone.trim().length > 40)) {
+      setMessage('Проверьте номер телефона.');
+      setStatus('error');
+      return;
+    }
+
     if (!consent) {
       setMessage(consentCopy.error);
       setStatus('error');
@@ -43,18 +67,24 @@ export function ContactModal({ interest, onInterestChange, onClose }: Props) {
       const response = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, interest, consent, policyVersion }),
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          interests,
+          consent,
+          policyVersion,
+        }),
       });
       const result = (await response.json()) as { ok?: boolean; error?: string };
       if (!response.ok || !result.ok) {
-        // Ошибка — это предложение, а не красная рамка.
-        setMessage(result.error ?? 'Отправить не получилось. Попробуйте ещё раз или напишите нам на почту.');
+        setMessage(result.error ?? 'Отправить не получилось. Попробуйте еще раз.');
         setStatus('error');
         return;
       }
       setStatus('sent');
     } catch {
-      setMessage('Отправить не получилось. Попробуйте ещё раз или напишите нам на почту.');
+      setMessage('Отправить не получилось. Попробуйте еще раз.');
       setStatus('error');
     }
   }
@@ -80,9 +110,6 @@ export function ContactModal({ interest, onInterestChange, onClose }: Props) {
 
   return (
     <Overlay onClose={onClose} labelledBy={titleId} focusOn="form">
-      {/* noValidate: нативные пузыри браузера — это красная рамка, которой в
-          системе нет. Проверяем сами и отвечаем предложением. Атрибуты required
-          на полях оставлены — их читает скринридер. */}
       <form onSubmit={send} noValidate>
         <div className={styles.head}>
           <h2 className="h2" id={titleId} style={{ fontSize: 24, lineHeight: '30px', marginRight: 'auto' }}>
@@ -97,40 +124,47 @@ export function ContactModal({ interest, onInterestChange, onClose }: Props) {
           {contactCopy.body}
         </p>
 
+        <p className={styles.call}>
+          {contactCopy.call}{' '}
+          <a className={styles.phone} href={phoneHref}>
+            {phoneLabel}
+          </a>
+        </p>
+
         <div className={styles.fields}>
           <Field
-            label="Имя и фамилия"
+            label="Имя"
             name="name"
             value={name}
             onChange={setName}
-            placeholder="Введите имя и фамилию"
+            placeholder="Как к вам обращаться"
             autoComplete="name"
             required
           />
           <Field
-            label="Рабочая почта"
+            label="Почта"
             name="email"
             type="email"
             value={email}
             onChange={setEmail}
-            placeholder="Введите рабочую почту"
+            placeholder="name@company.ru"
             autoComplete="email"
-            required
           />
           <Field
-            label="Компания"
-            name="company"
-            value={company}
-            onChange={setCompany}
-            placeholder="Введите название компании"
-            autoComplete="organization"
-            required
+            label="Телефон"
+            name="phone"
+            type="tel"
+            value={phone}
+            onChange={setPhone}
+            placeholder="+7 (999) 000-00-00"
+            autoComplete="tel"
           />
+          <p className={styles.hint}>{contactCopy.contactHint}</p>
           <ChoiceRow
             label={contactCopy.interestLabel}
             options={contactCopy.interests}
-            value={interest}
-            onChange={onInterestChange}
+            value={interests}
+            onChange={onInterestsChange}
           />
           <Consent checked={consent} onChange={setConsent} />
         </div>

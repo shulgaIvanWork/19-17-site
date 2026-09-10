@@ -4,15 +4,28 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ContactSalesButton } from './ContactSalesButton';
+import { ThemeToggle } from './ThemeToggle';
+import { HubMenu } from './SitesMenu';
 import { MobileMenu } from './MobileMenu';
 import { NavButton } from './NavButton';
-import { SitesMenu } from './SitesMenu';
-import { wordmark } from '@/content/nav';
+import { useHubSectionHash } from './useHubSectionHash';
+import {
+  infraHubPaths,
+  infraMenuGroups,
+  infraTabHref,
+  infraTabLabel,
+  siteHubPaths,
+  siteMenuGroups,
+  sitesTabHref,
+  wordmark,
+} from '@/content/nav';
+import { interestFromLocation } from '@/content/site';
 import styles from './SiteHeader.module.css';
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const hash = useHubSectionHash(pathname);
 
   // Смена маршрута закрывает мобильное меню.
   useEffect(() => {
@@ -21,24 +34,43 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className={styles.header}>
+      <header className={styles.header} data-header-glow>
         <div className={styles.row}>
-          <Link href="/" className={styles.wordmark}>
-            {wordmark}
-          </Link>
+          <div className={styles.brand}>
+            <Link href="/" className={styles.wordmark}>
+              {wordmark}
+            </Link>
+          </div>
 
-          {/* Пять вкладок; шесть услуг по сайтам — за панелью «Сайты».
+          {/* «Сайты» и «VPN/AI» раскрываются группами.
               «Цены» в шапке намеренно нет: на страницу ведут кнопки героев и футер. */}
           <nav className={styles.links} aria-label="Основная навигация">
             <NavButton href="/" label="Главная" active={pathname === '/'} />
-            <SitesMenu pathname={pathname} />
-            <NavButton href="/vpn" label="VPN" active={pathname === '/vpn'} />
-            <NavButton href="/ai" label="AI" active={pathname === '/ai'} />
+            <HubMenu
+              pathname={pathname}
+              hash={hash}
+              label="Сайты"
+              tabHref={sitesTabHref}
+              groups={siteMenuGroups}
+              hubPaths={siteHubPaths}
+            />
+            <HubMenu
+              pathname={pathname}
+              hash={hash}
+              label={infraTabLabel}
+              tabHref={infraTabHref}
+              groups={infraMenuGroups}
+              hubPaths={infraHubPaths}
+              badge="ХИТ!"
+            />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />
           </nav>
 
           <div className={styles.right}>
-            <ContactSalesButton />
+            <span className={styles.deskCta}>
+              <ContactSalesButton interest={interestFromLocation(pathname, hash)} />
+            </span>
+            <ThemeToggle />
             <button
               type="button"
               className={['navbtn', styles.burger].join(' ')}
@@ -51,9 +83,12 @@ export function SiteHeader() {
             </button>
           </div>
         </div>
+        <div className={styles.progress} aria-hidden="true">
+          <span className={styles.progressFill} />
+        </div>
       </header>
 
-      {menuOpen && <MobileMenu pathname={pathname} onNavigate={() => setMenuOpen(false)} />}
+      {menuOpen && <MobileMenu pathname={pathname} hash={hash} onNavigate={() => setMenuOpen(false)} />}
     </>
   );
 }

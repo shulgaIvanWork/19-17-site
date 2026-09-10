@@ -1,0 +1,15 @@
+.withBadge {
+  position: relative;
+}
+
+.withBadge :global(.hitbadge) {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 70%);
+  padding: 0 3px;
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+}

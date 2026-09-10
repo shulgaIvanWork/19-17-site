@@ -24,6 +24,33 @@
 
 .close:hover { background: var(--cloud); }
 
+.call {
+  margin-top: 12px;
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--pewter);
+}
+
+.phone {
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.phone:hover {
+  color: var(--blue-press);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hint {
+  margin: -10px 0 0;
+  font-family: var(--text);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--fog);
+}
+
 .fields {
   display: flex;
   flex-direction: column;
@@ -31,10 +58,27 @@
   margin-top: 26px;
 }
 
+@media (max-width: 768px) {
+  .fields {
+    gap: 16px;
+    margin-top: 18px;
+  }
+}
+
 .actions {
   display: flex;
   gap: 12px;
   margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .actions :global(.btn) {
+    flex: 1 1 140px;
+  }
 }
 
 .confirm {

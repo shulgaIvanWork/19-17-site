@@ -1,24 +1,113 @@
 .footer {
-  border-top: 1px solid var(--cloud);
+  border-top: 1.5px solid var(--pale);
+  background: var(--ash);
+  padding-top: clamp(64px, 8vw, 104px);
+  padding-bottom: max(64px, calc(env(safe-area-inset-bottom) + 48px));
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 32px;
-  padding-top: 28px;
-  padding-bottom: 28px;
-  align-items: center;
+.grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.3fr) minmax(0, 2.7fr);
+  gap: clamp(48px, 8vw, 120px);
+}
+
+.brand {
+  align-self: start;
+}
+
+.wordmark {
+  display: inline-block;
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+.wordmark:hover {
+  color: var(--blue);
 }
 
 .note {
-  margin-right: auto;
-  font-size: 12px;
+  max-width: 30ch;
+  margin: 14px 0 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--graphite);
+}
+
+.phone {
+  display: block;
+  width: fit-content;
+  margin-bottom: 20px;
+  color: var(--carbon);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.phone:hover {
+  color: var(--blue);
+}
+
+.navigation {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+}
+
+.heading {
+  margin-bottom: 16px;
+  font-family: var(--text);
+  font-size: 13px;
   line-height: 18px;
-  color: var(--pewter);
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+.links {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
 }
 
 .link {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--graphite);
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .navigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .navigation {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 36px 24px;
+  }
+
+  .group:first-child {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 420px) {
+  .navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .group:first-child {
+    grid-row: auto;
+  }
 }

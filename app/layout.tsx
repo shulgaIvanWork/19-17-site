@@ -1,8 +1,10 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Manrope, Unbounded } from 'next/font/google';
+import { ClientDecor } from '@/components/ClientDecor';
 import { ContactProvider } from '@/components/ContactContext';
-import { HeroCursorHighlight } from '@/components/HeroCursorHighlight';
 import { Footer } from '@/components/Footer';
+import { ScrollToHash } from '@/components/ScrollToHash';
 import { SiteHeader } from '@/components/SiteHeader';
 import { settings } from '@/content/settings';
 import './globals.css';
@@ -15,6 +17,8 @@ const manrope = Manrope({
   weight: ['400', '500'],
   variable: '--font-manrope',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
 
 /** The display face for .h1 / .h2 and the product-card names.
@@ -30,24 +34,38 @@ const unbounded = Unbounded({
   weight: ['500'],
   variable: '--font-unbounded',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   title: {
-    default: '19×17 — сайты, которые проходят проверку',
+    default: '19×17 — разработка и поддержка цифровых сервисов',
     template: '%s — 19×17',
   },
   description:
-    'Сайты и интернет-магазины под ключ, поддержка, интеграции с Битрикс24 и 1С, корпоративный VPN и нейросеть на вашем железе. Для компаний, которым есть перед кем отчитываться.',
-  // На сайте пока стоят тексты-заготовки и нет цен. Снять этот блок перед запуском.
+    'Создание и обновление сайтов, техническая поддержка, интеграции с CRM и 1С, корпоративный VPN и локальный AI на базе Qwen3-8B.',
+  // Снять запрет на индексацию перед публикацией сайта.
   robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${manrope.variable} ${unbounded.variable}`}>
+    <html lang="ru" className={`${manrope.variable} ${unbounded.variable}`} suppressHydrationWarning>
+      <head>
+        <Script id="theme-boot" strategy="beforeInteractive">
+          {`(function(){try{if(localStorage.getItem('theme')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}})();`}
+        </Script>
+      </head>
       <body>
-        <HeroCursorHighlight enabled={settings.cursorHighlight} />
+        <ScrollToHash />
+        <ClientDecor cursorHighlight={settings.cursorHighlight} />
         <ContactProvider>
           <SiteHeader />
           <main>{children}</main>

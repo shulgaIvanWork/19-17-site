@@ -6,7 +6,13 @@
 
 .rounded { border-radius: 12px; }
 
-.img { object-fit: cover; }
+.img {
+  object-fit: cover;
+}
+
+.portrait {
+  object-position: 50% 20%;
+}
 
 .empty {
   position: absolute;

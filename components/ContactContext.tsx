@@ -2,8 +2,10 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { ContactModal } from './ContactModal';
+import dynamic from 'next/dynamic';
 import { contactCopy } from '@/content/site';
+
+const ContactModal = dynamic(() => import('./ContactModal').then((mod) => mod.ContactModal));
 
 type ContactValue = {
   open: (interest?: string) => void;
@@ -21,12 +23,10 @@ export function useContact() {
 /** Holds the Contact Sales modal for every route. Mounted once, in the layout. */
 export function ContactProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  // Значение по умолчанию берётся из списка чипов, а не дублируется строкой:
-  // иначе при правке списка оно молча перестаёт совпадать и сервер отклоняет заявку.
-  const [interest, setInterest] = useState(contactCopy.interests[0]);
+  const [interests, setInterests] = useState<string[]>([]);
 
   const open = useCallback((preset?: string) => {
-    if (preset) setInterest(preset);
+    setInterests(preset && contactCopy.interests.includes(preset) ? [preset] : []);
     setIsOpen(true);
   }, []);
 
@@ -37,7 +37,7 @@ export function ContactProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      {isOpen && <ContactModal interest={interest} onInterestChange={setInterest} onClose={close} />}
+      {isOpen && <ContactModal interests={interests} onInterestsChange={setInterests} onClose={close} />}
     </Ctx.Provider>
   );
 }

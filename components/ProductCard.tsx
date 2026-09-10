@@ -1,29 +1,33 @@
 import Link from 'next/link';
 import { EnquireLink } from './ContactSalesButton';
+import { CardMark } from './CardMark';
 import { TextLink } from './TextLink';
 import type { ProductPath } from '@/content/products';
 import styles from './ProductCard.module.css';
 
-/** Home's product cards. Typographic, not photographic: the service name set
- *  in the display face, bottom-left on an ash ground that goes cloud on hover.
- *  The name sizes against the card (`15cqw`), not the page. Whole card clicks
- *  through; below it, the title, body and two text links. */
 export function ProductCard({ path }: { path: ProductPath }) {
   return (
-    <div className={styles.card}>
-      <Link href={path.href} className="mediacard">
-        <span className="cardname">{path.card}</span>
+    <article className={styles.card} data-service-card data-cursor-glow>
+      <Link href={path.href} className={styles.photo} tabIndex={-1} aria-hidden="true" prefetch={false}>
+        <CardMark kind={path.mark} />
       </Link>
-      <h2 className="h3" style={{ marginTop: 20 }}>
-        {path.title}
-      </h2>
-      <p className="body" style={{ marginTop: 8, maxWidth: '44ch' }}>
-        {path.body}
-      </p>
-      <div className={styles.links}>
-        <TextLink href={path.href}>Подробнее</TextLink>
-        <EnquireLink interest={path.interest} />
+      <div className={styles.copy}>
+        <h2 className={styles.name}>
+          <Link href={path.href}>{path.card}</Link>
+        </h2>
+        <p className="h3" style={{ marginTop: 8 }}>
+          {path.title}
+        </p>
+        <p className="body" style={{ marginTop: 8, maxWidth: '44ch' }}>
+          {path.body}
+        </p>
+        <div className={styles.links}>
+          <TextLink href={path.href} className="actionlink">
+            Подробнее
+          </TextLink>
+          <EnquireLink interest={path.interest} className="actionlink" />
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

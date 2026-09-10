@@ -1,0 +1,19 @@
+.enter {
+  animation: page-enter 0.18s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+@keyframes page-enter {
+  from {
+    transform: translateY(3px);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+}

@@ -14,8 +14,8 @@ import { contactCopy } from '@/content/site';
 type Enquiry = {
   name: string;
   email: string;
-  company: string;
-  interest: string;
+  phone: string;
+  interests: string[];
   /** Отметка согласия на обработку ПДн. Без неё заявка не принимается. */
   consent: true;
   /** Редакция политики, с которой согласился отправитель, и момент согласия —
@@ -29,7 +29,7 @@ const MAX = 200;
 type ParseResult = { ok: true; enquiry: Enquiry } | { ok: false; error: string };
 
 function parse(body: unknown): ParseResult {
-  const invalid = { ok: false as const, error: 'Проверьте имя, рабочую почту и компанию и отправьте ещё раз.' };
+  const invalid = { ok: false as const, error: 'Проверьте имя и способ связи.' };
   if (typeof body !== 'object' || body === null) return invalid;
   const value = body as Record<string, unknown>;
 
@@ -40,16 +40,26 @@ function parse(body: unknown): ParseResult {
 
   const name = field('name');
   const email = field('email');
-  const company = field('company');
-  const interest = field('interest');
+  const phone = field('phone');
+  const interests = Array.isArray(value.interests)
+    ? value.interests.filter((entry): entry is string => typeof entry === 'string').map((entry) => entry.trim())
+    : [];
 
-  if (!name || !email || !company) return invalid;
-  if ([name, email, company, interest].some((entry) => entry.length > MAX)) return invalid;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return invalid;
-  if (!contactCopy.interests.includes(interest)) return invalid;
+  if (!name) return invalid;
+  if (!email && !phone) {
+    return { ok: false, error: 'Укажите почту или номер телефона — достаточно одного.' };
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, error: 'Проверьте адрес электронной почты.' };
+  }
+  if (phone && (phone.length < 6 || phone.length > 40)) {
+    return { ok: false, error: 'Проверьте номер телефона.' };
+  }
+  if ([name, email, phone, ...interests].some((entry) => entry.length > MAX)) return invalid;
+  if (interests.length === 0 || interests.some((interest) => !contactCopy.interests.includes(interest))) {
+    return { ok: false, error: 'Выберите хотя бы одно направление.' };
+  }
 
-  // Согласие проверяется на сервере отдельно: клиентскую проверку можно обойти,
-  // а принимать данные без основания нельзя.
   if (value.consent !== true) return { ok: false, error: consentCopy.error };
 
   return {
@@ -57,8 +67,8 @@ function parse(body: unknown): ParseResult {
     enquiry: {
       name,
       email,
-      company,
-      interest,
+      phone,
+      interests,
       consent: true,
       policyVersion: typeof value.policyVersion === 'string' ? value.policyVersion : policyVersion,
       consentAt: new Date().toISOString(),
@@ -91,7 +101,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: 'Отправить не получилось. Попробуйте ещё раз.' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Отправить не получилось. Попробуйте еще раз.' }, { status: 400 });
   }
 
   const parsed = parse(body);
@@ -104,13 +114,13 @@ export async function POST(request: Request) {
     const delivered = await deliver(parsed.enquiry);
     if (!delivered) {
       return NextResponse.json(
-        { ok: false, error: 'Сейчас не удалось принять заявку. Напишите нам на почту, мы её увидим.' },
+        { ok: false, error: 'Сейчас не удалось принять заявку. Попробуйте еще раз позже.' },
         { status: 503 },
       );
     }
   } catch {
     return NextResponse.json(
-      { ok: false, error: 'Сейчас не удалось принять заявку. Напишите нам на почту, мы её увидим.' },
+      { ok: false, error: 'Сейчас не удалось принять заявку. Попробуйте еще раз позже.' },
       { status: 502 },
     );
   }

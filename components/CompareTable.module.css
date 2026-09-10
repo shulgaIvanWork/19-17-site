@@ -1,7 +1,63 @@
+.table :global(.divrow:not(.divrow-head)) {
+  border-top-width: 1.5px;
+  border-top-color: var(--pale);
+}
+
+.table :global(.divrow-head) {
+  padding-bottom: 20px;
+}
+
+.header {
+  color: var(--blue);
+  font-weight: 500;
+}
+
 .key {
   font-family: var(--text);
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
   color: var(--carbon);
+}
+
+.cell {
+  color: var(--pewter);
+}
+
+.narrow {
+  display: none;
+}
+
+.card {
+  padding: 18px 0;
+  border-top: 1.5px solid var(--pale);
+}
+
+.card:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: 4px 16px;
+  align-items: baseline;
+  margin-top: 10px;
+}
+
+.pairHead {
+  color: var(--blue);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.pairVal {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .wide { display: none; }
+  .narrow { display: block; }
 }

@@ -1,0 +1,60 @@
+.toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--graphite);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.glass {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: var(--frost);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  transition: opacity var(--t);
+}
+
+.toggle:hover .glass,
+.toggle:focus-visible .glass {
+  opacity: 1;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+}
+
+.fill {
+  fill: currentColor;
+}
+
+.rays {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+html[data-theme='dark'] .glass {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass {
+    transition: none;
+  }
+}

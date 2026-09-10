@@ -5,27 +5,25 @@ import styles from './ChoiceRow.module.css';
 type Props = {
   label: string;
   options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  value: string[];
+  onChange: (value: string[]) => void;
 };
 
-/** Single-select chips. Ash + graphite unselected, Electric Blue + white selected
- *  — one of the accent's four authorised jobs. */
+/** Independent chips: repeated click removes an option from the selection. */
 export function ChoiceRow({ label, options, value, onChange }: Props) {
   return (
-    <div className={styles.group} role="radiogroup" aria-label={label}>
+    <div className={styles.group} role="group" aria-label={label}>
       <div className={styles.label}>{label}</div>
       <div className={styles.row}>
         {options.map((option) => {
-          const selected = option === value;
+          const selected = value.includes(option);
           return (
             <button
               key={option}
               type="button"
-              role="radio"
-              aria-checked={selected}
+              aria-pressed={selected}
               className={[styles.chip, selected ? styles.selected : ''].filter(Boolean).join(' ')}
-              onClick={() => onChange(option)}
+              onClick={() => onChange(selected ? value.filter((item) => item !== option) : [...value, option])}
             >
               {option}
             </button>

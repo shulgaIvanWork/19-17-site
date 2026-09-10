@@ -2,9 +2,14 @@ import Image from 'next/image';
 import type { ImageSlot } from '@/content/products';
 import styles from './Photo.module.css';
 
+const photos: Record<string, string> = {
+  'home-photo': '/photos/home-photo.webp',
+  'founder-1': '/photos/founder-black.webp',
+  'founder-2': '/photos/founder-jacket.webp',
+};
+
 type Props = {
   slot: ImageSlot;
-  /** Set once real photography exists; until then the frame renders empty. */
   src?: string;
   /** 12px radius on every photographic frame. */
   rounded?: boolean;
@@ -13,10 +18,9 @@ type Props = {
   className?: string;
 };
 
-/** One of the eight image slots. No photography has been supplied yet, so an
- *  unfilled slot renders as a quiet ash frame naming what belongs there —
- *  visible in review, never mistaken for a design element. */
 export function Photo({ slot, src, rounded = true, ground = 'ash', className }: Props) {
+  const imageSrc = src ?? photos[slot.id];
+
   return (
     <div
       className={[styles.frame, rounded ? styles.rounded : '', className].filter(Boolean).join(' ')}
@@ -25,8 +29,8 @@ export function Photo({ slot, src, rounded = true, ground = 'ash', className }: 
         background: ground === 'white' ? 'var(--white)' : 'var(--ash)',
       }}
     >
-      {src ? (
-        <Image src={src} alt={slot.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className={styles.img} />
+      {imageSrc ? (
+          <Image src={imageSrc} alt={slot.alt} fill sizes="(max-width: 768px) 100vw, 50vw" quality={82} className={[styles.img, slot.ratio === '4/5' ? styles.portrait : ''].filter(Boolean).join(' ')} />
       ) : (
         <span className={styles.empty}>
           {slot.alt} — {slot.ratio}

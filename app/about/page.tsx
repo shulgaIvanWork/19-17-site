@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
+import { AboutScene } from '@/components/AboutScene';
 import { Photo } from '@/components/Photo';
 import { Section } from '@/components/Section';
+import { phoneHref, phoneLabel } from '@/content/nav';
 import { aboutHero, founders, foundersBand, howWeOperate } from '@/content/team';
 
 export const metadata: Metadata = {
   title: 'О нас',
-  description: 'Небольшая компания для внимательных клиентов. 19×17 ведут основатели.',
+  description: '19×17 — технический подрядчик по сайтам, интеграциям, корпоративному VPN и локальному AI.',
 };
 
 export default function AboutPage() {
@@ -18,6 +20,12 @@ export default function AboutPage() {
         <p className="lede" style={{ marginTop: 16, maxWidth: '48ch' }}>
           {aboutHero.lede}
         </p>
+        <div style={{ marginTop: 40 }}>
+          <div className="label">Телефон</div>
+          <a href={phoneHref} className="phone" style={{ marginTop: 8 }}>
+            {phoneLabel}
+          </a>
+        </div>
       </Section>
 
       <Section>
@@ -31,7 +39,7 @@ export default function AboutPage() {
               {howWeOperate.placeholder}
             </p>
           </div>
-          <Photo slot={howWeOperate.image} />
+          <AboutScene />
         </div>
       </Section>
 

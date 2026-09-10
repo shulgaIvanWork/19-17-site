@@ -1,7 +1,7 @@
+import { BoardScene } from '@/components/BoardScene';
 import { ButtonLink } from '@/components/Button';
 import { Hero } from '@/components/Hero';
 import { NumberedClaim } from '@/components/NumberedClaim';
-import { Photo } from '@/components/Photo';
 import { ProductCard } from '@/components/ProductCard';
 import { Section } from '@/components/Section';
 import { homeAbout, paths, steps } from '@/content/products';
@@ -46,7 +46,7 @@ export default function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <Photo slot={homeAbout.image} />
+          <BoardScene />
         </div>
       </Section>
     </>

@@ -9,12 +9,10 @@
  *  `prefers-reduced-motion`. */
 
 export const settings = {
-  /** Radial highlight following the pointer inside any hero. */
+  /** Radial highlight following the pointer inside heroes and the header. */
   cursorHighlight: true,
-  /** The drifting wireframe object behind the Home hero. */
+  /** Wireframe objects in the Home and service-page heroes. */
   heroObject: true,
-  /** Node count for the wireframe object. Clamped to 40–220 by the component. */
+  /** Node count for the Home globe only. Service meshes are sampled sparser. */
   heroObjectNodes: 110,
-  /** How far the object leans toward the pointer, in radians. */
-  heroObjectSway: 0.38,
 };

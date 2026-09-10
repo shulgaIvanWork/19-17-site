@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 
-/** Writes --mx / --my / --mo on every hero as the pointer moves, which drives
- *  the radial highlight in Hero.module.css. Mounted once in the layout: one
- *  listener for the whole site, and no React re-render per pointer move.
+/** Writes --mx / --my / --mo on highlighted surfaces as the pointer moves.
+ *  Mounted once in the layout: one listener for the whole site, and no React
+ *  re-render per pointer move.
  *
  *  Two details carried over from the prototype, both of which were bugs there
  *  first: the rAF token is a closure-local (an instance field broke on hot
@@ -18,18 +18,30 @@ export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
     let frame: number | null = null;
     let px = 0;
     let py = 0;
+    let active: HTMLElement | null = null;
+
+    const dim = (surface: HTMLElement | null) => {
+      if (!surface) return;
+      surface.style.setProperty('--mo', '0');
+    };
 
     const paint = () => {
       frame = null;
-      document.querySelectorAll<HTMLElement>('[data-hero]').forEach((hero) => {
-        const rect = hero.getBoundingClientRect();
-        const inside = px >= rect.left && px <= rect.right && py >= rect.top && py <= rect.bottom;
-        hero.style.setProperty('--mo', inside ? '1' : '0');
-        if (inside) {
-          hero.style.setProperty('--mx', `${(((px - rect.left) / rect.width) * 100).toFixed(2)}%`);
-          hero.style.setProperty('--my', `${(((py - rect.top) / rect.height) * 100).toFixed(2)}%`);
-        }
-      });
+      const hit = document.elementFromPoint(px, py);
+      const next = hit?.closest<HTMLElement>('[data-hero], [data-header-glow], [data-cursor-glow]') ?? null;
+      if (next !== active) {
+        dim(active);
+        active = next;
+      }
+      if (!active) return;
+      const rect = active.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) {
+        dim(active);
+        return;
+      }
+      active.style.setProperty('--mo', '1');
+      active.style.setProperty('--mx', `${(((px - rect.left) / rect.width) * 100).toFixed(2)}%`);
+      active.style.setProperty('--my', `${(((py - rect.top) / rect.height) * 100).toFixed(2)}%`);
     };
 
     const onMove = (event: PointerEvent) => {
@@ -39,9 +51,8 @@ export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
     };
 
     const onLeave = () => {
-      document
-        .querySelectorAll<HTMLElement>('[data-hero]')
-        .forEach((hero) => hero.style.setProperty('--mo', '0'));
+      dim(active);
+      active = null;
     };
 
     window.addEventListener('pointermove', onMove, { passive: true });
@@ -49,6 +60,7 @@ export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
 
     return () => {
       if (frame !== null) cancelAnimationFrame(frame);
+      dim(active);
       window.removeEventListener('pointermove', onMove);
       document.documentElement.removeEventListener('pointerleave', onLeave);
     };

@@ -1,0 +1,129 @@
+.wrap {
+  position: fixed;
+  right: max(var(--gut), env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 16;
+}
+
+.button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid var(--pale);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--lift) 90%, transparent);
+  color: var(--graphite);
+  box-shadow: 0 8px 24px rgba(23, 26, 32, 0.08);
+  cursor: pointer;
+  transition:
+    background-color var(--t),
+    border-color var(--t),
+    color var(--t);
+}
+
+.button:hover,
+.button[aria-expanded='true'] {
+  border-color: var(--blue);
+  background: var(--white);
+  color: var(--blue);
+}
+
+.button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(240px, 78vw);
+  padding-bottom: 10px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    opacity var(--t),
+    transform var(--t),
+    visibility 0s linear 0.33s;
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity var(--t),
+    transform var(--t),
+    visibility 0s;
+}
+
+.inner {
+  overflow: hidden;
+  border: 1px solid var(--pale);
+  border-radius: 4px;
+  padding: 6px;
+  background: color-mix(in srgb, var(--cloud) 88%, transparent);
+  box-shadow: 0 10px 28px rgba(23, 26, 32, 0.08);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--carbon);
+  cursor: pointer;
+  transition:
+    color var(--t),
+    background-color var(--t),
+    box-shadow var(--t);
+}
+
+.row:hover {
+  color: var(--blue);
+  background: transparent;
+}
+
+.active {
+  color: var(--blue);
+  font-weight: 600;
+  background: rgba(46, 88, 236, 0.1);
+  box-shadow: inset 0 0 0 1px var(--blue);
+}
+
+.active:hover {
+  color: var(--blue);
+  background: rgba(46, 88, 236, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .open {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .wrap {
+    bottom: max(24px, env(safe-area-inset-bottom));
+  }
+}

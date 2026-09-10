@@ -3,7 +3,9 @@
 
 .hero {
   position: relative;
-  min-height: max(680px, min(86vh, 840px));
+  scroll-margin-top: calc(56px + env(safe-area-inset-top, 0px));
+  min-height: calc(100vh - 56px);
+  min-height: calc(100svh - 56px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +17,6 @@
 }
 
 .short {
-  min-height: max(560px, min(66vh, 680px));
   padding-top: 84px;
   padding-bottom: 160px;
 }
@@ -25,6 +26,7 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  pointer-events: none;
 }
 
 .cta {
@@ -57,20 +59,46 @@
   transition: opacity var(--t);
 }
 
+:global(html[data-theme='dark']) .hero::after {
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 30%),
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
 /* Lift hero content above the highlight and the canvas. The two exclusions
    matter: .cta must stay absolutely positioned, and .object must stay behind
    the type — a blanket `.hero > *` silently overrides both, because it has the
    same specificity and simply comes later in the file. */
 .hero > *:not(.object):not(.cta) { position: relative; z-index: 1; }
 
-/* The wireframe object sits behind the type. */
+/* The wireframe sits behind the type. Fine pointers tilt the mesh toward the
+   cursor and may drag to orbit; touch ignores the canvas so a swipe scrolls. */
 .object {
   position: absolute;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
+  contain: paint;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.object:has([data-dragging='true']) {
+  cursor: grabbing;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .object { touch-action: none; }
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .object {
+    pointer-events: none;
+    cursor: auto;
+  }
 }
 
 @media (max-width: 768px) {
-  .hero { padding: 76px var(--gut) 184px; }
+  .hero { padding: 64px var(--gut) 168px; }
 }

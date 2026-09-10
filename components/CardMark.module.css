@@ -1,0 +1,564 @@
+.stage {
+  position: absolute;
+  inset: 0;
+  background: var(--ash);
+  color: var(--blue);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.panelLead {
+  margin: 0;
+}
+
+.panelFrame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--cloud);
+  aspect-ratio: 5 / 4;
+}
+
+.panelFrame .stage {
+  background: var(--white);
+}
+
+.cap,
+.capSub,
+.capFig {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+}
+
+.cap {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.type {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.typeLead {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.typeSub {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--text);
+  font-size: 10px;
+  font-weight: 400;
+  fill-opacity: 0.55;
+}
+
+.capSub {
+  font-size: 12px;
+  font-weight: 400;
+  fill-opacity: 0.52;
+}
+
+.wash {
+  fill: currentColor;
+  fill-opacity: 0.035;
+  stroke: none;
+}
+
+.ink {
+  fill: currentColor;
+  fill-opacity: 0.1;
+  stroke: none;
+}
+
+.still :is(
+  .addr,
+  .winA,
+  .winB,
+  .winC,
+  .rideSite,
+  .siteBlock,
+  .storeTrack,
+  .bag,
+  .rideCart,
+  .frameA,
+  .frameB,
+  .shield,
+  .rideEcg,
+  .lead,
+  .flowEast,
+  .flowWest,
+  .rideEast,
+  .rideEast2,
+  .rideWest,
+  .ring,
+  .wave,
+  .lock,
+  .satA,
+  .satB,
+  .satC,
+  .satD,
+  .satE,
+  .satF,
+  .core,
+  .rideHex,
+  .net
+) {
+  animation: none;
+}
+
+.still :is(.ride, .rideSite, .rideCart, .rideEcg, .rideEast, .rideEast2, .rideWest, .rideHex, .wave) {
+  opacity: 0;
+}
+
+.line,
+.soft,
+.panel,
+.pulse {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.soft { opacity: 0.34; }
+.panel {
+  fill: currentColor;
+  fill-opacity: 0.06;
+}
+.pulse {
+  fill: currentColor;
+  fill-opacity: 0.14;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.win {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ride {
+  fill: currentColor;
+  stroke: none;
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* ---- websites ----------------------------------------------------------- */
+
+.addr {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+.rideSite { opacity: 0; }
+
+/* ---- store -------------------------------------------------------------- */
+
+.storeTrack {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.bag {
+  transform-box: fill-box;
+  transform-origin: center 30%;
+}
+
+.rideCart { opacity: 0; }
+
+/* ---- redesign ----------------------------------------------------------- */
+
+.frameA,
+.frameB {
+  transform-box: view-box;
+  transform-origin: 240px 120px;
+}
+
+.frameA { transform: translate(-14px, -8px); }
+.frameB { transform: translate(16px, 10px) scale(0.9); opacity: 0.38; }
+
+/* ---- support ------------------------------------------------------------ */
+
+.ecg {
+  fill: none;
+}
+
+.shield {
+  transform-box: fill-box;
+  transform-origin: center 70%;
+}
+
+.rideEcg { opacity: 0; }
+
+/* ---- crm ---------------------------------------------------------------- */
+
+.lead {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* ---- 1C ----------------------------------------------------------------- */
+
+.rideEast,
+.rideEast2,
+.rideWest { opacity: 0; }
+
+/* ---- vpn ---------------------------------------------------------------- */
+
+.ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  stroke-dasharray: 3.5 7;
+}
+
+.wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.lock {
+  transform-box: fill-box;
+  transform-origin: center 18%;
+}
+
+.sat {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ---- ai ----------------------------------------------------------------- */
+
+.core {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.rideHex { opacity: 0; }
+
+@media (hover: hover) and (pointer: fine) {
+  :global([data-service-card]:hover) .addr { animation: addr 4.8s ease-in-out infinite; }
+  :global([data-service-card]:hover) .winA { animation: blink 1.8s ease-in-out infinite; }
+  :global([data-service-card]:hover) .winB { animation: blink 1.8s ease-in-out 0.22s infinite; }
+  :global([data-service-card]:hover) .winC { animation: blink 1.8s ease-in-out 0.44s infinite; }
+  :global([data-service-card]:hover) .rideSite {
+    opacity: 1;
+    animation: rideSite 5.6s linear infinite;
+  }
+  :global([data-service-card]:hover) .siteBlock { animation: breathe 5.6s ease-in-out infinite; }
+  :global([data-service-card]:hover) .storeTrack { animation: storeTrack 4.8s linear infinite; }
+  :global([data-service-card]:hover) .bag { animation: bagNod 4.8s ease-in-out infinite; }
+  :global([data-service-card]:hover) .rideCart { animation: dropCart 4.8s ease-in-out infinite; }
+  :global([data-service-card]:hover) .frameA { animation: swapA 6.4s ease-in-out infinite; }
+  :global([data-service-card]:hover) .frameB { animation: swapB 6.4s ease-in-out infinite; }
+  :global([data-service-card]:hover) .shield { animation: shieldPulse 3.6s ease-in-out infinite; }
+  :global([data-service-card]:hover) .rideEcg { animation: rideEcg 1.5s linear infinite; }
+  :global([data-service-card]:hover) .lead { animation: kanban 6.2s ease-in-out infinite; }
+  :global([data-service-card]:hover) .flowEast,
+  :global([data-service-card]:hover) .flowWest {
+    stroke-dasharray: 10 14;
+    animation: dash 1.8s linear infinite;
+  }
+  :global([data-service-card]:hover) .flowWest { animation-direction: reverse; }
+  :global([data-service-card]:hover) .rideEast { animation: packetEast 2.4s linear infinite; }
+  :global([data-service-card]:hover) .rideEast2 { animation: packetEast 2.4s linear 1.2s infinite; }
+  :global([data-service-card]:hover) .rideWest { animation: packetWest 2.4s linear 0.6s infinite; }
+  :global([data-service-card]:hover) .ring { animation: spin 14s linear infinite; }
+  :global([data-service-card]:hover) .wave { animation: radar 3.6s ease-out infinite; }
+  :global([data-service-card]:hover) .lock { animation: lockTick 3.6s ease-in-out infinite; }
+  :global([data-service-card]:hover) .satA { animation: sat 3.6s ease-in-out infinite; }
+  :global([data-service-card]:hover) .satB { animation: sat 3.6s ease-in-out 0.45s infinite; }
+  :global([data-service-card]:hover) .satC { animation: sat 3.6s ease-in-out 0.9s infinite; }
+  :global([data-service-card]:hover) .satD { animation: sat 3.6s ease-in-out 1.35s infinite; }
+  :global([data-service-card]:hover) .satE { animation: sat 3.6s ease-in-out 1.8s infinite; }
+  :global([data-service-card]:hover) .satF { animation: sat 3.6s ease-in-out 2.25s infinite; }
+  :global([data-service-card]:hover) .core { animation: core 5s ease-in-out infinite; }
+  :global([data-service-card]:hover) .rideHex {
+    opacity: 1;
+    animation: rideHex 5s linear infinite;
+  }
+  :global([data-service-card]:hover) .net { animation: net 5s ease-in-out infinite; }
+}
+
+@media not ((hover: hover) and (pointer: fine)) {
+  .addr,
+  .winA,
+  .winB,
+  .winC,
+  .rideSite,
+  .siteBlock,
+  .storeTrack,
+  .bag,
+  .rideCart,
+  .frameA,
+  .frameB,
+  .shield,
+  .rideEcg,
+  .lead,
+  .flowEast,
+  .flowWest,
+  .rideEast,
+  .rideEast2,
+  .rideWest,
+  .ring,
+  .wave,
+  .lock,
+  .satA,
+  .satB,
+  .satC,
+  .satD,
+  .satE,
+  .satF,
+  .core,
+  .rideHex,
+  .net {
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-play-state: paused;
+    animation-delay: calc(var(--mark-p, 0) * -1s);
+  }
+
+  .addr { animation-name: addr; }
+  .winA,
+  .winB,
+  .winC { animation-name: blink; }
+  .rideSite { opacity: 1; animation-name: rideSite; }
+  .siteBlock { animation-name: breathe; }
+  .storeTrack { animation-name: storeTrack; }
+  .bag { animation-name: bagNod; }
+  .rideCart { animation-name: dropCart; }
+  .frameA { animation-name: swapA; }
+  .frameB { animation-name: swapB; }
+  .shield { animation-name: shieldPulse; }
+  .rideEcg { animation-name: rideEcg; }
+  .lead { animation-name: kanban; }
+  .flowEast,
+  .flowWest {
+    stroke-dasharray: 10 14;
+    animation-name: dash;
+  }
+  .flowWest { animation-direction: reverse; }
+  .rideEast,
+  .rideEast2 { animation-name: packetEast; }
+  .rideEast2 { animation-delay: calc((var(--mark-p, 0) - 0.5) * -1s); }
+  .rideWest { animation-name: packetWest; }
+  .ring { animation-name: spin; }
+  .wave { animation-name: radar; }
+  .lock { animation-name: lockTick; }
+  .satA,
+  .satB,
+  .satC,
+  .satD,
+  .satE,
+  .satF { animation-name: sat; }
+  .satB { animation-delay: calc((var(--mark-p, 0) - 0.12) * -1s); }
+  .satC { animation-delay: calc((var(--mark-p, 0) - 0.24) * -1s); }
+  .satD { animation-delay: calc((var(--mark-p, 0) - 0.36) * -1s); }
+  .satE { animation-delay: calc((var(--mark-p, 0) - 0.48) * -1s); }
+  .satF { animation-delay: calc((var(--mark-p, 0) - 0.6) * -1s); }
+  .core { animation-name: core; }
+  .rideHex { opacity: 1; animation-name: rideHex; }
+  .net { animation-name: net; }
+}
+
+/* ---- keyframes ---------------------------------------------------------- */
+
+@keyframes rideSite {
+  0% { transform: translate(252px, 158px); }
+  20% { transform: translate(176px, 158px); }
+  40% { transform: translate(176px, 92px); }
+  60% { transform: translate(304px, 92px); }
+  80% { transform: translate(304px, 176px); }
+  100% { transform: translate(252px, 158px); }
+}
+
+@keyframes addr {
+  0%, 100% { transform: scaleX(0.42); }
+  50% { transform: scaleX(0.86); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.22; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+
+@keyframes storeTrack {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-76px, 0); }
+}
+
+@keyframes bagNod {
+  0%, 28% { transform: scale(1) rotate(0deg); }
+  36% { transform: scale(1.1) rotate(-8deg); }
+  44% { transform: scale(1.04) rotate(4deg); }
+  52%, 100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes dropCart {
+  0%, 6% { transform: translate(292px, 102px); opacity: 0; }
+  10% { transform: translate(292px, 102px); opacity: 1; }
+  22% { transform: translate(328px, 78px); opacity: 1; }
+  34% { transform: translate(370px, 118px); opacity: 1; }
+  42% { transform: translate(372px, 132px); opacity: 0; }
+  100% { transform: translate(372px, 132px); opacity: 0; }
+}
+
+@keyframes swapA {
+  0%, 100% { transform: translate(-14px, -8px) scale(1); opacity: 1; }
+  50% { transform: translate(16px, 10px) scale(0.9); opacity: 0.38; }
+}
+
+@keyframes swapB {
+  0%, 100% { transform: translate(16px, 10px) scale(0.9); opacity: 0.38; }
+  50% { transform: translate(-14px, -8px) scale(1); opacity: 1; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes rideEcg {
+  0% { transform: translate(192px, 126px); opacity: 0; }
+  8% { transform: translate(192px, 126px); opacity: 1; }
+  18% { transform: translate(212px, 126px); opacity: 1; }
+  32% { transform: translate(222px, 102px); }
+  48% { transform: translate(232px, 150px); }
+  62% { transform: translate(244px, 118px); }
+  74% { transform: translate(254px, 126px); }
+  90% { transform: translate(288px, 126px); opacity: 1; }
+  100% { transform: translate(288px, 126px); opacity: 0; }
+}
+
+@keyframes shieldPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.055); }
+}
+
+@keyframes packetEast {
+  0% { transform: translate(186px, 98px); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(240px, 70px); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(294px, 98px); opacity: 0; }
+}
+
+@keyframes packetWest {
+  0% { transform: translate(294px, 142px); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(240px, 170px); opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translate(186px, 142px); opacity: 0; }
+}
+
+@keyframes rideHex {
+  0%, 100% { transform: translate(240px, 64px); }
+  16.67% { transform: translate(288.5px, 92px); }
+  33.33% { transform: translate(288.5px, 148px); }
+  50% { transform: translate(240px, 176px); }
+  66.67% { transform: translate(191.5px, 148px); }
+  83.33% { transform: translate(191.5px, 92px); }
+}
+
+@keyframes core {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+
+@keyframes net {
+  0%, 100% { opacity: 0.34; }
+  50% { opacity: 0.78; }
+}
+
+@keyframes kanban {
+  0%, 8% { transform: translate(0, 0); opacity: 1; }
+  28% { transform: translate(80px, -24px); opacity: 1; }
+  50% { transform: translate(160px, 0); opacity: 1; }
+  62% { transform: translate(160px, 0); opacity: 1; }
+  72% { transform: translate(160px, 0); opacity: 0; }
+  73% { transform: translate(0, 24px); opacity: 0; }
+  86%, 100% { transform: translate(0, 0); opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes radar {
+  0% { transform: scale(0.35); opacity: 0.42; }
+  70% { transform: scale(1); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes lockTick {
+  0%, 100% { transform: rotate(0deg); }
+  12% { transform: rotate(-9deg); }
+  22% { transform: rotate(0deg); }
+}
+
+@keyframes sat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.28); opacity: 0.55; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .addr,
+  .winA,
+  .winB,
+  .winC,
+  .rideSite,
+  .siteBlock,
+  .storeTrack,
+  .bag,
+  .rideCart,
+  .frameA,
+  .frameB,
+  .shield,
+  .rideEcg,
+  .lead,
+  .rideEast,
+  .rideWest,
+  .rideEast2,
+  .ring,
+  .wave,
+  .lock,
+  .satA,
+  .satB,
+  .satC,
+  .satD,
+  .satE,
+  .satF,
+  .core,
+  .rideHex,
+  .net,
+  .flowEast,
+  .flowWest {
+    animation: none;
+  }
+}

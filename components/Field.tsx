@@ -6,7 +6,7 @@ import styles from './Field.module.css';
 type Props = {
   label: string;
   name: string;
-  type?: 'text' | 'email';
+  type?: 'text' | 'email' | 'tel';
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
