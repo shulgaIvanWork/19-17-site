@@ -26,7 +26,7 @@
 
 .input::placeholder { color: var(--fog); }
 
-/* The focus affordance is the rule turning blue — not an outline ring, which
+/* The focus affordance is the rule turning blue - not an outline ring, which
    would double up with the underline on a borderless field. */
 .input:focus,
 .input:focus-visible {

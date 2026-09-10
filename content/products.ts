@@ -24,7 +24,7 @@ export type ProductPath = {
 export type Claim = { num: string; title: string; body: string };
 export type TwoColRow = { k: string; v: string };
 
-/** Главная: восемь карточек. На плашке — линейный знак услуги. */
+/** Главная: восемь карточек. На плашке - линейный знак услуги. */
 export const paths: ProductPath[] = [
   {
     card: 'Создание сайта',
@@ -92,7 +92,7 @@ export const paths: ProductPath[] = [
   },
 ];
 
-/** Главная — как устроена работа. */
+/** Главная - как устроена работа. */
 export const steps: Claim[] = [
   {
     num: '01',

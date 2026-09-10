@@ -107,7 +107,7 @@ function retain(pathname: string, listener: Listener) {
 }
 
 /** Keep the hub hash in sync with the hero that is actually on screen.
- *  Header and jump rail share one observer — not two scroll listeners. */
+ *  Header and jump rail share one observer - not two scroll listeners. */
 export function useHubSectionHash(pathname: string) {
   const [hash, setHash] = useState('');
 

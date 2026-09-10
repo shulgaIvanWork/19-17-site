@@ -5,7 +5,7 @@ import styles from './AboutScene.module.css';
 import { useSceneGaze } from './useSceneGaze';
 import { useSceneProgress } from './useSceneProgress';
 
-/** How the two founders work — the About page's main presentational scene.
+/** How the two founders work - the About page's main presentational scene.
  *  Scroll sorts a brief into a structured project; two figures run the board. */
 export function AboutScene() {
   const ref = useRef<HTMLDivElement>(null);
@@ -18,7 +18,7 @@ export function AboutScene() {
       className={styles.frame}
       data-cursor-glow="scene"
       role="img"
-      aria-label="Два основателя разбирают задачу и собирают её в этапы проекта"
+      aria-label="Два основателя разбирают задачу и собирают ее в этапы проекта"
     >
       <svg className={styles.svg} viewBox="0 0 540 360" fill="none">
         <path className={styles.soft} d="M 22 328 H 518" />

@@ -5,7 +5,7 @@ import { checkEnquiry, type EnquiryInput } from '@/lib/enquiry';
 
 /** The site's only backend need: the enquiry behind Send Enquiry.
  *
- *  Delivery is not wired up — no provider credentials exist yet. Set
+ *  Delivery is not wired up - no provider credentials exist yet. Set
  *  ENQUIRY_WEBHOOK_URL to post the enquiry somewhere (a Bitrix24 inbound
  *  webhook is the obvious destination, since the firm sells that integration),
  *  or replace deliver() with an SMTP/provider call. Until then the route
@@ -24,7 +24,7 @@ async function deliver(enquiry: Enquiry): Promise<boolean> {
 
   if (!url) {
     if (process.env.NODE_ENV === 'development') {
-      console.info('[enquiry] no ENQUIRY_WEBHOOK_URL set — logging instead:', enquiry);
+      console.info('[enquiry] no ENQUIRY_WEBHOOK_URL set - logging instead:', enquiry);
       return true;
     }
     return false;

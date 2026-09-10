@@ -1,4 +1,4 @@
-/* The band label: an .h3 set in pewter at weight 400 — quieter than a heading,
+/* The band label: an .h3 set in pewter at weight 400 - quieter than a heading,
    which is why it is not an .h2. */
 .bandLabel {
   font-family: var(--text);

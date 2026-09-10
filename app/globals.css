@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   19x17 — global tokens and the shared class vocabulary.
+   19x17 - global tokens and the shared class vocabulary.
 
    Ported from the approved prototype's <style> block ("Meridian Site v3.dc.html",
    lines 14-81), which the handoff names as the source of truth. Two deliberate
@@ -32,12 +32,12 @@
   --scene-spot: rgba(62, 106, 225, 0.18);
   --hover-rim: rgba(255, 255, 255, 0.86);
 
-  /* type — both variables are injected by next/font in app/layout.tsx.
+  /* type - both variables are injected by next/font in app/layout.tsx.
      Swapping the display face is this one line. */
   --display: var(--font-unbounded), var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   --text: var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 
-  /* motion — the only transition in the system */
+  /* motion - the only transition in the system */
   --t: 0.33s cubic-bezier(0.5, 0, 0, 0.75);
 
   /* layout */
@@ -147,7 +147,7 @@ img { display: block; max-width: 100%; }
    above would otherwise capture every <h3 class="h3"> and force item headings
    into the caps-only display face. */
 .h3 { font-family: var(--text); font-size: 17px; line-height: 20px; font-weight: 500; }
-/* Promotional numeral. Text face, always — the display face has no usable digits. */
+/* Promotional numeral. Text face, always - the display face has no usable digits. */
 .figure { font-family: var(--text); font-size: 40px; line-height: 48px; font-weight: 400; color: var(--blue); }
 .phone {
   display: inline-block;
@@ -348,7 +348,7 @@ img { display: block; max-width: 100%; }
 
 /* ---- scroll, cursor, reveal --------------------------------------------- */
 
-/* White cursor wash — same recipe as the 3D heroes, reused on scenes, cards
+/* White cursor wash - same recipe as the 3D heroes, reused on scenes, cards
    and the landing nav panel. Heroes and the header keep their own ::after. */
 [data-cursor-glow] {
   position: relative;

@@ -9,7 +9,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { settings } from '@/content/settings';
 import './globals.css';
 
-/** Both faces are self-hosted at build time by next/font — no request ever
+/** Both faces are self-hosted at build time by next/font - no request ever
  *  reaches Google, which a financial-services site needs anyway.
  *  Both carry the Cyrillic subset: the site is Russian-language. */
 const manrope = Manrope({
@@ -23,8 +23,8 @@ const manrope = Manrope({
 
 /** The display face for .h1 / .h2 and the product-card names.
  *
- *  Replaces Universal Sans Display, which had zero Cyrillic glyphs (0 of 66) —
- *  every Russian heading would have fallen through to Manrope — and was in any
+ *  Replaces Universal Sans Display, which had zero Cyrillic glyphs (0 of 66) -
+ *  every Russian heading would have fallen through to Manrope - and was in any
  *  case a personal-use licence that could not ship. Unbounded is OFL, keeps the
  *  wide geometric character, and unlike the old face has lowercase and real
  *  digits. Headings are therefore set in sentence case, exactly as the design

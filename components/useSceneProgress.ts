@@ -4,7 +4,7 @@ import { useEffect, type RefObject } from 'react';
 
 /** Scene is in view before the sort starts, and the pose lands while the
  *  picture is still fully on screen. Ease-out so the last frames arrive a
- *  little early and then hold — visible process, no leftover scrub. */
+ *  little early and then hold - visible process, no leftover scrub. */
 const START = 0.98;
 const END = 0.18;
 

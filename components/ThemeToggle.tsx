@@ -51,7 +51,7 @@ export function ThemeToggle() {
       type="button"
       className={styles.toggle}
       onClick={toggle}
-      aria-label={dark ? 'Светлая тема' : 'Тёмная тема'}
+      aria-label={dark ? 'Светлая тема' : 'Темная тема'}
       aria-pressed={dark}
     >
       <span className={styles.glass} aria-hidden="true" />

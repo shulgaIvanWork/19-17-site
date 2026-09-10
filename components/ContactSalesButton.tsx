@@ -4,7 +4,7 @@ import { Button } from './Button';
 import { TextButton } from './TextLink';
 import { useContact } from './ContactContext';
 
-/** Синяя основная кнопка. Одна на полосу — второй основной кнопки система не допускает. */
+/** Синяя основная кнопка. Одна на полосу - второй основной кнопки система не допускает. */
 export function ContactSalesButton({
   hero,
   label = 'Обсудить задачу',

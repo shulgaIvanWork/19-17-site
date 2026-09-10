@@ -57,7 +57,7 @@ export const siteMenuGroups: NavGroup[] = [
   },
 ];
 
-/** Уникальные услуги для футера — один пункт на маршрут-якорь. */
+/** Уникальные услуги для футера - один пункт на маршрут-якорь. */
 export const siteServices: NavItem[] = siteMenuGroups.flatMap((group) => group.items);
 
 export const siteHubPaths = ['/websites'];
@@ -83,10 +83,10 @@ export const hashFallbacks: Record<string, string> = {
   '/vpn-ai': 'vpn',
 };
 
-/** Клик по самой вкладке «Сайты» ведёт на первую услугу. */
+/** Клик по самой вкладке «Сайты» ведет на первую услугу. */
 export const sitesTabHref = '/websites';
 
-/** Thin spaces around the slash — words themselves stay tight. */
+/** Thin spaces around the slash - words themselves stay tight. */
 export const infraTabLabel = 'VPN\u2009/\u2009AI';
 
 export const phoneHref = 'tel:+79959009404';

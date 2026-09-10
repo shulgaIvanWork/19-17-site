@@ -71,7 +71,7 @@ export type ScrollBasis = {
   mid: Point;
 };
 
-/** Centroids are fixed for a mesh — compute once, not every frame. */
+/** Centroids are fixed for a mesh - compute once, not every frame. */
 export function scrollBasis(points: Point[], parts: number[] | undefined): ScrollBasis {
   return { centers: centroids(points, parts), mid: allCentroid(points) };
 }
@@ -84,7 +84,7 @@ function flyOff(x: number, y: number, p: number): [number, number] {
   return [x + p * EXIT_X, y + p * EXIT_Y];
 }
 
-/** Scroll 0–1 drives a per-shape motion. Globe is unchanged. */
+/** Scroll 0-1 drives a per-shape motion. Globe is unchanged. */
 export function applyHeroScroll(
   shape: HeroShape,
   points: Point[],

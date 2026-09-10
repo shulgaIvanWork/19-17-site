@@ -8,7 +8,7 @@ export type Hero = {
   titleWidth: string;
   ledeWidth: string;
   blockWidth: string;
-  /** вторая, белая кнопка — подпись своя на каждом маршруте */
+  /** вторая, белая кнопка - подпись своя на каждом маршруте */
   secondaryCta: string;
 };
 
@@ -95,7 +95,7 @@ export const heroes = {
   },
 } satisfies Record<string, Hero>;
 
-/** Сноски под блоками — 12px, цвет fog. */
+/** Сноски под блоками - 12px, цвет fog. */
 export const footnotes = {
   websites: 'Состав работ зависит от числа страниц, готовности материалов и нужных интеграций. Оценку подготовим после короткого брифа.',
   pages:

@@ -15,7 +15,7 @@ export type Mesh = {
   edges: [number, number][];
   /** Semantic group per point (page index, 1 vs C, star, …). */
   parts?: number[];
-  /** 0–1 along a stroke; used to grow the CRM arrow from its base. */
+  /** 0-1 along a stroke; used to grow the CRM arrow from its base. */
   along?: number[];
 };
 

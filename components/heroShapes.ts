@@ -1,6 +1,6 @@
 /** Point clouds for the hero wireframe.
  *
- *  Home is the original Fibonacci sphere — do not change it.
+ *  Home is the original Fibonacci sphere - do not change it.
  *  Product heroes are rounded 3D letters and icons sampled in regular tube
  *  rings. The Home globe remains independent from this pipeline. */
 

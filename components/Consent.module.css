@@ -3,7 +3,7 @@
 }
 
 /* Настоящий чекбокс: с клавиатуры и для скринридера работает он, визуально
-   его заменяет .box. Не display:none — иначе он выпадает из фокуса. */
+   его заменяет .box. Не display:none - иначе он выпадает из фокуса. */
 .input {
   position: absolute;
   width: 1px;
@@ -33,7 +33,7 @@
 
 .label:hover .box { background: var(--cloud); }
 
-/* Отмеченное состояние — синяя заливка, как у выбранного чипа. */
+/* Отмеченное состояние - синяя заливка, как у выбранного чипа. */
 .input:checked + .label .box,
 .input:checked + .label:hover .box {
   background: var(--blue);

@@ -22,7 +22,7 @@ const scenes: Record<SceneId, (props: { uid: string }) => ReactNode> = {
   aiStack: AiStack,
 };
 
-/** Column illustration beside the matching copy — not a separate band above it. */
+/** Column illustration beside the matching copy - not a separate band above it. */
 export function ScenePanel({ kind }: { kind: SceneId }) {
   const ref = useRef<HTMLDivElement>(null);
   useSceneProgress(ref);
@@ -702,7 +702,7 @@ function CrmPipe({ uid }: { uid: string }) {
           3
         </T>
         <Deal x={190} y={84} title="ООО «Вектор»" meta="КП отправлено" sum="420 000 ₽" hot write="B" />
-        <Deal x={190} y={166} title="ИП Сергеев" meta="Счёт выставлен" sum="86 000 ₽" write="C" />
+        <Deal x={190} y={166} title="ИП Сергеев" meta="Счет выставлен" sum="86 000 ₽" write="C" />
         <Deal x={190} y={248} title="«Рассвет»" meta="Согласование" sum="1,2 млн ₽" write="D" />
         <T x="198" y="340" k="typeSub" write="D">
           в работе

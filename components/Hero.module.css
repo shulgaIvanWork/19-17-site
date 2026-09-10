@@ -1,4 +1,4 @@
-/* Hero — the one authorised gradient, and the only absolutely positioned row
+/* Hero - the one authorised gradient, and the only absolutely positioned row
    in the system. Ported from .hero / .hero-sm / .herocta in the prototype. */
 
 .hero {
@@ -41,7 +41,7 @@
   justify-content: center;
 }
 
-/* The cursor highlight — the second authorised gradient. --mx/--my/--mo are
+/* The cursor highlight - the second authorised gradient. --mx/--my/--mo are
    written by HeroCursorHighlight; with no pointer the opacity is 0 and nothing
    paints, so the hero is unchanged for keyboard and touch users. */
 .hero::after {
@@ -69,7 +69,7 @@
 
 /* Lift hero content above the highlight and the canvas. The two exclusions
    matter: .cta must stay absolutely positioned, and .object must stay behind
-   the type — a blanket `.hero > *` silently overrides both, because it has the
+   the type - a blanket `.hero > *` silently overrides both, because it has the
    same specificity and simply comes later in the file. */
 .hero > *:not(.object):not(.cta) { position: relative; z-index: 1; }
 

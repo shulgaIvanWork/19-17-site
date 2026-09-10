@@ -1,7 +1,7 @@
 import { ButtonLink } from '@/components/Button';
 import { Section } from '@/components/Section';
 
-/** В утверждённом дизайне страницы 404 нет — собрана из частей той же системы
+/** В утвержденном дизайне страницы 404 нет - собрана из частей той же системы
  *  и намеренно проста. Заменить, если у заказчика будет свой текст. */
 export default function NotFound() {
   return (

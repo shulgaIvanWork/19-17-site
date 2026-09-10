@@ -1,5 +1,5 @@
 /** Страница «О нас». Переведено с прототипа.
- *  Показаны только двое основателей; наёмных сотрудников намеренно нет. */
+ *  Показаны только двое основателей; наемных сотрудников намеренно нет. */
 
 import type { ImageSlot } from './products';
 
@@ -29,10 +29,10 @@ export type Founder = {
 
 export const founders: Founder[] = [
   {
-    name: 'Чебыкин Артём',
+    name: 'Чебыкин Артем',
     role: 'Работа с клиентами',
     body: 'Обсуждает задачу, готовит предложение и отвечает за организацию работ.',
-    image: { id: 'founder-1', src: '/photos/founder-black.webp', alt: 'Чебыкин Артём', ratio: '4/5' },
+    image: { id: 'founder-1', src: '/photos/founder-black.webp', alt: 'Чебыкин Артем', ratio: '4/5' },
   },
   {
     name: 'Шульга Иван',

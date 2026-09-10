@@ -90,7 +90,7 @@ export const aiTable: CompareTable = {
   ],
 };
 
-/** Полосы чередуют белый и светлый фон сверху вниз. Первая полоса — «Создание
+/** Полосы чередуют белый и светлый фон сверху вниз. Первая полоса - «Создание
  *  сайта» с колонками тарифов, она задана отдельно в самой странице. */
 export const pricingTables: { table: CompareTable; surface: 'white' | 'ash' }[] = [
   { table: storeTable, surface: 'ash' },
