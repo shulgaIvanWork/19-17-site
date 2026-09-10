@@ -1,3 +1,7 @@
+// globals.css - первым импортом. Turbopack (Next 16) подключает CSS строго в порядке
+// импортов: если модули шапки и футера импортированы раньше, глобальный класс
+// (.menurow, .btn) перекрывает модульный той же специфичности.
+import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Manrope, Unbounded } from 'next/font/google';
@@ -7,7 +11,6 @@ import { Footer } from '@/components/site/Footer';
 import { ScrollToHash } from '@/components/nav/ScrollToHash';
 import { SiteHeader } from '@/components/nav/SiteHeader';
 import { settings } from '@/content/settings';
-import './globals.css';
 
 /** Both faces are self-hosted at build time by next/font - no request ever
  *  reaches Google, which a financial-services site needs anyway.
