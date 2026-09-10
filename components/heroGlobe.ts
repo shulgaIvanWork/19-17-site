@@ -2,7 +2,7 @@ import type { Mesh, Point } from './heroTypes';
 
 const PHI = Math.PI * (3 - Math.sqrt(5));
 
-export function fibonacciSphere(n: number): Point[] {
+function fibonacciSphere(n: number): Point[] {
   const points: Point[] = [];
   for (let i = 0; i < n; i++) {
     const y = 1 - (i / (n - 1)) * 2;
@@ -13,7 +13,7 @@ export function fibonacciSphere(n: number): Point[] {
   return points;
 }
 
-export function nearestEdges(points: Point[], k: number, maxDist = Infinity): [number, number][] {
+function nearestEdges(points: Point[], k: number, maxDist = Infinity): [number, number][] {
   const seen = new Set<string>();
   const edges: [number, number][] = [];
   const max2 = maxDist * maxDist;

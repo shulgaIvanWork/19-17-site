@@ -1,14 +1,5 @@
+import type { CardMarkId } from '@/content/products';
 import styles from './CardMark.module.css';
-
-export type CardMarkId =
-  | 'websites'
-  | 'store'
-  | 'redesign'
-  | 'support'
-  | 'crm'
-  | 'onec'
-  | 'vpn'
-  | 'ai';
 
 /** Geometric service marks. Rest pose is the logo; hover runs a closed loop
  *  in the same line-and-node language as the hero wireframes. */

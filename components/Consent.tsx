@@ -13,7 +13,7 @@ type CheckRowProps = {
 };
 
 /** Квадрат 4px из системы: светлый без отметки, синий с галочкой. */
-export function CheckRow({ checked, onChange, children, required }: CheckRowProps) {
+function CheckRow({ checked, onChange, children, required }: CheckRowProps) {
   const id = useId();
 
   return (

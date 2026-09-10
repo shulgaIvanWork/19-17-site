@@ -1,6 +1,15 @@
 /** Контент направлений. Каждый экран собирается из одного из массивов ниже. */
 
-import type { CardMarkId } from '@/components/CardMark';
+/** Линейный знак услуги на карточке; рисует его components/CardMark. */
+export type CardMarkId =
+  | 'websites'
+  | 'store'
+  | 'redesign'
+  | 'support'
+  | 'crm'
+  | 'onec'
+  | 'vpn'
+  | 'ai';
 
 export type ImageSlot = {
   id: string;

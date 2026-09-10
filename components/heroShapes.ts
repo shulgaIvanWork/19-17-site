@@ -15,7 +15,7 @@ const TUBE_R = 0.075;
 const TRACKING = 0.28;
 const CAP_LAYERS = 1;
 /** Shared em: cap-height = 1, baseline = 0. Never rescale a word by its bbox. */
-export const EM = 0.78;
+const EM = 0.78;
 
 type Poly = [number, number][];
 type Glyph = {

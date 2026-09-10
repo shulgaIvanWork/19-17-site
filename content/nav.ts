@@ -10,10 +10,10 @@ export type NavItem = {
 export type NavGroup = { title: string; href: string; items: NavItem[] };
 
 /** Метка «хит» у вкладки VPN/AI в шапке и у пункта VPN в мобильном меню. */
-export const hitBadge = 'ХИТ!';
+export const hitBadge = 'ХИТ';
 
 /** Все маршруты, в порядке мобильного меню и футера. */
-export const nav: NavItem[] = [
+const nav: NavItem[] = [
   { href: '/', label: 'Главная' },
   { href: '/websites#landing', label: 'Лендинг' },
   { href: '/websites#multipage', label: 'Многостраничный сайт' },
@@ -93,7 +93,7 @@ export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';
 
 /** Правовые ссылки. Живут отдельно от навигации: это не разделы сайта. */
-export const legalLinks: NavItem[] = [
+const legalLinks: NavItem[] = [
   { href: '/privacy', label: 'Политика обработки персональных данных' },
 ];
 

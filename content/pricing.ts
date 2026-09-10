@@ -40,7 +40,7 @@ export type CompareTable = {
   rows: [string, string, string, string][];
 };
 
-export const storeTable: CompareTable = {
+const storeTable: CompareTable = {
   heading: 'Интернет-магазин',
   headers: ['Масштаб', 'Товаров', 'Что учитываем', 'Оценка'],
   rows: [
@@ -50,7 +50,7 @@ export const storeTable: CompareTable = {
   ],
 };
 
-export const supportTable: CompareTable = {
+const supportTable: CompareTable = {
   heading: 'Техническая поддержка',
   headers: ['Формат', 'Текущие задачи', 'Развитие', 'Стоимость'],
   rows: [
@@ -60,7 +60,7 @@ export const supportTable: CompareTable = {
   ],
 };
 
-export const integrationsTable: CompareTable = {
+const integrationsTable: CompareTable = {
   heading: 'Интеграции с CRM и 1С',
   headers: ['Масштаб', 'Систем', 'Что входит', 'Оценка'],
   rows: [
@@ -70,7 +70,7 @@ export const integrationsTable: CompareTable = {
   ],
 };
 
-export const vpnTable: CompareTable = {
+const vpnTable: CompareTable = {
   heading: 'Корпоративный VPN',
   headers: ['Тариф', 'Устройств', 'Кому подходит', 'В месяц'],
   rows: [
@@ -80,7 +80,7 @@ export const vpnTable: CompareTable = {
   ],
 };
 
-export const aiTable: CompareTable = {
+const aiTable: CompareTable = {
   heading: 'Локальный AI на базе Qwen3-8B',
   headers: ['Вариант', 'Пользователей', 'Состав', 'Оценка'],
   rows: [

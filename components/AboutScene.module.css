@@ -53,15 +53,6 @@
   cursor: default;
 }
 
-.fakeBtn .hit {
-  transition: fill var(--t), stroke var(--t);
-}
-
-.fakeBtn:hover .hit {
-  fill: rgba(62, 106, 225, 0.38);
-  stroke: rgba(255, 255, 255, 0.95);
-}
-
 .rest {
   transition: opacity var(--t);
 }
