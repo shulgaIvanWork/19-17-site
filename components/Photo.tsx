@@ -2,11 +2,6 @@ import Image from 'next/image';
 import type { ImageSlot } from '@/content/products';
 import styles from './Photo.module.css';
 
-const photos: Record<string, string> = {
-  'founder-1': '/photos/founder-black.webp',
-  'founder-2': '/photos/founder-jacket.webp',
-};
-
 type Props = {
   slot: ImageSlot;
   src?: string;
@@ -18,7 +13,7 @@ type Props = {
 };
 
 export function Photo({ slot, src, rounded = true, ground = 'ash', className }: Props) {
-  const imageSrc = src ?? photos[slot.id];
+  const imageSrc = src ?? slot.src;
 
   return (
     <div

@@ -2,7 +2,13 @@
 
 import type { CardMarkId } from '@/components/CardMark';
 
-export type ImageSlot = { id: string; alt: string; ratio: '3/2' | '4/5' };
+export type ImageSlot = {
+  id: string;
+  alt: string;
+  ratio: '3/2' | '4/5';
+  /** Файл в public/photos. Нет файла - Photo рисует рамку-заглушку с подписью. */
+  src?: string;
+};
 
 export type ProductPath = {
   /** Название услуги на плашке карточки, дисплейной гарнитурой. */

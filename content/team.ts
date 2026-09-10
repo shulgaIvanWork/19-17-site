@@ -32,12 +32,12 @@ export const founders: Founder[] = [
     name: 'Чебыкин Артём',
     role: 'Работа с клиентами',
     body: 'Обсуждает задачу, готовит предложение и отвечает за организацию работ.',
-    image: { id: 'founder-1', alt: 'Чебыкин Артём', ratio: '4/5' },
+    image: { id: 'founder-1', src: '/photos/founder-black.webp', alt: 'Чебыкин Артём', ratio: '4/5' },
   },
   {
     name: 'Шульга Иван',
     role: 'Разработка и инфраструктура',
     body: 'Отвечает за технические решения, разработку, интеграции и внутреннюю инфраструктуру.',
-    image: { id: 'founder-2', alt: 'Шульга Иван', ratio: '4/5' },
+    image: { id: 'founder-2', src: '/photos/founder-jacket.webp', alt: 'Шульга Иван', ratio: '4/5' },
   },
 ];

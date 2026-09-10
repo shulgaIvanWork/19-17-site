@@ -6,9 +6,10 @@ import { Consent } from './Consent';
 import { ChoiceRow } from './ChoiceRow';
 import { Field } from './Field';
 import { Overlay } from './Overlay';
-import { consentCopy, policyVersion } from '@/content/legal';
+import { policyVersion } from '@/content/legal';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { contactCopy } from '@/content/site';
+import { checkEnquiry } from '@/lib/enquiry';
 import styles from './ContactModal.module.css';
 
 type Props = {
@@ -31,32 +32,10 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
   async function send(event: React.FormEvent) {
     event.preventDefault();
 
-    if (interests.length === 0) {
-      setMessage('Выберите хотя бы одно направление.');
-      setStatus('error');
-      return;
-    }
-
-    if (!email.trim() && !phone.trim()) {
-      setMessage('Укажите почту или номер телефона — достаточно одного.');
-      setStatus('error');
-      return;
-    }
-
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setMessage('Проверьте адрес электронной почты.');
-      setStatus('error');
-      return;
-    }
-
-    if (phone.trim() && (phone.trim().length < 6 || phone.trim().length > 40)) {
-      setMessage('Проверьте номер телефона.');
-      setStatus('error');
-      return;
-    }
-
-    if (!consent) {
-      setMessage(consentCopy.error);
+    // Та же проверка, что на сервере (lib/enquiry): одни правила и одни тексты.
+    const checked = checkEnquiry({ name, email, phone, interests, consent });
+    if (!checked.ok) {
+      setMessage(checked.error);
       setStatus('error');
       return;
     }
@@ -67,24 +46,17 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
       const response = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          interests,
-          consent,
-          policyVersion,
-        }),
+        body: JSON.stringify({ ...checked.value, policyVersion }),
       });
       const result = (await response.json()) as { ok?: boolean; error?: string };
       if (!response.ok || !result.ok) {
-        setMessage(result.error ?? 'Отправить не получилось. Попробуйте еще раз.');
+        setMessage(result.error ?? contactCopy.errors.send);
         setStatus('error');
         return;
       }
       setStatus('sent');
     } catch {
-      setMessage('Отправить не получилось. Попробуйте еще раз.');
+      setMessage(contactCopy.errors.send);
       setStatus('error');
     }
   }
