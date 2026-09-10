@@ -79,7 +79,18 @@
 }
 
 .label {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Плашка поверх подписи, в правом верхнем углу, как в шапке. */
+.label :global(.hitbadge) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  transform: translate(85%, -55%);
+  pointer-events: none;
 }

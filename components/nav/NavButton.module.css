@@ -2,11 +2,13 @@
   position: relative;
 }
 
+/* Плашка поверх текста вкладки, в правом верхнем углу. */
 .withBadge :global(.hitbadge) {
   position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 70%);
+  top: 0;
+  right: 2px;
+  z-index: 1;
+  transform: translate(35%, -30%);
   padding: 0 3px;
   font-size: 8px;
   line-height: 10px;
