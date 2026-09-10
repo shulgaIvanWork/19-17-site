@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ContactSalesButton } from './ContactSalesButton';
-import { drawerLinks, infraMenuGroups, isHashCurrent, jumpHash, siteMenuGroups } from '@/content/nav';
-import { interestFromLocation } from '@/content/site';
+import { drawerLinks, infraMenuGroups, siteMenuGroups } from '@/content/nav';
+import { interestFromLocation, isHashCurrent, jumpHash } from '@/lib/hubNav';
 import styles from './MobileMenu.module.css';
 
 type Props = { pathname: string; hash: string; onNavigate: () => void };
@@ -13,6 +13,9 @@ const rest: { href: string; label: string; badge?: string }[] = [
   { href: '/about', label: 'О нас' },
   { href: '/pricing', label: 'Цены' },
 ];
+
+/** Те же группы, что у вкладок «Сайты» и «VPN/AI». */
+const groups = [...siteMenuGroups, ...infraMenuGroups];
 
 /** Меню: те же группы, что у вкладок «Сайты» и «VPN/AI», затем служебные. */
 export function MobileMenu({ pathname, hash, onNavigate }: Props) {
@@ -37,92 +40,62 @@ export function MobileMenu({ pathname, hash, onNavigate }: Props) {
           ›
         </span>
       </Link>
-      {siteMenuGroups.map((group) => (
-        <div
-          key={group.title}
-          className={styles.group}
-          onClick={(event) => {
-            if ((event.target as HTMLElement).closest('a')) return;
-            goGroup(group.href);
-          }}
-        >
-          <Link
-            href={group.href}
-            className={styles.heading}
+      {groups.map((group) => {
+        // Группа с меткой оборачивает подписи всех своих пунктов - так было и
+        // в разметке до слияния двух одинаковых блоков.
+        const wrapLabels = group.items.some((entry) => entry.badge);
+        return (
+          <div
+            key={group.title}
+            className={styles.group}
             onClick={(event) => {
-              if (jumpHash(group.href, pathname)) event.preventDefault();
-              onNavigate();
+              if ((event.target as HTMLElement).closest('a')) return;
+              goGroup(group.href);
             }}
           >
-            {group.title}
-          </Link>
-          {group.items.map((item) => (
             <Link
-              key={`${item.href}:${item.label}`}
-              href={item.href}
-              className={[styles.row, styles.sub, isHashCurrent(pathname, hash, item.href) ? styles.current : '']
-                .filter(Boolean)
-                .join(' ')}
+              href={group.href}
+              className={styles.heading}
               onClick={(event) => {
-                if (jumpHash(item.href, pathname)) event.preventDefault();
+                if (jumpHash(group.href, pathname)) event.preventDefault();
                 onNavigate();
               }}
             >
-              {item.label}
-              <span className="label" aria-hidden="true">
-                ›
-              </span>
+              {group.title}
             </Link>
-          ))}
-        </div>
-      ))}
-      {infraMenuGroups.map((group) => (
-        <div
-          key={group.title}
-          className={styles.group}
-          onClick={(event) => {
-            if ((event.target as HTMLElement).closest('a')) return;
-            goGroup(group.href);
-          }}
-        >
-          <Link
-            href={group.href}
-            className={styles.heading}
-            onClick={(event) => {
-              if (jumpHash(group.href, pathname)) event.preventDefault();
-              onNavigate();
-            }}
-          >
-            {group.title}
-          </Link>
-          {group.items.map((item, index) => (
-            <Link
-              key={`${item.href}:${item.label}`}
-              href={item.href}
-              className={[styles.row, styles.sub, isHashCurrent(pathname, hash, item.href) ? styles.current : '']
-                .filter(Boolean)
-                .join(' ')}
-              onClick={(event) => {
-                if (jumpHash(item.href, pathname)) event.preventDefault();
-                onNavigate();
-              }}
-              aria-label={index === 0 ? `${item.label}, ХИТ!` : undefined}
-            >
-              <span className={styles.label}>
-                {item.label}
-                {index === 0 ? (
-                  <span className="hitbadge" aria-hidden="true">
-                    ХИТ!
+            {group.items.map((item) => (
+              <Link
+                key={`${item.href}:${item.label}`}
+                href={item.href}
+                className={[styles.row, styles.sub, isHashCurrent(pathname, hash, item.href) ? styles.current : '']
+                  .filter(Boolean)
+                  .join(' ')}
+                onClick={(event) => {
+                  if (jumpHash(item.href, pathname)) event.preventDefault();
+                  onNavigate();
+                }}
+                aria-label={item.badge ? `${item.label}, ${item.badge}` : undefined}
+              >
+                {wrapLabels ? (
+                  <span className={styles.label}>
+                    {item.label}
+                    {item.badge ? (
+                      <span className="hitbadge" aria-hidden="true">
+                        {item.badge}
+                      </span>
+                    ) : null}
                   </span>
-                ) : null}
-              </span>
-              <span className="label" aria-hidden="true">
-                ›
-              </span>
-            </Link>
-          ))}
-        </div>
-      ))}
+                ) : (
+                  item.label
+                )}
+                <span className="label" aria-hidden="true">
+                  ›
+                </span>
+              </Link>
+            ))}
+          </div>
+        );
+      })}
       {rest.map((item) => (
         <Link
           key={item.href}

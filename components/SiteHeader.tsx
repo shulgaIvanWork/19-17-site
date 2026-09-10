@@ -14,12 +14,13 @@ import {
   infraMenuGroups,
   infraTabHref,
   infraTabLabel,
+  hitBadge,
   siteHubPaths,
   siteMenuGroups,
   sitesTabHref,
   wordmark,
 } from '@/content/nav';
-import { interestFromLocation } from '@/content/site';
+import { interestFromLocation } from '@/lib/hubNav';
 import styles from './SiteHeader.module.css';
 
 export function SiteHeader() {
@@ -61,7 +62,7 @@ export function SiteHeader() {
               tabHref={infraTabHref}
               groups={infraMenuGroups}
               hubPaths={infraHubPaths}
-              badge="ХИТ!"
+              badge={hitBadge}
             />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />
           </nav>

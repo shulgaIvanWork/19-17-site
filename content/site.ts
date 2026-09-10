@@ -1,4 +1,3 @@
-import { hashFallbacks } from './nav';
 
 /** Основные тексты страниц: первые экраны, пояснения и форма заявки. */
 
@@ -147,7 +146,8 @@ export const contactCopy = {
   },
 };
 
-const interestBySection: Record<string, string> = {
+/** Направление заявки по якорю раздела хаба. Читает lib/hubNav. */
+export const interestBySection: Record<string, string> = {
   landing: 'Создание сайта',
   multipage: 'Создание сайта',
   marketplace: 'Интернет-магазин',
@@ -159,8 +159,3 @@ const interestBySection: Record<string, string> = {
   ai: 'Локальный AI',
 };
 
-/** Направление заявки по текущей странице и якорю раздела. */
-export function interestFromLocation(pathname: string, hash: string): string | undefined {
-  const id = hash.replace(/^#/, '') || hashFallbacks[pathname] || '';
-  return interestBySection[id];
-}

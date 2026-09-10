@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { jumpHash, isHashCurrent, type NavGroup } from '@/content/nav';
+import type { NavGroup } from '@/content/nav';
+import { isHashCurrent, jumpHash } from '@/lib/hubNav';
+import { useHoverMenu } from '@/lib/useHoverMenu';
 import navStyles from './NavButton.module.css';
 import styles from './SitesMenu.module.css';
 
@@ -19,76 +20,25 @@ type Props = {
 
 /** Вкладка хаба и выпадающая панель с группами услуг.
  *
- *  Отступ 10px под кнопкой — это прозрачный padding ВНУТРИ `.menupanel`, а не
- *  margin: с margin между кнопкой и панелью остаётся мёртвая полоса, и меню
- *  закрывается раньше, чем курсор дойдёт. Закрытие отложено на 200 мс и
- *  отменяется, если курсор вернулся.
- *
- *  В прототипе панель работает только по наведению. Здесь добавлено то, что
- *  нужно в продакшене: открытие по фокусу, строки — настоящие ссылки, Esc
- *  закрывает и возвращает фокус на кнопку, уход фокуса из группы закрывает. */
+ *  Отступ 10px под кнопкой - это прозрачный padding ВНУТРИ `.menupanel`, а не
+ *  margin: с margin между кнопкой и панелью остается мертвая полоса, и меню
+ *  закрывается раньше, чем курсор дойдет. Открытие, задержку закрытия, Esc и
+ *  потерю фокуса дает useHoverMenu; строки меню - настоящие ссылки. */
 export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badge }: Props) {
-  const [open, setOpen] = useState(false);
+  const { open, close, wrapProps, triggerRef } = useHoverMenu<HTMLAnchorElement>(pathname);
   const active = hubPaths.includes(pathname);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLAnchorElement>(null);
   const router = useRouter();
-
-  const cancelClose = () => {
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-  };
 
   const goGroup = (href: string) => {
     if (jumpHash(href, pathname)) {
-      cancelClose();
-      setOpen(false);
+      close();
       return;
     }
     router.push(href);
   };
 
-  const openNow = () => {
-    cancelClose();
-    setOpen(true);
-  };
-
-  const closeSoon = () => {
-    cancelClose();
-    closeTimer.current = setTimeout(() => setOpen(false), 200);
-  };
-
-  useEffect(() => cancelClose, []);
-
-  useEffect(() => {
-    cancelClose();
-    setOpen(false);
-  }, [pathname]);
-
   return (
-    <div
-      ref={wrapRef}
-      className={styles.wrap}
-      onMouseEnter={openNow}
-      onMouseLeave={closeSoon}
-      onFocus={openNow}
-      onBlur={(event) => {
-        if (!wrapRef.current?.contains(event.relatedTarget as Node | null)) {
-          cancelClose();
-          setOpen(false);
-        }
-      }}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape' && open) {
-          cancelClose();
-          setOpen(false);
-          triggerRef.current?.focus();
-        }
-      }}
-    >
+    <div className={styles.wrap} {...wrapProps}>
       <Link
         ref={triggerRef}
         href={tabHref}
@@ -129,8 +79,7 @@ export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badg
                 onClick={(event) => {
                   if (!jumpHash(group.href, pathname)) return;
                   event.preventDefault();
-                  cancelClose();
-                  setOpen(false);
+                  close();
                 }}
               >
                 {group.title}
@@ -148,8 +97,7 @@ export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badg
                         onClick={(event) => {
                           if (!jumpHash(item.href, pathname)) return;
                           event.preventDefault();
-                          cancelClose();
-                          setOpen(false);
+                          close();
                         }}
                       >
                         <span className={[styles.name, current ? styles.current : ''].filter(Boolean).join(' ')}>

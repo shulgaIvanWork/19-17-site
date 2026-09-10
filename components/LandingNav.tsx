@@ -1,44 +1,18 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { hubStops, isHashCurrent, jumpHash } from '@/content/nav';
+import { hubStops, isHashCurrent, jumpHash } from '@/lib/hubNav';
+import { useHoverMenu } from '@/lib/useHoverMenu';
 import { useHubSectionHash } from './useHubSectionHash';
 import styles from './LandingNav.module.css';
 
-/** Round control on hub landings. Hover (or tap) opens a compact section list
- *  in the same spirit as the Sites / VPN·AI header menus. */
+/** Круглая кнопка на хабах. Наведение (или касание) открывает короткий список
+ *  разделов - в том же духе, что меню «Сайты» и «VPN/AI» в шапке. */
 export function LandingNav() {
   const pathname = usePathname();
   const hash = useHubSectionHash(pathname);
   const stops = hubStops(pathname);
-  const [open, setOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-
-  const cancelClose = () => {
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-  };
-
-  const openNow = () => {
-    cancelClose();
-    setOpen(true);
-  };
-
-  const closeSoon = () => {
-    cancelClose();
-    closeTimer.current = setTimeout(() => setOpen(false), 200);
-  };
-
-  useEffect(() => cancelClose, []);
-  useEffect(() => {
-    cancelClose();
-    setOpen(false);
-  }, [pathname]);
+  const { open, setOpen, wrapProps, triggerRef } = useHoverMenu<HTMLButtonElement>(pathname);
 
   if (!stops || stops.length < 2) return null;
 
@@ -48,26 +22,7 @@ export function LandingNav() {
   };
 
   return (
-    <div
-      ref={wrapRef}
-      className={styles.wrap}
-      onMouseEnter={openNow}
-      onMouseLeave={closeSoon}
-      onFocus={openNow}
-      onBlur={(event) => {
-        if (!wrapRef.current?.contains(event.relatedTarget as Node | null)) {
-          cancelClose();
-          setOpen(false);
-        }
-      }}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape' && open) {
-          cancelClose();
-          setOpen(false);
-          triggerRef.current?.focus();
-        }
-      }}
-    >
+    <div className={styles.wrap} {...wrapProps}>
       <button
         ref={triggerRef}
         type="button"

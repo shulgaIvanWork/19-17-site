@@ -1,8 +1,16 @@
 /** Маршруты и навигация. */
 
-export type NavItem = { href: string; label: string };
+export type NavItem = {
+  href: string;
+  label: string;
+  /** Метка рядом с пунктом меню. Текст метки - hitBadge ниже. */
+  badge?: string;
+};
 
 export type NavGroup = { title: string; href: string; items: NavItem[] };
+
+/** Метка «хит» у вкладки VPN/AI в шапке и у пункта VPN в мобильном меню. */
+export const hitBadge = 'ХИТ!';
 
 /** Все маршруты, в порядке мобильного меню и футера. */
 export const nav: NavItem[] = [
@@ -59,7 +67,7 @@ export const infraMenuGroups: NavGroup[] = [
     title: 'Инфраструктура',
     href: '/vpn-ai#vpn',
     items: [
-      { href: '/vpn-ai#vpn', label: 'Корпоративный VPN' },
+      { href: '/vpn-ai#vpn', label: 'Корпоративный VPN', badge: hitBadge },
       { href: '/vpn-ai#ai', label: 'Локальный AI' },
     ],
   },
@@ -75,40 +83,11 @@ export const hashFallbacks: Record<string, string> = {
   '/vpn-ai': 'vpn',
 };
 
-export function isHashCurrent(pathname: string, hash: string, href: string) {
-  const [path, id] = href.split('#');
-  if (pathname !== path) return false;
-  const have = hash.replace(/^#/, '');
-  const want = id ?? '';
-  if (!want) return true;
-  if (!have) return hashFallbacks[pathname] === want;
-  return have === want;
-}
-
-/** Same-page hash click: native Next navigation often will not scroll. */
-export function jumpHash(href: string, pathname: string) {
-  const [path, id] = href.split('#');
-  if (!id || path !== pathname) return false;
-  const node = document.getElementById(id);
-  if (!node) return false;
-  node.scrollIntoView({ behavior: 'instant', block: 'start' });
-  history.pushState(null, '', href);
-  window.dispatchEvent(new HashChangeEvent('hashchange'));
-  return true;
-}
-
 /** Клик по самой вкладке «Сайты» ведёт на первую услугу. */
 export const sitesTabHref = '/websites';
 
 /** Thin spaces around the slash — words themselves stay tight. */
 export const infraTabLabel = 'VPN\u2009/\u2009AI';
-
-/** Hero ids on a combined landing, in page order. */
-export function hubStops(pathname: string): NavItem[] | null {
-  if (pathname === '/websites') return siteServices;
-  if (pathname === '/vpn-ai') return infraMenuGroups.flatMap((group) => group.items);
-  return null;
-}
 
 export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';
