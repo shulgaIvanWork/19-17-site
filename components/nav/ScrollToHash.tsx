@@ -2,11 +2,11 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { scrollToLocationHash } from '@/lib/hubNav';
+import { scrollToLocationHash } from './hubNav';
 
 /** Прокручивает к якорю из адреса после смены маршрута и при смене якоря.
  *  Хабы держат несколько разделов на одном адресе, меню прыгает по id.
- *  Сама механика - в lib/hubNav. */
+ *  Сама механика - в hubNav.ts рядом. */
 export function ScrollToHash() {
   const pathname = usePathname();
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { CompareTable } from '@/components/CompareTable';
-import { ContactSalesButton } from '@/components/ContactSalesButton';
-import { Section } from '@/components/Section';
+import { CompareTable } from '@/components/blocks/CompareTable';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
+import { Section } from '@/components/ui/Section';
 import { pricingHero, pricingTables, webPlans } from '@/content/pricing';
 import { footnotes } from '@/content/site';
 import styles from './pricing.module.css';

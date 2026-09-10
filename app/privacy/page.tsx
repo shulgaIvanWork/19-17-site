@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Section } from '@/components/Section';
+import { Section } from '@/components/ui/Section';
 import { policyPage, policySections } from '@/content/legal';
 import styles from './privacy.module.css';
 

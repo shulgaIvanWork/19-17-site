@@ -146,7 +146,7 @@ export const contactCopy = {
   },
 };
 
-/** Направление заявки по якорю раздела хаба. Читает lib/hubNav. */
+/** Направление заявки по якорю раздела хаба. Читает components/nav/hubNav. */
 export const interestBySection: Record<string, string> = {
   landing: 'Создание сайта',
   multipage: 'Создание сайта',

@@ -1,8 +1,8 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { hubStops, isHashCurrent, jumpHash } from '@/lib/hubNav';
-import { useHoverMenu } from '@/lib/useHoverMenu';
+import { hubStops, isHashCurrent, jumpHash } from './hubNav';
+import { useHoverMenu } from './useHoverMenu';
 import { useHubSectionHash } from './useHubSectionHash';
 import styles from './LandingNav.module.css';
 

@@ -1,5 +1,5 @@
-import { ButtonLink } from '@/components/Button';
-import { Section } from '@/components/Section';
+import { ButtonLink } from '@/components/ui/Button';
+import { Section } from '@/components/ui/Section';
 
 /** В утвержденном дизайне страницы 404 нет - собрана из частей той же системы
  *  и намеренно проста. Заменить, если у заказчика будет свой текст. */

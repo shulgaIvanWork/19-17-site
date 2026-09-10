@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ContactSalesButton } from './ContactSalesButton';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { ThemeToggle } from './ThemeToggle';
 import { HubMenu } from './SitesMenu';
 import { MobileMenu } from './MobileMenu';
@@ -20,7 +20,7 @@ import {
   sitesTabHref,
   wordmark,
 } from '@/content/nav';
-import { interestFromLocation } from '@/lib/hubNav';
+import { interestFromLocation } from './hubNav';
 import styles from './SiteHeader.module.css';
 
 export function SiteHeader() {

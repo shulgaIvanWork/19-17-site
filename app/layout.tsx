@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Manrope, Unbounded } from 'next/font/google';
-import { ClientDecor } from '@/components/ClientDecor';
-import { ContactProvider } from '@/components/ContactContext';
-import { Footer } from '@/components/Footer';
-import { ScrollToHash } from '@/components/ScrollToHash';
-import { SiteHeader } from '@/components/SiteHeader';
+import { ClientDecor } from '@/components/site/ClientDecor';
+import { ContactProvider } from '@/components/contact/ContactContext';
+import { Footer } from '@/components/site/Footer';
+import { ScrollToHash } from '@/components/nav/ScrollToHash';
+import { SiteHeader } from '@/components/nav/SiteHeader';
 import { settings } from '@/content/settings';
 import './globals.css';
 

@@ -1,11 +1,11 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { Button } from './Button';
+import { Button } from '@/components/ui/Button';
 import { Consent } from './Consent';
-import { ChoiceRow } from './ChoiceRow';
-import { Field } from './Field';
-import { Overlay } from './Overlay';
+import { ChoiceRow } from '@/components/ui/ChoiceRow';
+import { Field } from '@/components/ui/Field';
+import { Overlay } from '@/components/ui/Overlay';
 import { policyVersion } from '@/content/legal';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { contactCopy } from '@/content/site';

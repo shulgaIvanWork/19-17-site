@@ -1,5 +1,5 @@
-import { HashLink } from './HashLink';
-import { EnquireLink } from './ContactSalesButton';
+import { HashLink } from '@/components/nav/HashLink';
+import { EnquireLink } from '@/components/contact/ContactSalesButton';
 import { footerGroups, phoneHref, phoneLabel, wordmark } from '@/content/nav';
 import { footerNote } from '@/content/site';
 import styles from './Footer.module.css';

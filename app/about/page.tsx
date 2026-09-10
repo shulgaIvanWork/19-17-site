@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import { AboutScene } from '@/components/AboutScene';
-import { Photo } from '@/components/Photo';
-import { Section } from '@/components/Section';
+import { AboutScene } from '@/components/scenes/AboutScene';
+import { Photo } from '@/components/ui/Photo';
+import { Section } from '@/components/ui/Section';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { aboutHero, founders, foundersBand, howWeOperate } from '@/content/team';
 

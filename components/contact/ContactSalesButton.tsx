@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from './Button';
-import { TextButton } from './TextLink';
+import { Button } from '@/components/ui/Button';
+import { TextButton } from '@/components/ui/TextLink';
 import { useContact } from './ContactContext';
 
 /** Синяя основная кнопка. Одна на полосу - второй основной кнопки система не допускает. */

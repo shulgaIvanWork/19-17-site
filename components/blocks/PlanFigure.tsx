@@ -1,4 +1,4 @@
-import { EnquireLink } from './ContactSalesButton';
+import { EnquireLink } from '@/components/contact/ContactSalesButton';
 
 type Props = {
   /** The promotional numeral. Rendered by .figure, which is locked to the text

@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { EnquireLink } from './ContactSalesButton';
+import { EnquireLink } from '@/components/contact/ContactSalesButton';
 import { CardMark } from './CardMark';
-import { TextLink } from './TextLink';
+import { TextLink } from '@/components/ui/TextLink';
 import type { ProductPath } from '@/content/products';
 import styles from './ProductCard.module.css';
 

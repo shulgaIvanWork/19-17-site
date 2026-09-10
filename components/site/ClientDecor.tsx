@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 const HeroCursorHighlight = dynamic(
-  () => import('./HeroCursorHighlight').then((mod) => mod.HeroCursorHighlight),
+  () => import('@/components/hero/HeroCursorHighlight').then((mod) => mod.HeroCursorHighlight),
   { ssr: false },
 );
 const SiteMotion = dynamic(() => import('./SiteMotion').then((mod) => mod.SiteMotion), { ssr: false });
@@ -13,7 +13,7 @@ const ScrollLinkedMarks = dynamic(
   { ssr: false },
 );
 const ScrollToTop = dynamic(() => import('./ScrollToTop').then((mod) => mod.ScrollToTop), { ssr: false });
-const LandingNav = dynamic(() => import('./LandingNav').then((mod) => mod.LandingNav), { ssr: false });
+const LandingNav = dynamic(() => import('@/components/nav/LandingNav').then((mod) => mod.LandingNav), { ssr: false });
 
 /** Подсветка и появление блоков подгружаются после первого кадра. */
 export function ClientDecor({ cursorHighlight }: { cursorHighlight: boolean }) {

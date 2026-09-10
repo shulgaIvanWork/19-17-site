@@ -1,5 +1,5 @@
-import { ButtonLink } from './Button';
-import { ContactSalesButton } from './ContactSalesButton';
+import { ButtonLink } from '@/components/ui/Button';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { HeroObjectMount } from './HeroObjectMount';
 import { type HeroShape } from './heroTypes';
 import { settings } from '@/content/settings';

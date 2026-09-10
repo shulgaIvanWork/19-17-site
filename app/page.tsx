@@ -1,9 +1,9 @@
-import { BoardScene } from '@/components/BoardScene';
-import { ButtonLink } from '@/components/Button';
-import { Hero } from '@/components/Hero';
-import { NumberedClaim } from '@/components/NumberedClaim';
-import { ProductCard } from '@/components/ProductCard';
-import { Section } from '@/components/Section';
+import { BoardScene } from '@/components/scenes/BoardScene';
+import { ButtonLink } from '@/components/ui/Button';
+import { Hero } from '@/components/hero/Hero';
+import { NumberedClaim } from '@/components/blocks/NumberedClaim';
+import { ProductCard } from '@/components/blocks/ProductCard';
+import { Section } from '@/components/ui/Section';
 import { homeAbout, paths, steps } from '@/content/products';
 import { heroes } from '@/content/site';
 

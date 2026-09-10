@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { ScenePanel } from '@/components/BandArt';
-import { CompareTable } from '@/components/CompareTable';
-import { ContactQuietButton } from '@/components/ContactSalesButton';
-import { Hero } from '@/components/Hero';
-import { NumberedClaim } from '@/components/NumberedClaim';
-import { PlanFigure } from '@/components/PlanFigure';
-import { Section } from '@/components/Section';
-import { TwoColList } from '@/components/TwoColList';
+import { ScenePanel } from '@/components/scenes/BandArt';
+import { CompareTable } from '@/components/blocks/CompareTable';
+import { ContactQuietButton } from '@/components/contact/ContactSalesButton';
+import { Hero } from '@/components/hero/Hero';
+import { NumberedClaim } from '@/components/blocks/NumberedClaim';
+import { PlanFigure } from '@/components/blocks/PlanFigure';
+import { Section } from '@/components/ui/Section';
+import { TwoColList } from '@/components/blocks/TwoColList';
 import {
   crmBands,
   crmFeatures,

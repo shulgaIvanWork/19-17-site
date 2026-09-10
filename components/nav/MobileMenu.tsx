@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ContactSalesButton } from './ContactSalesButton';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { drawerLinks, infraMenuGroups, siteMenuGroups } from '@/content/nav';
-import { interestFromLocation, isHashCurrent, jumpHash } from '@/lib/hubNav';
+import { interestFromLocation, isHashCurrent, jumpHash } from './hubNav';
 import styles from './MobileMenu.module.css';
 
 type Props = { pathname: string; hash: string; onNavigate: () => void };
