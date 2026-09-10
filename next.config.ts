@@ -3,6 +3,10 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Только для next dev. Next 16 не пускает к служебным ресурсам dev-сервера страницу,
+  // открытую не с localhost: на http://127.0.0.1:3000 не работал весь клиентский JS
+  // (3D, тема, сцены, форма). На production-сборку не влияет.
+  allowedDevOrigins: ['127.0.0.1'],
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1600],
