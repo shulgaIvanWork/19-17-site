@@ -1,6 +1,5 @@
 'use client';
 
-import { useId } from 'react';
 import styles from './Field.module.css';
 
 type Props = {
@@ -14,8 +13,10 @@ type Props = {
   required?: boolean;
 };
 
-/** 12px pewter label over an underline-only input. The rule goes Electric Blue
- *  on focus. There is no red border anywhere: an error is a sentence. */
+/** Underline-only input without a visible label (по просьбе заказчика
+ *  2026-09-11): label goes to aria-label, so screen readers still name the
+ *  field. The rule goes Electric Blue on focus. There is no red border
+ *  anywhere: an error is a sentence. */
 export function Field({
   label,
   name,
@@ -26,14 +27,10 @@ export function Field({
   autoComplete,
   required,
 }: Props) {
-  const id = useId();
   return (
     <div className={styles.field}>
-      <label className={styles.label} htmlFor={id}>
-        {label}
-      </label>
       <input
-        id={id}
+        aria-label={label}
         name={name}
         type={type}
         className={styles.input}
