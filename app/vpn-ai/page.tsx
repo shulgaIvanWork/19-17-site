@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ScenePanel } from '@/components/scenes/BandArt';
-import { ContactQuietButton } from '@/components/contact/ContactSalesButton';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
@@ -76,7 +76,7 @@ export default function VpnAiPage() {
               {aiBands.uses.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={aiBands.uses.cta} interest="Локальный AI" />
+              <ContactSalesButton label={aiBands.uses.cta} interest="Локальный AI" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={aiUses} caption="Задачи для локальной модели" />

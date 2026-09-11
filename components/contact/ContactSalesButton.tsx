@@ -22,24 +22,6 @@ export function ContactSalesButton({
   );
 }
 
-/** Белая или светлая кнопка, открывающая ту же форму. */
-export function ContactQuietButton({
-  label,
-  variant = 'white',
-  interest,
-}: {
-  label: string;
-  variant?: 'white' | 'ash';
-  interest?: string;
-}) {
-  const { open } = useContact();
-  return (
-    <Button variant={variant} onClick={() => open(interest)}>
-      {label}
-    </Button>
-  );
-}
-
 /** Текстовая ссылка рядом с тарифом или карточкой. */
 export function EnquireLink({
   interest,

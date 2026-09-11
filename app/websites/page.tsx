@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ScenePanel } from '@/components/scenes/BandArt';
 import { CompareTable } from '@/components/blocks/CompareTable';
-import { ContactQuietButton, ContactSalesButton } from '@/components/contact/ContactSalesButton';
+import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
@@ -93,7 +93,7 @@ export default function WebsitesPage() {
               {pagesBand.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={pagesBand.cta} interest="Создание сайта" />
+              <ContactSalesButton label={pagesBand.cta} interest="Создание сайта" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={pagesAreas} caption="Состав многостраничного сайта" />
@@ -126,7 +126,7 @@ export default function WebsitesPage() {
               {storeBands.handles.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={storeBands.handles.cta} interest="Интернет-магазин" />
+              <ContactSalesButton label={storeBands.handles.cta} interest="Интернет-магазин" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={storeAreas} caption="Состав интернет-магазина" />
@@ -231,7 +231,7 @@ export default function WebsitesPage() {
               {onecBands.exchange.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={onecBands.exchange.cta} interest="Интеграция с 1С" />
+              <ContactSalesButton label={onecBands.exchange.cta} interest="Интеграция с 1С" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={onecAreas} caption="Какие данные передаем" />
@@ -280,7 +280,7 @@ export default function WebsitesPage() {
               {crmBands.connect.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={crmBands.connect.cta} interest="Интеграция с CRM" />
+              <ContactSalesButton label={crmBands.connect.cta} interest="Интеграция с CRM" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={crmSystems} caption="Системы, которые подключаем" />
