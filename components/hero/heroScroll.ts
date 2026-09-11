@@ -19,14 +19,6 @@ function rotateXY(x: number, y: number, cx: number, cy: number, angle: number): 
   return [cx + dx * c - dy * s, cy + dx * s + dy * c];
 }
 
-function rotateYZ(y: number, z: number, cy: number, cz: number, angle: number): [number, number] {
-  const dy = y - cy;
-  const dz = z - cz;
-  const c = Math.cos(angle);
-  const s = Math.sin(angle);
-  return [cy + dy * c - dz * s, cz + dy * s + dz * c];
-}
-
 function rotateXZ(x: number, z: number, cx: number, cz: number, angle: number): [number, number] {
   const dx = x - cx;
   const dz = z - cz;
@@ -113,13 +105,8 @@ export function applyHeroScroll(
     const part = parts?.[i] ?? 0;
 
     if (shape === 'sites') {
-      const click = t < 0.38 ? Math.sin((t / 0.38) * Math.PI) : 0;
-      z -= click * 0.1;
-      const [ny, nz] = rotateYZ(y, z, mid[1], mid[2], click * 0.32);
-      y = ny;
-      z = nz;
-      const squash = 1 - 0.08 * click * click;
-      y = mid[1] + (y - mid[1]) * squash;
+      // Только плавный уход по диагонали. Нажатие (наклон, вдавливание и
+      // сжатие в первой трети прокрутки) убрано по просьбе заказчика 2026-09-11.
       [x, y] = flyOff(x, y, t);
     } else if (shape === 'store') {
       const shift = (t - 0.5) * (EXIT_X * 2);

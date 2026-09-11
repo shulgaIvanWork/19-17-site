@@ -368,17 +368,19 @@ function StoreFloor({ uid }: { uid: string }) {
         <Chip x={102} y={122} w={88} label="В наличии" on />
         <Chip x={196} y={122} w={56} label="Склад" />
         <Chip x={258} y={122} w={54} label="Новое" />
-        <T x="56" y="168" k="typeSub" write="A">
+        {/* Шапка на 160, строки с 192: подложка первой строки начинается на
+            y - 18, и при шапке на 168 и строках с 186 она наезжала на шапку. */}
+        <T x="56" y="160" k="typeSub" write="A">
           Наименование
         </T>
-        <T x="214" y="168" k="typeSub" write="A">
+        <T x="214" y="160" k="typeSub" write="A">
           Цена
         </T>
-        <T x="276" y="168" k="typeSub" write="A">
+        <T x="276" y="160" k="typeSub" write="A">
           Ост.
         </T>
         {rows.map((row, i) => {
-          const y = 186 + i * 38;
+          const y = 192 + i * 38;
           return (
             <RowHit key={row.name} x={44} y={y - 18} w={268} h={34} r={10} rest={row.hot}>
               <T x="56" y={y} write={row.write}>

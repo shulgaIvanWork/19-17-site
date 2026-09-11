@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ScenePanel } from '@/components/scenes/BandArt';
 import { CompareTable } from '@/components/blocks/CompareTable';
-import { ContactQuietButton } from '@/components/contact/ContactSalesButton';
+import { ContactQuietButton, ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
@@ -175,7 +175,7 @@ export default function WebsitesPage() {
               {redesignBands.audit.body}
             </p>
             <div style={{ marginTop: 24 }}>
-              <ContactQuietButton label={redesignBands.audit.cta} interest="Обновление сайта" />
+              <ContactSalesButton label={redesignBands.audit.cta} interest="Обновление сайта" />
             </div>
             <div style={{ marginTop: 40 }}>
               <TwoColList rows={redesignAreas} caption="Что проверяем во время аудита" />
