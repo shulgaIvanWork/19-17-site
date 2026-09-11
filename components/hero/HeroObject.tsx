@@ -37,8 +37,10 @@ const FIT_WIDTH = 0.62;
 // Уже 768 px модель упирается в ширину: даем ей почти всю, как было до общего правила.
 const FIT_WIDTH_NARROW = 0.88;
 const FIT_CENTER_Y = 0.47;
-// Пример: pages: { scale: 1.1, dy: -0.02 }. Сейчас общего правила хватает всем.
-const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; dy?: number }>> = {};
+const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; dy?: number }>> = {
+  // Магазин ближе к кнопкам (по просьбе заказчика, 2026-09-11).
+  store: { dy: 0.05 },
+};
 
 type Props = {
   nodes?: number;

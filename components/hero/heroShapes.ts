@@ -809,7 +809,14 @@ function distToPoly(px: number, py: number, poly: Poly, skip: 'start' | 'end' | 
   return min;
 }
 
-function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx: number; ty: number }[] {
+/** Предел растяжения кольца в остром углу: без него стык на ус дает шип. */
+const MITER_LIMIT = 1.8;
+
+/** Точки вдоль ломаной с касательной. В вершине касательная - биссектриса угла,
+ *  а m - во сколько раз растянуть кольцо в плоскости, чтобы трубка не сужалась
+ *  (стык на ус). Раньше вершина брала касательную входящего ребра, и на острых
+ *  углах без скругления (курсор лендинга, звезда AI) стык выходил косым. */
+function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx: number; ty: number; m: number }[] {
   if (poly.length < 2) return [];
   const cleaned: Poly = [poly[0]];
   for (let i = 1; i < poly.length; i++) {
@@ -826,7 +833,7 @@ function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx
   }
   if (total < 1e-6) return [];
   const step = preferredStep ?? ALONG_STEP;
-  const samples: { x: number; y: number; tx: number; ty: number }[] = [];
+  const samples: { x: number; y: number; tx: number; ty: number; m: number }[] = [];
   for (let i = 0; i < cleaned.length - 1; i++) {
     const ax = cleaned[i][0];
     const ay = cleaned[i][1];
@@ -839,7 +846,22 @@ function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx
     for (let s = 0; s <= n; s++) {
       if (i > 0 && s === 0) continue;
       const t = s / n;
-      samples.push({ x: ax + tx * t, y: ay + ty * t, tx, ty });
+      if (s === n && i < cleaned.length - 2) {
+        // Вершина между ребром i и i + 1: биссектриса и растяжение на ус.
+        const ux = tx / len;
+        const uy = ty / len;
+        const vx = (cleaned[i + 2][0] - bx) / (lens[i + 1] || 1);
+        const vy = (cleaned[i + 2][1] - by) / (lens[i + 1] || 1);
+        const sx = ux + vx;
+        const sy = uy + vy;
+        const sl = Math.hypot(sx, sy);
+        if (sl > 1e-6) {
+          const cosHalf = (sx * ux + sy * uy) / sl;
+          samples.push({ x: bx, y: by, tx: sx / sl, ty: sy / sl, m: Math.min(MITER_LIMIT, 1 / Math.max(cosHalf, 1e-3)) });
+          continue;
+        }
+      }
+      samples.push({ x: ax + tx * t, y: ay + ty * t, tx, ty, m: 1 });
     }
   }
   return samples;
@@ -853,12 +875,13 @@ function addRing(
   ty: number,
   radius = TUBE_R,
   sides = RING,
+  miter = 1,
 ): number[] {
   const { n, b } = planarFrame(tx, ty);
   const ids: number[] = [];
   for (let k = 0; k < sides; k++) {
     const ang = (k / sides) * Math.PI * 2;
-    const ca = Math.cos(ang);
+    const ca = Math.cos(ang) * miter;
     const sa = Math.sin(ang);
     points.push([x + (n[0] * ca + b[0] * sa) * radius, y + (n[1] * ca + b[1] * sa) * radius, (n[2] * ca + b[2] * sa) * radius]);
     ids.push(points.length - 1);
@@ -1021,7 +1044,7 @@ function addSafeStroke(
   const rings: Ring[] = [];
   for (let s = 0; s < samples.length; s++) {
     const sample = samples[s];
-    const ids = addRing(points, ox + sample.x, sample.y, sample.tx, sample.ty, radius, sides);
+    const ids = addRing(points, ox + sample.x, sample.y, sample.tx, sample.ty, radius, sides, sample.m);
     linkRing(edges, ids);
     const previous = rings[rings.length - 1];
     if (previous) {
