@@ -26,6 +26,7 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [consent, setConsent] = useState(false);
+  const [trap, setTrap] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
 
@@ -46,7 +47,7 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
       const response = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...checked.value, policyVersion }),
+        body: JSON.stringify({ ...checked.value, policyVersion, website: trap }),
       });
       const result = (await response.json()) as { ok?: boolean; error?: string };
       if (!response.ok || !result.ok) {
@@ -105,6 +106,20 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
             {phoneLabel}
           </a>
         </p>
+
+        {/* Ловушка для ботов: поле убрано за край экрана, из порядка табуляции
+            и от скринридера, его заполняют только автоматические отправители.
+            Сервер отвечает на такую заявку успехом, но письмо не отправляет. */}
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          value={trap}
+          onChange={(event) => setTrap(event.target.value)}
+          style={{ position: 'absolute', left: -9999, width: 1, height: 1, opacity: 0 }}
+        />
 
         <div className={styles.fields}>
           <Field
