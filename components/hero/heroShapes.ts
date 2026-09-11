@@ -469,21 +469,25 @@ function starPath(cx: number, cy: number, outer: number, inner: number): Poly {
 }
 
 /** Курсор лендинга. Сечение 4 грани и шаг по умолчанию: при 6 гранях и шаге
- *  0.06 сетка была самой плотной из всех моделей и читалась как сложная. */
+ *  0.06 сетка была самой плотной из всех моделей и читалась как сложная.
+ *  Хвост шириной 0.12 между осями ребер при трубке 0.032: раньше было 0.068
+ *  при диаметре трубки 0.076, трубки хвоста налезали друг на друга.
+ *  Нижний левый угол 58 градусов вместо 35: в остром угле трубки двух ребер
+ *  накладывались на половине длины короткого ребра и давали пучок линий. */
 const SITES_SHAPE: StrokeShape = {
   width: 1,
-  tubeRadius: 0.038,
+  tubeRadius: 0.032,
   strokes: [
     {
       closed: true,
       points: rotatePoly(
         [
           [0.34, 0.9],
-          [0.34, 0.16],
-          [0.48, 0.34],
-          [0.58, 0.1],
-          [0.7, 0.16],
-          [0.52, 0.42],
+          [0.34, 0.2],
+          [0.5, 0.3],
+          [0.592, 0.078],
+          [0.703, 0.124],
+          [0.611, 0.346],
           [0.8, 0.5],
         ],
         0.54,
@@ -559,7 +563,9 @@ const AI_SHAPE: StrokeShape = {
   tubeRadius: 0.045,
   strokes: [
     { part: 0, closed: true, points: starPath(0.5, 0.46, 0.36, 0.12) },
-    { part: 1, closed: true, points: starPath(0.76, 0.72, 0.12, 0.04) },
+    // Малая звезда: внутренний радиус 0.04 был меньше радиуса трубки, лучи
+    // слипались в клубок. Свой, более тонкий радиус трубки.
+    { part: 1, closed: true, radius: 0.028, points: starPath(0.76, 0.72, 0.12, 0.05) },
   ],
 };
 
@@ -816,7 +822,18 @@ const MITER_LIMIT = 1.8;
  *  а m - во сколько раз растянуть кольцо в плоскости, чтобы трубка не сужалась
  *  (стык на ус). Раньше вершина брала касательную входящего ребра, и на острых
  *  углах без скругления (курсор лендинга, звезда AI) стык выходил косым. */
-function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx: number; ty: number; m: number }[] {
+/** Поворот, начиная с которого вершина считается углом, а не шагом дуги. */
+const GUARD_TURN = 0.35;
+
+/** guard - радиус трубки. У каждого угла ставятся два обычных кольца на
+ *  расстоянии около радиуса до и после вершины: ребро между ними идет
+ *  параллельными линиями, а растянутое кольцо стоит только в самом углу.
+ *  Без них при редком шаге продольные линии расходились веером по всему ребру. */
+function densify(
+  poly: Poly,
+  preferredStep?: number,
+  guard = 0,
+): { x: number; y: number; tx: number; ty: number; m: number }[] {
   if (poly.length < 2) return [];
   const cleaned: Poly = [poly[0]];
   for (let i = 1; i < poly.length; i++) {
@@ -857,7 +874,13 @@ function densify(poly: Poly, preferredStep?: number): { x: number; y: number; tx
         const sl = Math.hypot(sx, sy);
         if (sl > 1e-6) {
           const cosHalf = (sx * ux + sy * uy) / sl;
+          const turn = Math.acos(Math.max(-1, Math.min(1, ux * vx + uy * vy)));
+          const g = guard > 0 && turn > GUARD_TURN ? guard * Math.min(Math.tan(turn / 2) + 0.35, 1.8) : 0;
+          const nextLen = lens[i + 1] || 1;
+          const nextStep = nextLen / Math.max(1, Math.round(nextLen / step));
+          if (g > 0 && g < (len / n) * 0.8) samples.push({ x: bx - ux * g, y: by - uy * g, tx: ux, ty: uy, m: 1 });
           samples.push({ x: bx, y: by, tx: sx / sl, ty: sy / sl, m: Math.min(MITER_LIMIT, 1 / Math.max(cosHalf, 1e-3)) });
+          if (g > 0 && g < nextStep * 0.8) samples.push({ x: bx + vx * g, y: by + vy * g, tx: vx, ty: vy, m: 1 });
           continue;
         }
       }
@@ -1031,7 +1054,7 @@ function addSafeStroke(
   if (stroke.points.length < 2) return;
   const source = stroke.closed ? closedFromEdgeMidpoint(stroke.points) : stroke.points;
   const shaped = stroke.fillet ? fillet(source, stroke.fillet) : source;
-  const samples = densify(shaped, alongStep);
+  const samples = densify(shaped, alongStep, radius);
   if (
     stroke.closed &&
     samples.length > 1 &&
