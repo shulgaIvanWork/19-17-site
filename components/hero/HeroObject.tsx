@@ -40,6 +40,8 @@ const FIT_CENTER_Y = 0.47;
 const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; dy?: number }>> = {
   // Магазин ближе к кнопкам (по просьбе заказчика, 2026-09-11).
   store: { dy: 0.05 },
+  // Курсор лендинга тоже ближе к кнопкам (по просьбе заказчика, 2026-09-11).
+  sites: { dy: 0.05 },
 };
 
 type Props = {
