@@ -202,8 +202,12 @@ export function heroScrollProgress(surface: HTMLElement, shape: HeroShape = 'glo
   }
 
   if (shape === 'crm') {
+    // Модель дорисована полностью, когда верх героя доходит до 12% высоты
+    // экрана, то есть чуть раньше, чем герой встает под шапку. Раньше конец был
+    // на -0.55 высоты героя, и на полном экране стрелка была нарисована на две
+    // трети, без крыльев (просьба заказчика 2026-09-11).
     const enter = view * 0.88;
-    const done = -rect.height * 0.55;
+    const done = view * 0.12;
     return clamp((enter - rect.top) / (enter - done || 1));
   }
 
