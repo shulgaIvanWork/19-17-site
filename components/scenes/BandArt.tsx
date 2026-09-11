@@ -788,10 +788,10 @@ function AiStack({ uid }: { uid: string }) {
           <circle className={styles.glassLift} cx="236" cy="200" r="48" />
           <circle className={styles.wash} cx="236" cy="200" r="48" />
           <T x="236" y="196" k="typeLead" anchor="middle" write="B">
-            Qwen
+            Qwen3-8B
           </T>
           <T x="236" y="214" k="typeSub" anchor="middle" write="C">
-            8B · локально
+            локально
           </T>
         </g>
       </Piece>
