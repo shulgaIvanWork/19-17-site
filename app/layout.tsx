@@ -41,11 +41,15 @@ const unbounded = Unbounded({
   adjustFontFallback: true,
 });
 
+/** theme-color здесь не объявляется. Тема сайта выбирается кнопкой, а не
+ *  системой, и тег должен быть один: его создает и перекрашивает скрипт
+ *  theme-boot ниже, а после переключения темы - ThemeToggle. Next рисовал свой
+ *  тег #ffffff рядом, и в темной теме на странице было два разных theme-color
+ *  (проверено 2026-09-13): какой из них возьмет браузер, не гарантировано. */
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#ffffff',
 };
 
 export const metadata: Metadata = {
@@ -72,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <Script id="theme-boot" strategy="beforeInteractive">
-          {`(function(){try{var d=localStorage.getItem('theme')==='dark';if(d)document.documentElement.dataset.theme='dark';var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',d?'#12141a':'#ffffff');}catch(e){}})();`}
+          {`(function(){try{var d=localStorage.getItem('theme')==='dark';if(d)document.documentElement.dataset.theme='dark';var m=document.querySelector('meta[name="theme-color"]');if(!m){m=document.createElement('meta');m.setAttribute('name','theme-color');document.head.appendChild(m);}m.setAttribute('content',d?'#12141a':'#ffffff');}catch(e){}})();`}
         </Script>
       </head>
       <body>
