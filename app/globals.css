@@ -312,7 +312,7 @@ html[data-theme='dark'] .navbtn-active:hover {
      Правило глобальное и живет здесь: в CSS-модуле чисто глобальный селектор
      не проходит сборку (правила CSS-модулей требуют локальный класс). */
   html:has([data-hub-pager]) {
-    --hub-pager: calc(56px + env(safe-area-inset-bottom, 0px));
+    --hub-pager: calc(44px + env(safe-area-inset-bottom, 0px));
   }
   .g2 { grid-template-columns: 1fr; }
   .g2 > * { min-width: 0; }
