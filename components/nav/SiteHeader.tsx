@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
+import { isHubJumping, onHubJumpStart } from '@/components/hub/hubScroll';
 import { ThemeToggle } from './ThemeToggle';
 import { HubMenu } from './SitesMenu';
 import { MobileMenu } from './MobileMenu';
@@ -25,9 +26,15 @@ import { interestFromLocation } from '@/components/hub/hubLinks';
 import styles from './SiteHeader.module.css';
 
 const MENU_MS = 380;
+/** Сдвиг за кадр, после которого шапка прячется или возвращается. */
+const HEADER_STEP_PX = 2;
+/** Сколько после касания, колеса или клавиши прокрутка считается делом посетителя:
+ *  на телефоне страница еще катится по инерции после того, как палец убран. */
+const USER_SCROLL_MS = 1500;
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuEntered, setMenuEntered] = useState(false);
@@ -66,6 +73,56 @@ export function SiteHeader() {
     return () => window.clearTimeout(timer);
   }, [menuOpen, menuMounted]);
 
+  // Узкий экран: шапка уезжает вверх при прокрутке вниз и возвращается при
+  // прокрутке вверх. Атрибут ставится прямо на DOM, без состояния React: решение
+  // принимается на каждом кадре прокрутки. Прячется шапка только от прокрутки
+  // посетителя. Прыжок по разделам, посадка на якорь и переход на страницу
+  // считают место с учетом высоты шапки (hubScroll, yOf), и спрятанная шапка
+  // оставила бы над разделом пустую полосу. У верха страницы и при открытом
+  // меню шапка всегда на месте.
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const narrow = window.matchMedia('(max-width: 900px)');
+    let lastY = window.scrollY;
+    let userAt = -Infinity;
+    let frame: number | null = null;
+
+    const setHidden = (hidden: boolean) => header.toggleAttribute('data-scroll-hidden', hidden);
+    const update = () => {
+      frame = null;
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      if (!narrow.matches || y <= header.offsetHeight || header.hasAttribute('data-menu-open') || isHubJumping()) {
+        setHidden(false);
+        return;
+      }
+      if (performance.now() - userAt > USER_SCROLL_MS) return;
+      if (dy > HEADER_STEP_PX) setHidden(true);
+      else if (dy < -HEADER_STEP_PX) setHidden(false);
+    };
+    const onScroll = () => {
+      if (frame === null) frame = window.requestAnimationFrame(update);
+    };
+    const onInput = () => {
+      userAt = performance.now();
+    };
+    const stopJump = onHubJumpStart(() => setHidden(false));
+    const inputs = ['touchstart', 'touchmove', 'wheel', 'keydown'] as const;
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    for (const type of inputs) window.addEventListener(type, onInput, { passive: true });
+    narrow.addEventListener('change', onScroll);
+    return () => {
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      stopJump();
+      window.removeEventListener('scroll', onScroll);
+      for (const type of inputs) window.removeEventListener(type, onInput);
+      narrow.removeEventListener('change', onScroll);
+    };
+  }, []);
+
   useEffect(() => {
     if (!menuMounted) return;
     const html = document.documentElement;
@@ -82,7 +139,12 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className={styles.header} data-header-glow data-menu-open={menuMounted ? '' : undefined}>
+      <header
+        ref={headerRef}
+        className={styles.header}
+        data-header-glow
+        data-menu-open={menuMounted ? '' : undefined}
+      >
         <div className={styles.row}>
           <div className={styles.brand}>
             <Link href="/" className={styles.wordmark}>

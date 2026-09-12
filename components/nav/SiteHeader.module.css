@@ -147,6 +147,20 @@
   .deskCta { display: none; }
 }
 
+/* Узкий экран: шапка уезжает вверх при прокрутке вниз и возвращается при
+   прокрутке вверх. Атрибут data-scroll-hidden ставит SiteHeader.tsx. */
+@media (max-width: 900px) {
+  .header {
+    transition:
+      background-color 0.55s ease,
+      transform 0.3s cubic-bezier(0.22, 1, 0.32, 1);
+  }
+
+  .header[data-scroll-hidden] {
+    transform: translateY(-100%);
+  }
+}
+
 @media (max-width: 768px) {
   .header {
     --header-row: 44px;
