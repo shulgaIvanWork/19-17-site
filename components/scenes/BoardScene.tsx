@@ -100,16 +100,16 @@ export function BoardScene() {
 
         <g className={styles.body}>
           <g className={styles.sway}>
-            <path className={styles.soft} d="M 48 318 H 118" />
             <g className={styles.gaze}>
               <circle className={styles.panel} cx="78" cy="168" r="15" />
               <path className={styles.line} d="M 66 164 C 70 150 90 149 93 163" />
             </g>
             <path className={styles.line} d="M 78 183 V 192" />
             <path className={styles.panel} d="M 62 194 C 62 188 94 188 94 194 L 98 246 C 98 252 58 252 58 246 Z" />
-            <path className={styles.line} d="M 68 246 L 62 318 M 88 246 L 96 318" />
-            <path className={styles.soft} d="M 56 318 H 68 M 90 318 H 104" />
           </g>
+          <path className={styles.line} d="M 68 246 L 62 318 M 88 246 L 96 318" />
+          <path className={styles.soft} d="M 56 318 H 68 M 90 318 H 104" />
+          <path className={styles.soft} d="M 48 318 H 118" />
         </g>
         <g className={styles.armL}>
           <g className={styles.wave}>

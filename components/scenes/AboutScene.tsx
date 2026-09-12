@@ -151,9 +151,9 @@ export function AboutScene() {
             </g>
             <path className={styles.line} d="M 58 182 V 190" />
             <path className={styles.panel} d="M 43 192 C 43 186 73 186 73 192 L 77 244 C 77 250 39 250 39 244 Z" />
-            <path className={styles.line} d="M 49 244 L 44 318 M 67 244 L 74 318" />
-            <path className={styles.soft} d="M 38 318 H 50 M 68 318 H 82" />
           </g>
+          <path className={styles.line} d="M 49 244 L 44 318 M 67 244 L 74 318" />
+          <path className={styles.soft} d="M 38 318 H 50 M 68 318 H 82" />
         </g>
         <g className={styles.armLL}>
           <g className={styles.waveL}>
@@ -177,9 +177,9 @@ export function AboutScene() {
             </g>
             <path className={styles.line} d="M 482 182 V 190" />
             <path className={styles.panel} d="M 467 192 C 467 186 497 186 497 192 L 501 244 C 501 250 463 250 463 244 Z" />
-            <path className={styles.line} d="M 473 244 L 466 318 M 491 244 L 498 318" />
-            <path className={styles.soft} d="M 458 318 H 472 M 492 318 H 506" />
           </g>
+          <path className={styles.line} d="M 473 244 L 466 318 M 491 244 L 498 318" />
+          <path className={styles.soft} d="M 458 318 H 472 M 492 318 H 506" />
         </g>
         <g className={styles.armRL}>
           <path className={styles.line} d="M 469 198 L 448 210 L 424 198" />

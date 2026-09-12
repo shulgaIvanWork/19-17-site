@@ -4,6 +4,7 @@ import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
+import { PlanFigureGrid } from '@/components/blocks/PlanFigureGrid';
 import { Section } from '@/components/ui/Section';
 import { TwoColList } from '@/components/blocks/TwoColList';
 import {
@@ -38,7 +39,7 @@ export default function VpnAiPage() {
 
       <Section surface="ash">
         <h2 className="h2">{vpnBand.title}</h2>
-        <div className="g3" style={{ marginTop: 52 }}>
+        <PlanFigureGrid label="Тарифы VPN">
           {vpnPlans.map((plan) => (
             <PlanFigure
               key={plan.name}
@@ -49,7 +50,7 @@ export default function VpnAiPage() {
               interest="Корпоративный VPN"
             />
           ))}
-        </div>
+        </PlanFigureGrid>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '60ch' }}>
           {footnotes.vpn}
         </p>
@@ -87,7 +88,7 @@ export default function VpnAiPage() {
 
       <Section>
         <h2 className="h2">{aiBands.sized.title}</h2>
-        <div className="g3" style={{ marginTop: 52 }}>
+        <PlanFigureGrid label="Тарифы локального AI">
           {aiPlans.map((plan) => (
             <PlanFigure
               key={plan.name}
@@ -98,7 +99,7 @@ export default function VpnAiPage() {
               interest="Локальный AI"
             />
           ))}
-        </div>
+        </PlanFigureGrid>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '64ch' }}>
           {footnotes.ai}
         </p>

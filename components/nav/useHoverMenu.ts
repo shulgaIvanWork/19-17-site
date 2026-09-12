@@ -51,7 +51,9 @@ export function useHoverMenu<T extends HTMLElement>(pathname: string, delay = 20
     onMouseLeave: closeSoon,
     onFocus: openNow,
     onBlur: (event: FocusEvent<HTMLDivElement>) => {
-      if (!wrapRef.current?.contains(event.relatedTarget as Node | null)) close();
+      if (wrapRef.current?.contains(event.relatedTarget as Node | null)) return;
+      if (wrapRef.current?.matches(':hover')) return;
+      close();
     },
     onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
       if (event.key === 'Escape' && open) {
@@ -61,5 +63,5 @@ export function useHoverMenu<T extends HTMLElement>(pathname: string, delay = 20
     },
   };
 
-  return { open, setOpen, close, wrapProps, triggerRef };
+  return { open, setOpen, close, openNow, cancelClose, closeSoon, wrapProps, triggerRef };
 }

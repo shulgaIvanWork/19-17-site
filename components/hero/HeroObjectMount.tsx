@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useLayoutEffect, useRef, useState } from 'react';
+import { onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/nav/hubNav';
 import type { HeroShape } from './heroTypes';
 
 /** Loads the canvas object only where it is actually drawn. */
@@ -9,9 +10,20 @@ const HeroObject = dynamic(() => import('./HeroObject').then((m) => m.HeroObject
   ssr: false,
 });
 
-/** Keep at most the current (and maybe next) hero canvas in memory.
- *  Hub landings mount seven heroes; each full-size 2D buffer is a GPU layer. */
-const NEAR_MARGIN = '70% 0px';
+function coarsePointer() {
+  return window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+}
+
+function nearMargin() {
+  return coarsePointer() ? '18% 0px' : '45% 0px';
+}
+
+function isNear(node: HTMLElement) {
+  const rect = node.getBoundingClientRect();
+  if (rect.width < 1 || rect.height < 1) return false;
+  const slop = window.innerHeight * (coarsePointer() ? 0.18 : 0.45);
+  return rect.bottom > -slop && rect.top < window.innerHeight + slop;
+}
 
 export function HeroObjectMount({
   nodes,
@@ -26,14 +38,42 @@ export function HeroObjectMount({
   useLayoutEffect(() => {
     const host = hostRef.current;
     if (!host) return;
+    const hero = host.closest<HTMLElement>('[data-hero]');
 
-    const io = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), {
-      root: null,
-      rootMargin: NEAR_MARGIN,
-      threshold: 0,
-    });
+    const sync = () => {
+      const dest = pinnedHubSection();
+      if (dest && hero?.id === dest) {
+        setNear(true);
+        return;
+      }
+      setNear(isNear(host));
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const dest = pinnedHubSection();
+        if (dest && hero?.id === dest) {
+          setNear(true);
+          return;
+        }
+        setNear(entry.isIntersecting);
+      },
+      { root: null, rootMargin: nearMargin(), threshold: 0 },
+    );
     io.observe(host);
-    return () => io.disconnect();
+    sync();
+    const later = window.requestAnimationFrame(sync);
+    const stopJump = onHubJumpEnd(sync);
+    const stopStart = onHubJumpStart((id) => {
+      if (hero?.id === id) setNear(true);
+      else sync();
+    });
+    return () => {
+      window.cancelAnimationFrame(later);
+      stopJump();
+      stopStart();
+      io.disconnect();
+    };
   }, []);
 
   return (

@@ -40,10 +40,6 @@
   stroke-linejoin: round;
 }
 
-.besideNav {
-  right: calc(max(var(--gut), env(safe-area-inset-right)) + 54px);
-}
-
 .visible {
   opacity: 1;
   visibility: visible;
@@ -54,6 +50,12 @@
     visibility 0s,
     background-color var(--t),
     border-color var(--t);
+}
+
+@media (max-width: 900px) {
+  .button {
+    bottom: max(24px, calc(12px + var(--hub-pager, 0px)));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

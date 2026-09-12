@@ -20,11 +20,24 @@ function Sun() {
   );
 }
 
+function syncThemeColor(dark: boolean) {
+  const color = dark ? '#12141a' : '#ffffff';
+  let meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', color);
+}
+
 export function ThemeToggle() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    setDark(document.documentElement.dataset.theme === 'dark');
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    setDark(isDark);
+    syncThemeColor(isDark);
   }, []);
 
   const toggle = () => {
@@ -33,6 +46,7 @@ export function ThemeToggle() {
       setDark(next);
       if (next) document.documentElement.dataset.theme = 'dark';
       else delete document.documentElement.dataset.theme;
+      syncThemeColor(next);
       try {
         localStorage.setItem('theme', next ? 'dark' : 'light');
       } catch {

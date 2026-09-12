@@ -1,0 +1,189 @@
+.frame {
+  --scene-p: 0;
+  position: relative;
+  width: 100%;
+  color: var(--blue);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.line,
+.soft,
+.panel {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.soft { opacity: 0.34; }
+.panel {
+  fill: currentColor;
+  fill-opacity: 0.06;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.mound {
+  fill: currentColor;
+  fill-opacity: 0.08;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-opacity: 0.35;
+}
+
+.moundCrest {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-opacity: 0.22;
+}
+
+.rubTop,
+.rubRight,
+.rubInner {
+  stroke: none;
+}
+
+.rubTop {
+  fill: color-mix(in srgb, var(--blue) 20%, transparent);
+}
+
+.rubRight {
+  fill: color-mix(in srgb, var(--blue) 14%, transparent);
+}
+
+.rubInner {
+  fill: color-mix(in srgb, var(--blue) 24%, transparent);
+}
+
+.rubFront {
+  fill: color-mix(in srgb, var(--blue) 6%, transparent);
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.rubRim {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.rubHint {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-opacity: 0.28;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.spark {
+  fill: var(--blue);
+  fill-opacity: calc(0.35 + var(--scene-p) * 0.45);
+  stroke: none;
+}
+
+.sparkA {
+  transform-box: view-box;
+  transform-origin: 328px 165px;
+  transform: rotate(calc(var(--scene-p) * 28deg)) scale(calc(0.55 + var(--scene-p) * 0.45));
+  opacity: calc(0.35 + var(--scene-p) * 0.65);
+  pointer-events: none;
+}
+
+.lean {
+  transform-box: view-box;
+  transform-origin: 128px 318px;
+}
+
+.gaze {
+  transform-box: view-box;
+  transform-origin: 128px 178px;
+  transform: rotate(calc(var(--look-x, 0.35) * 20deg)) translate(calc(var(--look-x, 0.35) * 3px), calc(var(--look-y, 0) * 5px));
+  transition: transform 0.18s ease-out;
+}
+
+.wave,
+.flap,
+.sway {
+  transform-box: view-box;
+}
+
+.wave { transform-origin: 114px 210px; }
+.flap { transform-origin: 96px 244px; }
+.sway { transform-origin: 128px 256px; }
+
+.frame[data-hello] .wave {
+  animation: helloRaise 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
+}
+
+.frame[data-hello] .flap {
+  animation: helloFlap 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
+}
+
+.frame[data-hello] .sway {
+  animation: helloSway 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
+}
+
+@keyframes helloRaise {
+  0% { transform: none; }
+  18% { transform: rotate(94deg); }
+  26% { transform: rotate(88deg); }
+  74% { transform: rotate(90deg); }
+  90%, 100% { transform: none; }
+}
+
+@keyframes helloFlap {
+  0%, 18% { transform: none; }
+  26% { transform: rotate(16deg); }
+  34% { transform: rotate(-12deg); }
+  42% { transform: rotate(18deg); }
+  50% { transform: rotate(-10deg); }
+  58% { transform: rotate(14deg); }
+  66% { transform: rotate(-8deg); }
+  74%, 100% { transform: none; }
+}
+
+@keyframes helloSway {
+  0%, 100% { transform: none; }
+  18% { transform: rotate(-4deg); }
+  26% { transform: rotate(-2deg); }
+  34% { transform: rotate(-5deg); }
+  42% { transform: rotate(-2deg); }
+  50% { transform: rotate(-5deg); }
+  58% { transform: rotate(-2deg); }
+  66% { transform: rotate(-4deg); }
+  74% { transform: rotate(-3deg); }
+  90% { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gaze {
+    transition: none;
+    transform: none;
+  }
+  .wave,
+  .flap,
+  .sway {
+    animation: none;
+    transform: none;
+  }
+  .sparkA {
+    transform: none;
+    opacity: 0.55;
+  }
+}

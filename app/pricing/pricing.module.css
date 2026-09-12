@@ -1,32 +1,45 @@
-/* The band label: an .h3 set in pewter at weight 400 - quieter than a heading,
-   which is why it is not an .h2. */
-.bandLabel {
-  font-family: var(--text);
-  font-size: 17px;
-  line-height: 20px;
-  font-weight: 400;
-  color: var(--pewter);
+.bandHead {
+  text-align: center;
+  margin-inline: auto;
+  max-width: 40rem;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
+.bandHead p {
+  margin-top: 12px;
+  margin-inline: auto;
+  max-width: 52ch;
 }
 
-.items {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0 24px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3.2vw, 48px);
+  margin-top: clamp(32px, 4vw, 48px);
 }
 
-.item {
-  padding: 10px 0;
-  border-top: 1.5px solid var(--pale);
-  color: var(--pewter);
+.gridTwo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* Pins the CTA to the bottom of the column, whatever the item count. */
-.action {
-  margin-top: auto;
-  align-self: flex-start;
+@media (max-width: 1024px) {
+  .grid,
+  .gridTwo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.carousel {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .grid,
+  .gridTwo {
+    display: none;
+  }
+
+  .carousel {
+    display: block;
+    margin-top: clamp(32px, 4vw, 48px);
+  }
 }

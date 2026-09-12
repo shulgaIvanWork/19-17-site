@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { infraHubPaths, siteHubPaths } from '@/content/nav';
+import { isHubJumping, onHubPin, pinnedHubSection } from './hubNav';
 
 type Listener = (hash: string) => void;
 
@@ -23,6 +24,7 @@ function emit(next: string) {
 
 function commitHub(id: string, pathname: string) {
   emit(id);
+  if (isHubJumping()) return;
   const next = id ? `#${id}` : '';
   if (id && window.location.hash !== next) {
     history.replaceState(null, '', `${pathname}${next}`);
@@ -30,6 +32,8 @@ function commitHub(id: string, pathname: string) {
 }
 
 function pickHeroId() {
+  const pinned = pinnedHubSection();
+  if (pinned) return pinned;
   const sections = document.querySelectorAll<HTMLElement>('[data-hero][id]');
   let id = sections[0]?.id ?? readLocation();
   const line = window.innerHeight * 0.36;
@@ -42,6 +46,12 @@ function pickHeroId() {
 function startHub(pathname: string) {
   let frame: number | null = null;
   const sync = () => {
+    const pinned = pinnedHubSection();
+    if (pinned) {
+      commitHub(pinned, pathname);
+      return;
+    }
+    if (isHubJumping()) return;
     if (frame !== null) return;
     frame = window.requestAnimationFrame(() => {
       frame = null;
@@ -62,6 +72,7 @@ function startHub(pathname: string) {
 
   watch();
   const boot = window.requestAnimationFrame(watch);
+  const stopPin = onHubPin((id) => commitHub(id, pathname));
   window.addEventListener('hashchange', sync);
   window.addEventListener('resize', sync);
 
@@ -69,6 +80,7 @@ function startHub(pathname: string) {
     if (frame !== null) window.cancelAnimationFrame(frame);
     window.cancelAnimationFrame(boot);
     observer.disconnect();
+    stopPin();
     window.removeEventListener('hashchange', sync);
     window.removeEventListener('resize', sync);
   };

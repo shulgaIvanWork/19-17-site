@@ -1,14 +1,10 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { infraHubPaths, siteHubPaths } from '@/content/nav';
 import styles from './ScrollToTop.module.css';
 
 export function ScrollToTop() {
-  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
-  const besideNav = siteHubPaths.includes(pathname) || infraHubPaths.includes(pathname);
 
   useEffect(() => {
     let frame: number | null = null;
@@ -37,9 +33,7 @@ export function ScrollToTop() {
   return (
     <button
       type="button"
-      className={[styles.button, visible ? styles.visible : '', besideNav ? styles.besideNav : '']
-        .filter(Boolean)
-        .join(' ')}
+      className={[styles.button, visible ? styles.visible : ''].filter(Boolean).join(' ')}
       onClick={scrollUp}
       aria-label="Вернуться наверх"
       aria-hidden={!visible}

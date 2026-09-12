@@ -2,6 +2,8 @@
   --scene-p: 0;
   position: relative;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   aspect-ratio: 3 / 2;
   overflow: hidden;
   border-radius: 16px;
@@ -190,31 +192,31 @@ html[data-theme='dark'] .glassSoft {
 .waveR { transform-origin: 495px 198px; }
 .flapL { transform-origin: 32px 232px; }
 .flapR { transform-origin: 508px 232px; }
-.swayL { transform-origin: 58px 246px; }
-.swayR { transform-origin: 482px 246px; }
+.swayL { transform-origin: 58px 244px; }
+.swayR { transform-origin: 482px 244px; }
 
 .frame[data-hello] .waveL {
-  animation: helloRaiseL 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+  animation: helloRaiseL 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
 }
 
 .frame[data-hello] .flapL {
-  animation: helloFlapL 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+  animation: helloFlapL 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
 }
 
 .frame[data-hello] .swayL {
-  animation: helloSwayL 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.08s 1 both;
+  animation: helloSwayL 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.08s 1 both;
 }
 
 .frame[data-hello] .waveR {
-  animation: helloRaiseR 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.28s 1 both;
+  animation: helloRaiseR 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.28s 1 both;
 }
 
 .frame[data-hello] .flapR {
-  animation: helloFlapR 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.28s 1 both;
+  animation: helloFlapR 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.28s 1 both;
 }
 
 .frame[data-hello] .swayR {
-  animation: helloSwayR 2.3s cubic-bezier(0.5, 0, 0, 0.75) 0.28s 1 both;
+  animation: helloSwayR 2.55s cubic-bezier(0.37, 0, 0.2, 1) 0.28s 1 both;
 }
 
 .copy,
@@ -363,64 +365,66 @@ html[data-theme='dark'] .glassSoft {
 
 @keyframes helloRaiseL {
   0% { transform: none; }
-  16% { transform: rotate(-158deg); }
-  72% { transform: rotate(-158deg); }
-  88%, 100% { transform: none; }
+  18% { transform: rotate(94deg); }
+  26% { transform: rotate(88deg); }
+  74% { transform: rotate(90deg); }
+  90%, 100% { transform: none; }
 }
 
 @keyframes helloRaiseR {
   0% { transform: none; }
-  16% { transform: rotate(158deg); }
-  72% { transform: rotate(158deg); }
-  88%, 100% { transform: none; }
+  18% { transform: rotate(-94deg); }
+  26% { transform: rotate(-88deg); }
+  74% { transform: rotate(-90deg); }
+  90%, 100% { transform: none; }
 }
 
 @keyframes helloFlapL {
-  0%, 14% { transform: none; }
-  22% { transform: rotate(-32deg); }
-  30% { transform: rotate(24deg); }
-  38% { transform: rotate(-34deg); }
-  46% { transform: rotate(22deg); }
-  54% { transform: rotate(-28deg); }
-  62% { transform: rotate(10deg); }
-  70%, 100% { transform: none; }
+  0%, 18% { transform: none; }
+  26% { transform: rotate(16deg); }
+  34% { transform: rotate(-12deg); }
+  42% { transform: rotate(18deg); }
+  50% { transform: rotate(-10deg); }
+  58% { transform: rotate(14deg); }
+  66% { transform: rotate(-8deg); }
+  74%, 100% { transform: none; }
 }
 
 @keyframes helloFlapR {
-  0%, 14% { transform: none; }
-  22% { transform: rotate(32deg); }
-  30% { transform: rotate(-24deg); }
-  38% { transform: rotate(34deg); }
-  46% { transform: rotate(-22deg); }
-  54% { transform: rotate(28deg); }
-  62% { transform: rotate(-10deg); }
-  70%, 100% { transform: none; }
+  0%, 18% { transform: none; }
+  26% { transform: rotate(-16deg); }
+  34% { transform: rotate(12deg); }
+  42% { transform: rotate(-18deg); }
+  50% { transform: rotate(10deg); }
+  58% { transform: rotate(-14deg); }
+  66% { transform: rotate(8deg); }
+  74%, 100% { transform: none; }
 }
 
 @keyframes helloSwayL {
   0%, 100% { transform: none; }
-  16% { transform: rotate(7deg); }
-  22% { transform: rotate(3deg); }
-  30% { transform: rotate(8deg); }
-  38% { transform: rotate(2deg); }
-  46% { transform: rotate(8deg); }
-  54% { transform: rotate(3deg); }
-  62% { transform: rotate(6deg); }
-  72% { transform: rotate(5deg); }
-  88% { transform: none; }
+  18% { transform: rotate(-4deg); }
+  26% { transform: rotate(-2deg); }
+  34% { transform: rotate(-5deg); }
+  42% { transform: rotate(-2deg); }
+  50% { transform: rotate(-5deg); }
+  58% { transform: rotate(-2deg); }
+  66% { transform: rotate(-4deg); }
+  74% { transform: rotate(-3deg); }
+  90% { transform: none; }
 }
 
 @keyframes helloSwayR {
   0%, 100% { transform: none; }
-  16% { transform: rotate(-7deg); }
-  22% { transform: rotate(-3deg); }
-  30% { transform: rotate(-8deg); }
-  38% { transform: rotate(-2deg); }
-  46% { transform: rotate(-8deg); }
-  54% { transform: rotate(-3deg); }
-  62% { transform: rotate(-6deg); }
-  72% { transform: rotate(-5deg); }
-  88% { transform: none; }
+  18% { transform: rotate(4deg); }
+  26% { transform: rotate(2deg); }
+  34% { transform: rotate(5deg); }
+  42% { transform: rotate(2deg); }
+  50% { transform: rotate(5deg); }
+  58% { transform: rotate(2deg); }
+  66% { transform: rotate(4deg); }
+  74% { transform: rotate(3deg); }
+  90% { transform: none; }
 }
 
 @keyframes writeA {
@@ -441,6 +445,14 @@ html[data-theme='dark'] .glassSoft {
 @keyframes writeD {
   0%, 60% { opacity: 0; }
   76%, 100% { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .frame {
+    max-height: min(240px, 36svh);
+    aspect-ratio: auto;
+    height: min(240px, 36svh);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { ThemeToggle } from './ThemeToggle';
 import { HubMenu } from './SitesMenu';
@@ -23,9 +24,13 @@ import {
 import { interestFromLocation } from './hubNav';
 import styles from './SiteHeader.module.css';
 
+const MENU_MS = 380;
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuMounted, setMenuMounted] = useState(false);
+  const [menuEntered, setMenuEntered] = useState(false);
   const hash = useHubSectionHash(pathname);
 
   // Смена маршрута закрывает мобильное меню.
@@ -33,9 +38,54 @@ export function SiteHeader() {
     setMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (menuOpen) setMenuMounted(true);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuMounted) return;
+    if (!menuOpen) {
+      setMenuEntered(false);
+      return;
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setMenuEntered(true);
+      return;
+    }
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setMenuEntered(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [menuOpen, menuMounted]);
+
+  useEffect(() => {
+    if (menuOpen || !menuMounted) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timer = window.setTimeout(() => setMenuMounted(false), reduced ? 0 : MENU_MS);
+    return () => window.clearTimeout(timer);
+  }, [menuOpen, menuMounted]);
+
+  useEffect(() => {
+    if (!menuMounted) return;
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflow;
+    const prevBody = body.style.overflow;
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prevHtml;
+      body.style.overflow = prevBody;
+    };
+  }, [menuMounted]);
+
   return (
     <>
-      <header className={styles.header} data-header-glow>
+      <header className={styles.header} data-header-glow data-menu-open={menuMounted ? '' : undefined}>
         <div className={styles.row}>
           <div className={styles.brand}>
             <Link href="/" className={styles.wordmark}>
@@ -43,8 +93,7 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          {/* «Сайты» и «VPN/AI» раскрываются группами.
-              «Цены» в шапке намеренно нет: на страницу ведут кнопки героев и футер. */}
+          {/* «Сайты» и «VPN/AI» раскрываются группами. «Цены» - обычная вкладка. */}
           <nav className={styles.links} aria-label="Основная навигация">
             <NavButton href="/" label="Главная" active={pathname === '/'} />
             <HubMenu
@@ -64,6 +113,7 @@ export function SiteHeader() {
               hubPaths={infraHubPaths}
               badge={hitBadge}
             />
+            <NavButton href="/pricing" label="Цены" active={pathname === '/pricing'} />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />
           </nav>
 
@@ -80,7 +130,7 @@ export function SiteHeader() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
             >
-              {menuOpen ? '×' : '≡'}
+              {menuMounted ? '×' : '≡'}
             </button>
           </div>
         </div>
@@ -89,7 +139,25 @@ export function SiteHeader() {
         </div>
       </header>
 
-      {menuOpen && <MobileMenu pathname={pathname} hash={hash} onNavigate={() => setMenuOpen(false)} />}
+      {menuMounted
+        ? createPortal(
+            <>
+              <button
+                type="button"
+                className={[styles.scrim, menuEntered ? styles.scrimOpen : ''].filter(Boolean).join(' ')}
+                aria-label="Закрыть меню"
+                onClick={() => setMenuOpen(false)}
+              />
+              <MobileMenu
+                pathname={pathname}
+                hash={hash}
+                open={menuEntered}
+                onNavigate={() => setMenuOpen(false)}
+              />
+            </>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

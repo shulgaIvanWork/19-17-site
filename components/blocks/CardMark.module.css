@@ -178,131 +178,47 @@
 
 .rideHex { opacity: 0; }
 
-@media (hover: hover) and (pointer: fine) {
-  :global([data-service-card]:hover) .addr { animation: addr 4.8s ease-in-out infinite; }
-  :global([data-service-card]:hover) .winA { animation: blink 1.8s ease-in-out infinite; }
-  :global([data-service-card]:hover) .winB { animation: blink 1.8s ease-in-out 0.22s infinite; }
-  :global([data-service-card]:hover) .winC { animation: blink 1.8s ease-in-out 0.44s infinite; }
-  :global([data-service-card]:hover) .rideSite {
+:global([data-mark-live]) .addr { animation: addr 4.8s ease-in-out infinite; }
+  :global([data-mark-live]) .winA { animation: blink 1.8s ease-in-out infinite; }
+  :global([data-mark-live]) .winB { animation: blink 1.8s ease-in-out 0.22s infinite; }
+  :global([data-mark-live]) .winC { animation: blink 1.8s ease-in-out 0.44s infinite; }
+  :global([data-mark-live]) .rideSite {
     opacity: 1;
     animation: rideSite 5.6s linear infinite;
   }
-  :global([data-service-card]:hover) .siteBlock { animation: breathe 5.6s ease-in-out infinite; }
-  :global([data-service-card]:hover) .storeTrack { animation: storeTrack 4.8s linear infinite; }
-  :global([data-service-card]:hover) .bag { animation: bagNod 4.8s ease-in-out infinite; }
-  :global([data-service-card]:hover) .rideCart { animation: dropCart 4.8s ease-in-out infinite; }
-  :global([data-service-card]:hover) .frameA { animation: swapA 6.4s ease-in-out infinite; }
-  :global([data-service-card]:hover) .frameB { animation: swapB 6.4s ease-in-out infinite; }
-  :global([data-service-card]:hover) .shield { animation: shieldPulse 3.6s ease-in-out infinite; }
-  :global([data-service-card]:hover) .rideEcg { animation: rideEcg 1.5s linear infinite; }
-  :global([data-service-card]:hover) .lead { animation: kanban 6.2s ease-in-out infinite; }
-  :global([data-service-card]:hover) .flowEast,
-  :global([data-service-card]:hover) .flowWest {
+  :global([data-mark-live]) .siteBlock { animation: breathe 5.6s ease-in-out infinite; }
+  :global([data-mark-live]) .storeTrack { animation: storeTrack 4.8s linear infinite; }
+  :global([data-mark-live]) .bag { animation: bagNod 4.8s ease-in-out infinite; }
+  :global([data-mark-live]) .rideCart { animation: dropCart 4.8s ease-in-out infinite; }
+  :global([data-mark-live]) .frameA { animation: swapA 6.4s ease-in-out infinite; }
+  :global([data-mark-live]) .frameB { animation: swapB 6.4s ease-in-out infinite; }
+  :global([data-mark-live]) .shield { animation: shieldPulse 3.6s ease-in-out infinite; }
+  :global([data-mark-live]) .rideEcg { animation: rideEcg 1.5s linear infinite; }
+  :global([data-mark-live]) .lead { animation: kanban 6.2s ease-in-out infinite; }
+  :global([data-mark-live]) .flowEast,
+  :global([data-mark-live]) .flowWest {
     stroke-dasharray: 10 14;
     animation: dash 1.8s linear infinite;
   }
-  :global([data-service-card]:hover) .flowWest { animation-direction: reverse; }
-  :global([data-service-card]:hover) .rideEast { animation: packetEast 2.4s linear infinite; }
-  :global([data-service-card]:hover) .rideEast2 { animation: packetEast 2.4s linear 1.2s infinite; }
-  :global([data-service-card]:hover) .rideWest { animation: packetWest 2.4s linear 0.6s infinite; }
-  :global([data-service-card]:hover) .ring { animation: spin 14s linear infinite; }
-  :global([data-service-card]:hover) .wave { animation: radar 3.6s ease-out infinite; }
-  :global([data-service-card]:hover) .lock { animation: lockTick 3.6s ease-in-out infinite; }
-  :global([data-service-card]:hover) .satA { animation: sat 3.6s ease-in-out infinite; }
-  :global([data-service-card]:hover) .satB { animation: sat 3.6s ease-in-out 0.45s infinite; }
-  :global([data-service-card]:hover) .satC { animation: sat 3.6s ease-in-out 0.9s infinite; }
-  :global([data-service-card]:hover) .satD { animation: sat 3.6s ease-in-out 1.35s infinite; }
-  :global([data-service-card]:hover) .satE { animation: sat 3.6s ease-in-out 1.8s infinite; }
-  :global([data-service-card]:hover) .satF { animation: sat 3.6s ease-in-out 2.25s infinite; }
-  :global([data-service-card]:hover) .core { animation: core 5s ease-in-out infinite; }
-  :global([data-service-card]:hover) .rideHex {
+  :global([data-mark-live]) .flowWest { animation-direction: reverse; }
+  :global([data-mark-live]) .rideEast { animation: packetEast 2.4s linear infinite; }
+  :global([data-mark-live]) .rideEast2 { animation: packetEast 2.4s linear 1.2s infinite; }
+  :global([data-mark-live]) .rideWest { animation: packetWest 2.4s linear 0.6s infinite; }
+  :global([data-mark-live]) .ring { animation: spin 14s linear infinite; }
+  :global([data-mark-live]) .wave { animation: radar 3.6s ease-out infinite; }
+  :global([data-mark-live]) .lock { animation: lockTick 3.6s ease-in-out infinite; }
+  :global([data-mark-live]) .satA { animation: sat 3.6s ease-in-out infinite; }
+  :global([data-mark-live]) .satB { animation: sat 3.6s ease-in-out 0.45s infinite; }
+  :global([data-mark-live]) .satC { animation: sat 3.6s ease-in-out 0.9s infinite; }
+  :global([data-mark-live]) .satD { animation: sat 3.6s ease-in-out 1.35s infinite; }
+  :global([data-mark-live]) .satE { animation: sat 3.6s ease-in-out 1.8s infinite; }
+  :global([data-mark-live]) .satF { animation: sat 3.6s ease-in-out 2.25s infinite; }
+  :global([data-mark-live]) .core { animation: core 5s ease-in-out infinite; }
+  :global([data-mark-live]) .rideHex {
     opacity: 1;
     animation: rideHex 5s linear infinite;
   }
-  :global([data-service-card]:hover) .net { animation: net 5s ease-in-out infinite; }
-}
-
-@media not ((hover: hover) and (pointer: fine)) {
-  .addr,
-  .winA,
-  .winB,
-  .winC,
-  .rideSite,
-  .siteBlock,
-  .storeTrack,
-  .bag,
-  .rideCart,
-  .frameA,
-  .frameB,
-  .shield,
-  .rideEcg,
-  .lead,
-  .flowEast,
-  .flowWest,
-  .rideEast,
-  .rideEast2,
-  .rideWest,
-  .ring,
-  .wave,
-  .lock,
-  .satA,
-  .satB,
-  .satC,
-  .satD,
-  .satE,
-  .satF,
-  .core,
-  .rideHex,
-  .net {
-    animation-duration: 1s;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-play-state: paused;
-    animation-delay: calc(var(--mark-p, 0) * -1s);
-  }
-
-  .addr { animation-name: addr; }
-  .winA,
-  .winB,
-  .winC { animation-name: blink; }
-  .rideSite { opacity: 1; animation-name: rideSite; }
-  .siteBlock { animation-name: breathe; }
-  .storeTrack { animation-name: storeTrack; }
-  .bag { animation-name: bagNod; }
-  .rideCart { animation-name: dropCart; }
-  .frameA { animation-name: swapA; }
-  .frameB { animation-name: swapB; }
-  .shield { animation-name: shieldPulse; }
-  .rideEcg { animation-name: rideEcg; }
-  .lead { animation-name: kanban; }
-  .flowEast,
-  .flowWest {
-    stroke-dasharray: 10 14;
-    animation-name: dash;
-  }
-  .flowWest { animation-direction: reverse; }
-  .rideEast,
-  .rideEast2 { animation-name: packetEast; }
-  .rideEast2 { animation-delay: calc((var(--mark-p, 0) - 0.5) * -1s); }
-  .rideWest { animation-name: packetWest; }
-  .ring { animation-name: spin; }
-  .wave { animation-name: radar; }
-  .lock { animation-name: lockTick; }
-  .satA,
-  .satB,
-  .satC,
-  .satD,
-  .satE,
-  .satF { animation-name: sat; }
-  .satB { animation-delay: calc((var(--mark-p, 0) - 0.12) * -1s); }
-  .satC { animation-delay: calc((var(--mark-p, 0) - 0.24) * -1s); }
-  .satD { animation-delay: calc((var(--mark-p, 0) - 0.36) * -1s); }
-  .satE { animation-delay: calc((var(--mark-p, 0) - 0.48) * -1s); }
-  .satF { animation-delay: calc((var(--mark-p, 0) - 0.6) * -1s); }
-  .core { animation-name: core; }
-  .rideHex { opacity: 1; animation-name: rideHex; }
-  .net { animation-name: net; }
-}
+  :global([data-mark-live]) .net { animation: net 5s ease-in-out infinite; }
 
 /* ---- keyframes ---------------------------------------------------------- */
 

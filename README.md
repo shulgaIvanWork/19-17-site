@@ -13,12 +13,12 @@
 | `/` | Главная |
 | `/websites` | Хаб «Сайты»: разделы `#landing`, `#multipage`, `#marketplace`, `#redesign`, `#support`, `#onec`, `#crm` |
 | `/vpn-ai` | Хаб «VPN / AI»: разделы `#vpn`, `#ai` |
-| `/pricing` | Цены. В шапке их нет по указанию заказчика, ведут кнопки героев и футер |
+| `/pricing` | Цены |
 | `/about` | О компании |
 | `/privacy` | Политика обработки персональных данных |
 | `/api/enquiry` | Прием заявки из формы |
 
-Шапка: Главная · Сайты ▾ · VPN / AI ▾ · О нас.
+Шапка: Главная · Сайты ▾ · VPN / AI ▾ · Цены · О нас.
 
 Старые адреса отдельных услуг (`/vpn`, `/ai`, `/support`, `/website-redesign`,
 `/online-store`, `/integrations/crm`, `/integrations/1c`, `/integrations`,

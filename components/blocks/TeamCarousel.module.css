@@ -1,0 +1,100 @@
+.rail {
+  --team-gap: clamp(20px, 3vw, 32px);
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.viewport {
+  overflow: hidden;
+  overflow: clip;
+  box-sizing: border-box;
+  padding-inline: max(var(--gut), calc((100vw - var(--max)) / 2 + var(--gut)));
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--gut),
+    #000 calc(100% - var(--gut)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--gut),
+    #000 calc(100% - var(--gut)),
+    transparent 100%
+  );
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  gap: var(--team-gap);
+  will-change: transform;
+}
+
+.viewport :global(img) {
+  -webkit-user-drag: none;
+}
+
+.card {
+  flex: 0 0 calc((min(var(--max), 100vw) - 2 * var(--gut) - 2 * var(--team-gap)) / 3);
+  min-width: 0;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 4;
+  top: 34%;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid var(--pale);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--graphite);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color var(--t), border-color var(--t), color var(--t);
+}
+
+.arrow[data-side='prev'] { left: max(12px, var(--gut)); }
+.arrow[data-side='next'] { right: max(12px, var(--gut)); }
+
+.arrow:hover {
+  border-color: var(--blue);
+  color: var(--carbon);
+}
+
+.arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    flex-basis: calc((min(var(--max), 100vw) - 2 * var(--gut) - var(--team-gap)) / 2);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex-basis: calc((100vw - 2 * var(--gut) - var(--team-gap)) / 2.2);
+  }
+
+  .arrow {
+    top: 28%;
+  }
+}

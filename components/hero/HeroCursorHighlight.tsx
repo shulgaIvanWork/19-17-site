@@ -2,6 +2,12 @@
 
 import { useEffect } from 'react';
 
+/** Clickable controls must not pick up the cursor wash: the spotlight would
+ *  sit on the control and tint its hover. Card photos stay out of this list
+ *  on purpose - they are links, but the glow on the illustration is wanted. */
+const CURSOR_SKIP =
+  'button, a.btn, .navbtn, .menurow, .actionlink, [role="button"], [data-cursor-skip], input, select, textarea, summary, [data-header-glow] a';
+
 /** Writes --mx / --my / --mo on highlighted surfaces as the pointer moves.
  *  Mounted once in the layout: one listener for the whole site, and no React
  *  re-render per pointer move.
@@ -28,6 +34,11 @@ export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
     const paint = () => {
       frame = null;
       const hit = document.elementFromPoint(px, py);
+      if (hit?.closest(CURSOR_SKIP)) {
+        dim(active);
+        active = null;
+        return;
+      }
       const next = hit?.closest<HTMLElement>('[data-hero], [data-header-glow], [data-cursor-glow]') ?? null;
       if (next !== active) {
         dim(active);

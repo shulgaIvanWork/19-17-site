@@ -1,6 +1,7 @@
 import { BoardScene } from '@/components/scenes/BoardScene';
 import { ButtonLink } from '@/components/ui/Button';
 import { Hero } from '@/components/hero/Hero';
+import { LoopCarousel } from '@/components/blocks/LoopCarousel';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { ProductCard } from '@/components/blocks/ProductCard';
 import { Section } from '@/components/ui/Section';
@@ -13,11 +14,16 @@ export default function HomePage() {
       <Hero copy={heroes.home} size="tall" object />
 
       <Section>
-        <div className="gcards">
+        <div className="gcards desk-only">
           {paths.map((path) => (
             <ProductCard key={path.href} path={path} />
           ))}
         </div>
+        <LoopCarousel peek="one" label="Направления">
+          {paths.map((path) => (
+            <ProductCard key={path.href} path={path} />
+          ))}
+        </LoopCarousel>
       </Section>
 
       <Section surface="ash">

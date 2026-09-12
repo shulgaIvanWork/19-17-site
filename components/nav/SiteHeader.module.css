@@ -2,11 +2,31 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  isolation: isolate;
-  background: var(--frost);
-  backdrop-filter: blur(14px);
-  padding-top: env(safe-area-inset-top);
+  --header-row: 56px;
+  background-color: transparent;
+  background: transparent;
+  padding-top: env(safe-area-inset-top, 0px);
   transition: background-color 0.55s ease;
+}
+
+.header[data-menu-open] {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+/* Стекло на дочернем слое: iOS 26 семплит sticky-элемент и не должен
+   видеть backdrop-filter на нём самом, иначе Dynamic Island становится плотным. */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: color-mix(in srgb, var(--frost) 72%, var(--white));
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  backdrop-filter: blur(18px) saturate(1.35);
 }
 
 .header::after {
@@ -31,7 +51,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 var(--gut);
-  min-height: 56px;
+  min-height: var(--header-row);
 }
 
 .brand {
@@ -109,6 +129,63 @@
   .deskCta { display: none; }
 }
 
+@media (max-width: 768px) {
+  .header {
+    --header-row: 44px;
+  }
+
+  .header::before {
+    top: env(safe-area-inset-top, 0px);
+    background-color: color-mix(in srgb, var(--frost) 42%, transparent);
+    background: color-mix(in srgb, var(--frost) 42%, transparent);
+  }
+
+  .wordmark {
+    font-size: 13px;
+    letter-spacing: 0.32em;
+  }
+
+  .burger {
+    min-height: 36px;
+    width: 36px;
+    font-size: 22px;
+  }
+}
+
 @media (max-width: 420px) {
-  .wordmark { letter-spacing: 0.28em; }
+  .wordmark { letter-spacing: 0.22em; }
+}
+
+.scrim {
+  display: none;
+}
+
+@media (max-width: 1120px) {
+  .scrim {
+    display: block;
+    position: fixed;
+    top: calc(var(--header-row, 56px) + env(safe-area-inset-top, 0px));
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 18;
+    padding: 0;
+    border: none;
+    background: color-mix(in srgb, var(--white) 18%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(1.35);
+    backdrop-filter: blur(22px) saturate(1.35);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--t);
+  }
+
+  .scrimOpen {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim {
+    transition: none;
+  }
 }

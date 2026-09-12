@@ -3,7 +3,8 @@ import { AboutScene } from '@/components/scenes/AboutScene';
 import { Photo } from '@/components/ui/Photo';
 import { Section } from '@/components/ui/Section';
 import { phoneHref, phoneLabel } from '@/content/nav';
-import { aboutHero, founders, foundersBand, howWeOperate } from '@/content/team';
+import { TeamCarousel } from '@/components/blocks/TeamCarousel';
+import { aboutHero, developers, founders, foundersBand, howWeOperate, teamBand } from '@/content/team';
 
 export const metadata: Metadata = {
   title: 'О нас',
@@ -65,6 +66,15 @@ export default function AboutPage() {
                 </p>
               </div>
             ))}
+          </div>
+          <h2 className="h2" style={{ marginTop: 'clamp(64px, 8vw, 104px)' }}>
+            {teamBand.title}
+          </h2>
+          <p className="body" style={{ marginTop: 12, maxWidth: '46ch' }}>
+            {teamBand.body}
+          </p>
+          <div style={{ marginTop: 48 }}>
+            <TeamCarousel people={developers} />
           </div>
         </div>
       </Section>

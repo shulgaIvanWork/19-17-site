@@ -179,45 +179,64 @@ export function applyHeroScroll(
   }
 }
 
-/** 0 when the hero is entering or at rest, 1 when it has fully left. */
+function clamp01(value: number) {
+  return Math.min(1, Math.max(0, value));
+}
+
+/** 0 за обоими краями, 1 на пике (блок на экране). Дальше — зеркало, обратный ход. */
+function pingPong(top: number, enter: number, peak: number, gone: number) {
+  if (top >= enter || top <= gone) return 0;
+  if (top >= peak) return clamp01((enter - top) / (enter - peak || 1));
+  return clamp01((top - gone) / (peak - gone || 1));
+}
+
+/** Поза, когда герой посажен под шапку. */
+export function heroDockProgress(shape: HeroShape) {
+  if (shape === 'pages' || shape === 'crm' || shape === 'support') return 1;
+  if (shape === 'store') return 0.5;
+  return 0;
+}
+
+/** Поза за краем экрана: 1 — снизу, -1 — сверху. */
+export function heroApproachProgress(shape: HeroShape, fromDir: -1 | 1) {
+  if (shape === 'pages' || shape === 'crm' || shape === 'support') return 0;
+  if (shape === 'store') return fromDir > 0 ? 0 : 1;
+  return fromDir > 0 ? 0 : 1;
+}
+
+/** 0 when the hero is entering or at rest, 1 when it has fully left.
+ *  У pages/crm/support цикл кончается до ухода блока: после пика тот же ход назад. */
 export function heroScrollProgress(surface: HTMLElement, shape: HeroShape = 'globe') {
   const rect = surface.getBoundingClientRect();
   const view = window.innerHeight;
   const open = 64;
   const gone = -rect.height;
-  const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
   if (shape === 'pages') {
-    const enter = view * 0.92;
-    const done = -rect.height * 0.22;
-    return clamp((enter - rect.top) / (enter - done || 1));
+    const span = view * 0.92 + rect.height * 0.22;
+    const peak = open;
+    const enter = peak + span;
+    return pingPong(rect.top, enter, peak, gone);
   }
 
   if (shape === 'store') {
-    const enter = view * 0.82;
+    const enter = view * 1.2;
     if (rect.top > open) {
-      return clamp((0.5 * (enter - rect.top)) / (enter - open || 1));
+      return clamp01((0.5 * (enter - rect.top)) / (enter - open || 1));
     }
-    return clamp(0.5 + (0.5 * (open - rect.top)) / (open - gone || 1));
+    return clamp01(0.5 + (0.5 * (open - rect.top)) / (open - gone || 1));
   }
 
   if (shape === 'crm') {
-    // Модель дорисована полностью, когда верх героя доходит до 12% высоты
-    // экрана, то есть чуть раньше, чем герой встает под шапку. Раньше конец был
-    // на -0.55 высоты героя, и на полном экране стрелка была нарисована на две
-    // трети, без крыльев (просьба заказчика 2026-09-11).
     const enter = view * 0.88;
-    const done = view * 0.12;
-    return clamp((enter - rect.top) / (enter - done || 1));
+    const peak = view * 0.12;
+    return pingPong(rect.top, enter, peak, gone);
   }
 
   if (shape === 'support') {
     const enter = view * 0.58;
-    if (rect.top > open) {
-      return clamp((enter - rect.top) / (enter - open || 1));
-    }
-    return 1;
+    return pingPong(rect.top, enter, open, gone);
   }
 
-  return clamp((open - rect.top) / (open - gone || 1));
+  return clamp01((open - rect.top) / (open - gone || 1));
 }

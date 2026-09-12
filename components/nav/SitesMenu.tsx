@@ -25,15 +25,12 @@ type Props = {
  *  закрывается раньше, чем курсор дойдет. Открытие, задержку закрытия, Esc и
  *  потерю фокуса дает useHoverMenu; строки меню - настоящие ссылки. */
 export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badge }: Props) {
-  const { open, close, wrapProps, triggerRef } = useHoverMenu<HTMLAnchorElement>(pathname);
+  const { open, wrapProps, triggerRef } = useHoverMenu<HTMLAnchorElement>(pathname);
   const active = hubPaths.includes(pathname);
   const router = useRouter();
 
   const goGroup = (href: string) => {
-    if (jumpHash(href, pathname)) {
-      close();
-      return;
-    }
+    if (jumpHash(href, pathname)) return;
     router.push(href);
   };
 
@@ -79,7 +76,6 @@ export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badg
                 onClick={(event) => {
                   if (!jumpHash(group.href, pathname)) return;
                   event.preventDefault();
-                  close();
                 }}
               >
                 {group.title}
@@ -97,7 +93,6 @@ export function HubMenu({ pathname, hash, label, tabHref, groups, hubPaths, badg
                         onClick={(event) => {
                           if (!jumpHash(item.href, pathname)) return;
                           event.preventDefault();
-                          close();
                         }}
                       >
                         <span className={[styles.name, current ? styles.current : ''].filter(Boolean).join(' ')}>

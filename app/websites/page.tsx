@@ -5,6 +5,7 @@ import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
+import { PlanFigureGrid } from '@/components/blocks/PlanFigureGrid';
 import { Section } from '@/components/ui/Section';
 import { TwoColList } from '@/components/blocks/TwoColList';
 import {
@@ -137,7 +138,7 @@ export default function WebsitesPage() {
 
       <Section>
         <h2 className="h2">{storeBands.sized.title}</h2>
-        <div className="g3" style={{ marginTop: 52 }}>
+        <PlanFigureGrid label="Размер каталога">
           {storePlans.map((plan) => (
             <PlanFigure
               key={plan.name}
@@ -148,7 +149,7 @@ export default function WebsitesPage() {
               interest="Интернет-магазин"
             />
           ))}
-        </div>
+        </PlanFigureGrid>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
           {footnotes.store}
         </p>
@@ -242,7 +243,7 @@ export default function WebsitesPage() {
 
       <Section>
         <h2 className="h2">{onecBands.priced.title}</h2>
-        <div className="g3" style={{ marginTop: 52 }}>
+        <PlanFigureGrid label="Пакеты интеграции с 1С">
           {onecPackages.map((pkg) => (
             <PlanFigure
               key={pkg.name}
@@ -253,7 +254,7 @@ export default function WebsitesPage() {
               interest="Интеграция с 1С"
             />
           ))}
-        </div>
+        </PlanFigureGrid>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
           {footnotes.integrations}
         </p>
@@ -291,7 +292,7 @@ export default function WebsitesPage() {
 
       <Section>
         <h2 className="h2">{crmBands.priced.title}</h2>
-        <div className="g3" style={{ marginTop: 52 }}>
+        <PlanFigureGrid label="Пакеты интеграции с CRM">
           {crmPackages.map((pkg) => (
             <PlanFigure
               key={pkg.name}
@@ -302,7 +303,7 @@ export default function WebsitesPage() {
               interest="Интеграция с CRM"
             />
           ))}
-        </div>
+        </PlanFigureGrid>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
           {footnotes.integrations}
         </p>

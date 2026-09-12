@@ -17,10 +17,8 @@
   position: absolute;
   inset: 0;
   border-radius: 4px;
-  background: var(--frost);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.48);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  background: transparent;
+  border: 1px solid var(--pale);
   opacity: 0;
   transition: opacity var(--t);
 }
@@ -49,8 +47,14 @@
 }
 
 html[data-theme='dark'] .glass {
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: var(--hover-rim);
+}
+
+@media (max-width: 768px) {
+  .toggle {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

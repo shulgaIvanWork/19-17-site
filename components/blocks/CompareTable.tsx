@@ -1,3 +1,4 @@
+import { CompareCards } from './CompareCards';
 import styles from './CompareTable.module.css';
 
 type Props = {
@@ -13,51 +14,37 @@ type Props = {
  *  as labeled pairs instead of wrapping into a 2×2 scramble. */
 export function CompareTable({ headers, rows, headerStyle = 'label', caption }: Props) {
   return (
-    <div className={styles.table} role="table" aria-label={caption}>
-      <div className={styles.wide}>
-        <div className={['divrow', 'divrow-head'].join(' ')} role="row">
-          {headers.map((header, index) => (
-            <div
-              key={`${header}-${index}`}
-              role="columnheader"
-              className={[headerStyle === 'h3' ? 'h3' : 'label', styles.header].join(' ')}
-            >
-              {header || ' '}
-            </div>
-          ))}
-        </div>
-        {rows.map((row) => (
-          <div className="divrow" role="row" key={row[0]}>
-            <div role="rowheader" className={styles.key}>
-              {row[0]}
-            </div>
-            {row.slice(1).map((cell, index) => (
-              <div role="cell" className={['body', styles.cell].join(' ')} key={`${row[0]}-${index}`}>
-                {cell}
+    <>
+      <div className={styles.table} role="table" aria-label={caption}>
+        <div className={styles.wide}>
+          <div className={['divrow', 'divrow-head'].join(' ')} role="row">
+            {headers.map((header, index) => (
+              <div
+                key={`${header}-${index}`}
+                role="columnheader"
+                className={[headerStyle === 'h3' ? 'h3' : 'label', styles.header].join(' ')}
+              >
+                {header || ' '}
               </div>
             ))}
           </div>
-        ))}
-      </div>
-
-      <div className={styles.narrow}>
-        {rows.map((row) => (
-          <div className={styles.card} role="row" key={row[0]}>
-            <div role="rowheader" className={styles.key}>
-              {row[0]}
-            </div>
-            {row.slice(1).map((cell, index) => {
-              const label = headers[index + 1];
-              return (
-                <div className={styles.pair} role="cell" key={`${row[0]}-${index}`}>
-                  {label ? <span className={styles.pairHead}>{label}</span> : null}
-                  <span className={['body', styles.cell, styles.pairVal].join(' ')}>{cell}</span>
+          {rows.map((row) => (
+            <div className="divrow" role="row" key={row[0]}>
+              <div role="rowheader" className={styles.key}>
+                {row[0]}
+              </div>
+              {row.slice(1).map((cell, index) => (
+                <div role="cell" className={['body', styles.cell].join(' ')} key={`${row[0]}-${index}`}>
+                  {cell}
                 </div>
-              );
-            })}
-          </div>
-        ))}
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+      <div className={styles.narrow}>
+        <CompareCards headers={headers} rows={rows} />
+      </div>
+    </>
   );
 }

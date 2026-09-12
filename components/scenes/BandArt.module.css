@@ -1,15 +1,19 @@
 .lead {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .frame {
   --scene-p: 0;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
   border-radius: 16px;
   aspect-ratio: 5 / 4;
   content-visibility: auto;
-  contain-intrinsic-size: 640px 512px;
+  contain-intrinsic-size: auto 320px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
     0 1px 0 rgba(62, 106, 225, 0.05),
@@ -30,7 +34,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .glass {
@@ -277,6 +281,19 @@ html[data-theme='dark'] .nodeRing {
 @keyframes writeD {
   0%, 60% { opacity: 0; }
   76%, 100% { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .lead {
+    order: 1;
+    margin-top: 8px;
+  }
+
+  .frame {
+    max-height: min(240px, 36svh);
+    aspect-ratio: auto;
+    height: min(240px, 36svh);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

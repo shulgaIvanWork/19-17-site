@@ -1099,18 +1099,19 @@ function addSafeStroke(
   mark(points.length - beforeEndCap, 1);
 }
 
-function strokeShapeMesh(ox: number, shape: StrokeShape): Mesh {
+function strokeShapeMesh(ox: number, shape: StrokeShape, quality = 1): Mesh {
   const points: Point[] = [];
   const edges: [number, number][] = [];
   const parts: number[] = [];
   const along: number[] = [];
   const radius = shape.tubeRadius ?? TUBE_R;
-  const sides = shape.ringSides ?? RING;
+  const sides = quality < 0.72 ? 3 : (shape.ringSides ?? RING);
+  const step = (shape.alongStep ?? ALONG_STEP) / Math.max(0.38, quality);
   shape.strokes.forEach((stroke, index) => {
     const start = points.length;
     const a0 = stroke.alongFrom ?? 0;
     const a1 = stroke.alongTo ?? a0;
-    addSafeStroke(points, edges, ox, stroke, stroke.radius ?? radius, sides, shape.alongStep, along, a0, a1);
+    addSafeStroke(points, edges, ox, stroke, stroke.radius ?? radius, sides, step, along, a0, a1);
     const part = stroke.part ?? index;
     for (let i = start; i < points.length; i++) parts.push(part);
     while (along.length < points.length) along.push(a1);
@@ -1559,8 +1560,8 @@ function sampleWord(word: string): Mesh {
   return applyEmTransform({ points, edges });
 }
 
-function sampleStrokeShape(shape: StrokeShape): Mesh {
-  return applyEmTransform(strokeShapeMesh(-shape.width / 2, shape));
+function sampleStrokeShape(shape: StrokeShape, quality = 1): Mesh {
+  return applyEmTransform(strokeShapeMesh(-shape.width / 2, shape, quality));
 }
 
 export { isLetterShape } from './heroTypes';
@@ -1579,5 +1580,6 @@ export function meshForShape(shape: HeroShape, nodes: number): Mesh {
     support: SUPPORT_SHAPE,
     crm: CRM_SHAPE,
   };
-  return sampleStrokeShape(icons[shape] ?? SUPPORT_SHAPE);
+  const quality = Math.max(0.38, Math.min(1, nodes / 110));
+  return sampleStrokeShape(icons[shape] ?? SUPPORT_SHAPE, quality);
 }

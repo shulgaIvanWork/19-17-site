@@ -1,10 +1,29 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { applyHeroScroll, heroScrollProgress, scrollBasis, type LiveBuffers } from './heroScroll';
+import { applyHeroScroll, heroApproachProgress, heroDockProgress, heroScrollProgress, scrollBasis, type LiveBuffers } from './heroScroll';
 import { isLetterShape, type HeroShape, type Mesh } from './heroTypes';
+import { HUB_POSE_MS, hubJumpDir, hubRailBlocksLook, isHubJumping, onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/nav/hubNav';
 
 const meshCache = new Map<string, Promise<Mesh>>();
+let pointerX = Number.NaN;
+let pointerY = Number.NaN;
+let pointerBound = false;
+
+function rememberPointer(clientX: number, clientY: number) {
+  pointerX = clientX;
+  pointerY = clientY;
+}
+
+function bindPointer() {
+  if (pointerBound) return;
+  pointerBound = true;
+  window.addEventListener(
+    'pointermove',
+    (event) => rememberPointer(event.clientX, event.clientY),
+    { passive: true },
+  );
+}
 
 function loadMesh(shape: HeroShape, count: number) {
   const key = `${shape}:${count}`;
@@ -59,11 +78,16 @@ export function HeroObject({ nodes = 110, ink = '46,88,236', shape = 'globe' }: 
     const host = hostRef.current;
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: false });
     if (!ctx) return;
 
     const letters = isLetterShape(shape);
-    const count = Math.max(40, Math.min(240, Math.round(nodes)));
+    const coarse = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+    // Глобус главной не режем: у букв `nodes` раньше вообще не влиял на сетку.
+    const count =
+      shape === 'globe'
+        ? Math.max(40, Math.min(240, Math.round(nodes)))
+        : Math.max(36, Math.min(240, Math.round(nodes * (coarse ? 0.4 : 1))));
     let cancelled = false;
     let cleanup = () => {};
 
@@ -121,6 +145,7 @@ function startHero(
   const midX = letters ? (minX + maxX) / 2 : 0;
   const midY = letters ? (minY + maxY) / 2 : 0;
   const fit = SHAPE_FIT[shape];
+  const mobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
 
   const projectedX = new Float32Array(points.length);
   const projectedY = new Float32Array(points.length);
@@ -134,6 +159,33 @@ function startHero(
   const surface = host.closest<HTMLElement>('[data-hero]') ?? host;
   let scrollP = 0;
   let scrollShown = 0;
+  let jumpTween = false;
+  let jumpFrom = 0;
+  let jumpTo = 0;
+  let jumpT0 = 0;
+  let jumpId = '';
+  const JUMP_MS = HUB_POSE_MS;
+  const beginJumpPose = (id: string, dir: -1 | 1) => {
+    if (shape === 'globe') return;
+    const isDest = Boolean(id) && surface.id === id;
+    const destChanged = jumpId !== id;
+    jumpId = id;
+    if (isDest) {
+      jumpTo = heroDockProgress(shape);
+      jumpFrom = destChanged ? heroApproachProgress(shape, dir) : scrollShown;
+    } else {
+      jumpTo = heroApproachProgress(shape, dir > 0 ? -1 : 1);
+      jumpFrom = scrollShown;
+    }
+    if (Math.abs(jumpTo - jumpFrom) < 0.012) {
+      jumpTween = false;
+      scrollShown = jumpTo;
+      return;
+    }
+    jumpT0 = performance.now();
+    jumpTween = true;
+    scrollShown = jumpFrom;
+  };
   let lookYaw = 0;
   let lookPitch = 0;
   let orbitYaw = 0;
@@ -188,8 +240,9 @@ function startHero(
     }
 
     ctx.clearRect(0, 0, w, h);
-    ctx.lineWidth = 1.4;
-    const buckets = 12;
+    const lite = letters && mobile;
+    ctx.lineWidth = lite ? 1.15 : 1.4;
+    const buckets = lite ? 4 : 12;
     const edgeAlphaMax = 0.3;
     const pointAlphaMax = 0.58;
     const edgePaths = Array.from({ length: buckets }, () => new Path2D());
@@ -214,49 +267,66 @@ function startHero(
       ctx.stroke(path);
     });
 
-    for (let i = 0; i < points.length; i++) {
-      if (live.hide[i]) continue;
-      const alpha = 0.34 * (1 - (projectedZ[i] + 1) / 2.9);
-      if (alpha <= 0.005) continue;
-      const bucket = Math.min(buckets - 1, Math.floor((alpha / pointAlphaMax) * buckets));
-      pointPaths[bucket].moveTo(projectedX[i] + 1.7, projectedY[i]);
-      pointPaths[bucket].arc(projectedX[i], projectedY[i], 1.7, 0, Math.PI * 2);
-      pointUsed[bucket] = 1;
+    if (!lite) {
+      for (let i = 0; i < points.length; i++) {
+        if (live.hide[i]) continue;
+        const alpha = 0.34 * (1 - (projectedZ[i] + 1) / 2.9);
+        if (alpha <= 0.005) continue;
+        const bucket = Math.min(buckets - 1, Math.floor((alpha / pointAlphaMax) * buckets));
+        pointPaths[bucket].moveTo(projectedX[i] + 1.7, projectedY[i]);
+        pointPaths[bucket].arc(projectedX[i], projectedY[i], 1.7, 0, Math.PI * 2);
+        pointUsed[bucket] = 1;
+      }
+      pointPaths.forEach((path, bucket) => {
+        if (!pointUsed[bucket]) return;
+        const alpha = pointAlphaMax * ((bucket + 0.5) / buckets);
+        ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
+        ctx.fill(path);
+      });
     }
-    pointPaths.forEach((path, bucket) => {
-      if (!pointUsed[bucket]) return;
-      const alpha = pointAlphaMax * ((bucket + 0.5) / buckets);
-      ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
-      ctx.fill(path);
-    });
   };
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const mobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
-  const frameBudget = mobile ? 33 : 16;
+  const restBudget = !letters ? (mobile ? 33 : 16) : mobile ? 22 : 16;
   const dragGain = 0.0016;
   let dragging = false;
   let lastPointerX = 0;
   let lastPointerY = 0;
+  let persistLook = false;
+  let glanceUntil = 0;
+  let lastScrollY = window.scrollY;
+  let calmUntil = 0;
+  let paintBudget = restBudget;
   let baseYaw = restYaw;
   let basePitch = restPitch;
   const lookAmpYaw = letters ? 0.34 : 0.4;
   const lookAmpPitch = letters ? 0.15 : 0.18;
 
-  const applyLook = (clientX: number, clientY: number) => {
-    const rect = surface.getBoundingClientRect();
-    const inside =
-      clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
-    hovering = inside;
-    if (!inside) {
-      lookYaw = 0;
-      lookPitch = 0;
-      return;
-    }
-    const nx = ((clientX - rect.left) / (rect.width || 1)) * 2 - 1;
-    const ny = ((clientY - rect.top) / (rect.height || 1)) * 2 - 1;
+  const pointIn = (rect: DOMRect, clientX: number, clientY: number) =>
+    clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+
+  const lookFromPoint = (clientX: number, clientY: number) => {
+    const rect = host.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const nx = Math.max(-1, Math.min(1, ((clientX - rect.left) / rect.width) * 2 - 1));
+    const ny = Math.max(-1, Math.min(1, ((clientY - rect.top) / rect.height) * 2 - 1));
     lookYaw = nx * lookAmpYaw;
     lookPitch = ny * lookAmpPitch;
+  };
+
+  const applyLook = (clientX: number, clientY: number) => {
+    rememberPointer(clientX, clientY);
+    if (hubRailBlocksLook(clientX, clientY)) {
+      hovering = false;
+      persistLook = false;
+      return;
+    }
+    const over = pointIn(host.getBoundingClientRect(), clientX, clientY);
+    hovering = over;
+    persistLook = over;
+    if (!over) return;
+    glanceUntil = 0;
+    lookFromPoint(clientX, clientY);
   };
 
   const applyDrag = (dx: number, dy: number) => {
@@ -266,7 +336,7 @@ function startHero(
 
   const pose = () => {
     if (letters) {
-      const idle = dragging || hovering || reduced ? 0 : 1;
+      const idle = dragging || hovering || reduced || mobile ? 0 : 1;
       const idleYaw = Math.sin(tick * 0.0032) * 0.08 * idle;
       const idlePitch = Math.cos(tick * 0.0026) * 0.035 * idle;
       return { yaw: yaw + idleYaw, pitch: pitch + idlePitch };
@@ -296,13 +366,17 @@ function startHero(
     if (!inView) return;
     const rect = host.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const narrow = rect.width < 768;
-    const cap = letters || narrow ? 1.25 : 1.5;
+    const coarseNow = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+    const cap = coarseNow ? 1 : (letters || rect.width < 768 ? 1.25 : 1.5);
     const dpr = Math.min(cap, window.devicePixelRatio || 1);
+    const nextW = Math.round(rect.width * dpr);
+    const nextH = Math.round(rect.height * dpr);
     w = rect.width;
     h = rect.height;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
+    if (canvas.width !== nextW || canvas.height !== nextH) {
+      canvas.width = nextW;
+      canvas.height = nextH;
+    }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     paint();
   };
@@ -316,8 +390,12 @@ function startHero(
         cancelAnimationFrame(frame);
         frame = null;
       }
-      releaseBuffer();
       return;
+    }
+    if (shape !== 'globe' && !reduced && isHubJumping() && !jumpTween) {
+      const dest = pinnedHubSection();
+      const dir = hubJumpDir();
+      if (dest && dir) beginJumpPose(dest, dir);
     }
     resize();
     if (reduced) return;
@@ -325,6 +403,12 @@ function startHero(
       last = performance.now();
       frame = requestAnimationFrame(loop);
     }
+  };
+
+  const viewFromRect = () => {
+    const rect = host.getBoundingClientRect();
+    const slop = window.innerHeight * (mobile ? 0.18 : 0.45);
+    return rect.width > 1 && rect.height > 1 && rect.bottom > -slop && rect.top < window.innerHeight + slop;
   };
 
   const resizeObserver = new ResizeObserver(() => {
@@ -336,9 +420,37 @@ function startHero(
     (entries) => {
       setVisible(entries[0].isIntersecting);
     },
-    { root: null, rootMargin: '0px', threshold: 0 },
+    { root: null, rootMargin: mobile ? '18% 0px' : '45% 0px', threshold: 0 },
   );
   intersectionObserver.observe(host);
+  setVisible(viewFromRect());
+  bindPointer();
+  const startGlance = () => {
+    if (reduced || !inView || jumpTween || !Number.isFinite(pointerX)) return;
+    persistLook = false;
+    hovering = false;
+    lookFromPoint(pointerX, pointerY);
+    glanceUntil = performance.now() + 720;
+  };
+  const onJump = () => {
+    setVisible(viewFromRect());
+  };
+  const stopJump = onHubJumpEnd(onJump);
+  const stopJumpStart = onHubJumpStart((id, dir) => {
+    glanceUntil = 0;
+    persistLook = false;
+    hovering = false;
+    beginJumpPose(id, dir);
+    if (surface.id === id && !jumpTween) startGlance();
+  });
+  if (isHubJumping()) {
+    const dest = pinnedHubSection();
+    const dir = hubJumpDir();
+    if (dest && dir) {
+      beginJumpPose(dest, dir);
+      if (surface.id === dest && !jumpTween) startGlance();
+    }
+  }
 
   const onVisibility = () => setVisible();
   document.addEventListener('visibilitychange', onVisibility);
@@ -381,6 +493,7 @@ function startHero(
   };
 
   const onWindowMove = (event: PointerEvent) => {
+    rememberPointer(event.clientX, event.clientY);
     if (dragging || reduced || !inView) return;
     applyLook(event.clientX, event.clientY);
   };
@@ -391,18 +504,55 @@ function startHero(
       return;
     }
     frame = requestAnimationFrame(loop);
-    const dt = Math.min(32, now - last);
-    if (dt < frameBudget - 1) return;
+    const dt = now - last;
+    const scrollY = window.scrollY;
+    const speed = Math.abs(scrollY - lastScrollY) / Math.max(dt, 1);
+    lastScrollY = scrollY;
+    if (jumpTween) {
+      paintBudget = restBudget;
+    } else if (speed > 18) {
+      paintBudget = 45;
+      calmUntil = now + 120;
+    } else if (now < calmUntil || speed > 10) {
+      paintBudget = 32;
+    } else {
+      paintBudget = restBudget;
+    }
+    if (dt < paintBudget - 1) return;
     last = now;
+    const step = Math.min(48, dt);
+    if (!jumpTween && !dragging && !persistLook && now >= glanceUntil) {
+      lookYaw = follow(lookYaw, 0, step, 260);
+      lookPitch = follow(lookPitch, 0, step, 260);
+    }
     const destYaw = dragging ? baseYaw + orbitYaw : baseYaw + lookYaw;
     const destPitch = dragging ? basePitch + orbitPitch : basePitch + lookPitch;
-    yaw = follow(yaw, destYaw, dt, 130);
-    pitch = follow(pitch, destPitch, dt, 130);
-    tick += dt / 16.67;
-    if (!letters && !reduced) spin += 0.0016 * (dt / 16.67);
-    if (shape !== 'globe' && !reduced) {
+    yaw = follow(yaw, destYaw, step, 130);
+    pitch = follow(pitch, destPitch, step, 130);
+    tick += step / 16.67;
+    if (!letters && !reduced) spin += 0.0016 * (step / 16.67);
+    if (jumpTween) {
+      const t = Math.min(1, (now - jumpT0) / JUMP_MS);
+      const eased = t * t * (3 - 2 * t);
+      scrollShown = jumpFrom + (jumpTo - jumpFrom) * eased;
+      if (t >= 1) {
+        jumpTween = false;
+        if (jumpId && surface.id === jumpId) startGlance();
+      }
+    } else if (shape !== 'globe' && !reduced) {
       scrollP = heroScrollProgress(surface, shape);
-      scrollShown = follow(scrollShown, scrollP, dt, 240);
+      scrollShown = follow(scrollShown, scrollP, step, 240);
+    }
+    if (
+      letters &&
+      mobile &&
+      !jumpTween &&
+      !dragging &&
+      Math.abs(yaw - destYaw) < 0.004 &&
+      Math.abs(pitch - destPitch) < 0.004 &&
+      Math.abs(scrollShown - scrollP) < 0.006
+    ) {
+      return;
     }
     paint();
   }
@@ -437,6 +587,8 @@ function startHero(
     document.removeEventListener('visibilitychange', onVisibility);
     resizeObserver.disconnect();
     intersectionObserver.disconnect();
+    stopJump();
+    stopJumpStart();
     releaseBuffer();
   };
 }

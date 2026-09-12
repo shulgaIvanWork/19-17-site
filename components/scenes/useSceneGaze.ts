@@ -1,19 +1,38 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
+import { HUB_POSE_MS, hubRailBlocksLook, onHubJumpStart } from '@/components/nav/hubNav';
 
 function clamp(n: number) {
   return Math.max(-1, Math.min(1, n));
 }
 
+const REST_X = 0.35;
+const REST_Y = 0;
 const nodes = new Set<HTMLElement>();
 const visible = new Set<HTMLElement>();
 let observer: IntersectionObserver | null = null;
 let moveOn = false;
 let frame: number | null = null;
+let returnFrame: number | null = null;
 let px = 0;
 let py = 0;
 let finePointer = false;
+let persist = false;
+let glanceUntil = 0;
+let glanceTimer: number | null = null;
+let stopJump: (() => void) | null = null;
+
+function clearGlanceTimer() {
+  if (glanceTimer === null) return;
+  window.clearTimeout(glanceTimer);
+  glanceTimer = null;
+}
+
+function pointIn(node: HTMLElement, x: number, y: number) {
+  const rect = node.getBoundingClientRect();
+  return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
 
 function lookAt(node: HTMLElement) {
   const rect = node.getBoundingClientRect();
@@ -22,22 +41,79 @@ function lookAt(node: HTMLElement) {
   node.style.setProperty('--look-y', clamp(((py - rect.top) / rect.height) * 2 - 1).toFixed(3));
 }
 
+function restNode(node: HTMLElement) {
+  node.style.setProperty('--look-x', String(REST_X));
+  node.style.setProperty('--look-y', String(REST_Y));
+}
+
 function paint() {
   frame = null;
+  if (!persist) return;
   for (const node of visible) lookAt(node);
+}
+
+function lerpRest() {
+  returnFrame = null;
+  if (persist) return;
+  const now = performance.now();
+  if (now < glanceUntil) {
+    returnFrame = window.requestAnimationFrame(lerpRest);
+    return;
+  }
+  let moving = false;
+  for (const node of visible) {
+    const x = Number.parseFloat(node.style.getPropertyValue('--look-x') || String(REST_X));
+    const y = Number.parseFloat(node.style.getPropertyValue('--look-y') || String(REST_Y));
+    const nx = x + (REST_X - x) * 0.14;
+    const ny = y + (REST_Y - y) * 0.14;
+    node.style.setProperty('--look-x', nx.toFixed(3));
+    node.style.setProperty('--look-y', ny.toFixed(3));
+    if (Math.abs(nx - REST_X) > 0.012 || Math.abs(ny - REST_Y) > 0.012) moving = true;
+  }
+  if (moving) returnFrame = window.requestAnimationFrame(lerpRest);
+  else for (const node of visible) restNode(node);
 }
 
 function onMove(event: PointerEvent) {
   px = event.clientX;
   py = event.clientY;
+  if (hubRailBlocksLook(px, py)) {
+    persist = false;
+    return;
+  }
+  persist = false;
+  for (const node of visible) {
+    if (pointIn(node, px, py)) persist = true;
+  }
+  if (persist) glanceUntil = 0;
   if (frame === null) frame = requestAnimationFrame(paint);
+  if (!persist && glanceUntil === 0 && returnFrame === null) {
+    returnFrame = window.requestAnimationFrame(lerpRest);
+  }
+}
+
+function onJump() {
+  if (!finePointer || visible.size === 0) return;
+  persist = false;
+  for (const node of visible) lookAt(node);
+  glanceUntil = performance.now() + 720;
+  if (returnFrame === null) returnFrame = window.requestAnimationFrame(lerpRest);
+}
+
+function onJumpStart() {
+  clearGlanceTimer();
+  persist = false;
+  glanceUntil = 0;
+  glanceTimer = window.setTimeout(() => {
+    glanceTimer = null;
+    onJump();
+  }, HUB_POSE_MS);
 }
 
 function restVisible() {
-  for (const node of visible) {
-    node.style.setProperty('--look-x', '0.35');
-    node.style.setProperty('--look-y', '0');
-  }
+  persist = false;
+  glanceUntil = 0;
+  for (const node of visible) restNode(node);
 }
 
 function watchMove() {
@@ -45,6 +121,7 @@ function watchMove() {
   moveOn = true;
   window.addEventListener('pointermove', onMove, { passive: true });
   document.documentElement.addEventListener('pointerleave', restVisible);
+  if (!stopJump) stopJump = onHubJumpStart(onJumpStart);
 }
 
 function dropMove() {
@@ -52,8 +129,13 @@ function dropMove() {
   moveOn = false;
   if (frame !== null) cancelAnimationFrame(frame);
   frame = null;
+  if (returnFrame !== null) cancelAnimationFrame(returnFrame);
+  returnFrame = null;
   window.removeEventListener('pointermove', onMove);
   document.documentElement.removeEventListener('pointerleave', restVisible);
+  stopJump?.();
+  stopJump = null;
+  clearGlanceTimer();
 }
 
 function ensureObserver() {
@@ -83,8 +165,8 @@ function releaseObserver() {
   dropMove();
 }
 
-/** Gaze follows the pointer across the page while the figure is on screen.
- *  First time it enters view, `data-hello` starts the free-hand wave. */
+/** Gaze follows the pointer while it is over the figure. After a hub jump
+ *  the figure glances toward the cursor, then eases back to rest. */
 export function useSceneGaze(ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const node = ref.current;
@@ -92,8 +174,7 @@ export function useSceneGaze(ref: RefObject<HTMLElement | null>) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    node.style.setProperty('--look-x', '0.35');
-    node.style.setProperty('--look-y', '0');
+    restNode(node);
 
     nodes.add(node);
     ensureObserver();

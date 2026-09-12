@@ -1,7 +1,44 @@
+.wide {
+  margin: 0;
+}
+
 .key {
   font-family: var(--text);
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
   color: var(--carbon);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--pale);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--frost) 78%, var(--white));
+}
+
+.cardKey {
+  display: flex;
+  align-items: flex-end;
+  min-height: 44px;
+  min-height: 2lh;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--pale);
+  font-family: var(--text);
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  color: var(--carbon);
+}
+
+.cardVal {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .wide { display: none; }
 }

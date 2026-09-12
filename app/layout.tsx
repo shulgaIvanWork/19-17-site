@@ -45,6 +45,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
+  themeColor: '#ffffff',
 };
 
 export const metadata: Metadata = {
@@ -71,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <Script id="theme-boot" strategy="beforeInteractive">
-          {`(function(){try{if(localStorage.getItem('theme')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}})();`}
+          {`(function(){try{var d=localStorage.getItem('theme')==='dark';if(d)document.documentElement.dataset.theme='dark';var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',d?'#12141a':'#ffffff');}catch(e){}})();`}
         </Script>
       </head>
       <body>
