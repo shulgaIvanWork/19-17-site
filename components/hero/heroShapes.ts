@@ -630,6 +630,17 @@ function densify(
   return samples;
 }
 
+/** Поворот сечения трубки. При четном числе сторон вершины и так стоят
+ *  симметрично относительно оси в плоскости рисунка. При нечетном (3 стороны на
+ *  телефоне, quality < 0.72) без поворота одна вершина смотрела вдоль нормали, а
+ *  две другие - на -0.5r: на виде спереди трубка сдвигалась на четверть радиуса
+ *  вбок. У замка VPN перекладина скважины уходила с центра круга на 0.0125
+ *  (2026-09-13). Поворот на четверть оборота ставит одну вершину к зрителю, а две
+ *  другие - симметрично по сторонам оси. */
+function ringPhase(sides: number) {
+  return sides % 2 ? Math.PI / 2 : 0;
+}
+
 function addRing(
   points: Point[],
   x: number,
@@ -642,8 +653,9 @@ function addRing(
 ): number[] {
   const { n, b } = planarFrame(tx, ty);
   const ids: number[] = [];
+  const phase = ringPhase(sides);
   for (let k = 0; k < sides; k++) {
-    const ang = (k / sides) * Math.PI * 2;
+    const ang = (k / sides) * Math.PI * 2 + phase;
     const ca = Math.cos(ang) * miter;
     const sa = Math.sin(ang);
     points.push([x + (n[0] * ca + b[0] * sa) * radius, y + (n[1] * ca + b[1] * sa) * radius, (n[2] * ca + b[2] * sa) * radius]);
@@ -679,7 +691,7 @@ function addCap(
     const rr = Math.sqrt(Math.max(0, 1 - y * y));
     const ids: number[] = [];
     for (let k = 0; k < sides; k++) {
-      const ang = (k / sides) * Math.PI * 2;
+      const ang = (k / sides) * Math.PI * 2 + ringPhase(sides);
       const ca = Math.cos(ang) * rr;
       const sa = Math.sin(ang) * rr;
       points.push([
