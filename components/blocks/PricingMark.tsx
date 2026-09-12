@@ -103,8 +103,8 @@ function WebNew() {
       <rect className={`${styles.panel} ${styles.block}`} x="124" y="94" width="72" height="48" rx="6" />
       <rect className={`${styles.panel} ${styles.block}`} x="204" y="94" width="72" height="22" rx="6" />
       <rect className={`${styles.panel} ${styles.block}`} x="204" y="122" width="72" height="20" rx="10" />
-      <Dot cx="108" cy="36" />
-      <Dot cx="292" cy="36" />
+      <Dot cx={108} cy={36} />
+      <Dot cx={292} cy={36} />
       <circle className={`${styles.ride} ${styles.rideSite}`} r="2.6" />
     </g>
   );
@@ -144,8 +144,8 @@ function Pages() {
       <rect className={`${styles.panel} ${styles.block}`} x="186" y="88" width="70" height="52" rx="6" />
       <rect className={`${styles.panel} ${styles.block}`} x="266" y="88" width="72" height="24" rx="6" />
       <rect className={`${styles.panel} ${styles.block}`} x="266" y="118" width="72" height="22" rx="11" />
-      <Dot cx="42" cy="36" />
-      <Dot cx="360" cy="28" />
+      <Dot cx={42} cy={36} />
+      <Dot cx={360} cy={28} />
       <circle className={`${styles.ride} ${styles.rideSite}`} r="2.6" />
     </g>
   );
@@ -165,7 +165,7 @@ function WebRefresh() {
         <rect className={`${styles.panel} ${styles.block}`} x="124" y="90" width="62" height="44" rx="6" />
         <rect className={`${styles.panel} ${styles.block}`} x="196" y="90" width="64" height="20" rx="6" />
         <rect className={`${styles.panel} ${styles.block}`} x="196" y="116" width="64" height="18" rx="9" />
-        <Dot cx="108" cy="32" />
+        <Dot cx={108} cy={32} />
       </g>
     </g>
   );
@@ -184,8 +184,8 @@ function WebCare() {
         />
         <path className={`${styles.line} ${styles.ecg}`} pathLength="100" d="M 248 108 H 262 L 270 90 L 280 126 L 290 102 L 298 108 H 314" />
       </g>
-      <Dot cx="86" cy="40" />
-      <Dot cx="278" cy="52" />
+      <Dot cx={86} cy={40} />
+      <Dot cx={278} cy={52} />
     </g>
   );
 }
@@ -277,7 +277,7 @@ function Mail() {
         <path className={styles.line} d="M 230 64 L 286 102 L 342 64" />
         <path className={styles.soft} d="M 248 118 H 324" />
       </g>
-      <Dot cx="48" cy="42" />
+      <Dot cx={48} cy={42} />
       <circle className={`${styles.ride} ${styles.rideMail}`} r="3" />
     </g>
   );
@@ -346,7 +346,7 @@ function Vpn({ nodes }: { nodes: 3 | 5 | 7 }) {
       <g className={styles.lock}>
         <path className={styles.line} d="M 188 96 C 188 82 212 82 212 96" />
         <rect className={styles.faceFront} x="182" y="96" width="36" height="26" rx="5" />
-        <Dot cx="200" cy="109" r="2.2" />
+        <Dot cx={200} cy={109} r={2.2} />
       </g>
     </g>
   );
@@ -384,7 +384,7 @@ function Ai({ seats }: { seats: 1 | 3 | 5 }) {
         <path key={`${x}-${y}`} className={`${styles.soft} ${styles.net}`} d={`M 200 108 L ${x} ${y}`} />
       ))}
       {hex.map(([x, y]) => (
-        <Dot key={`n-${x}-${y}`} cx={x} cy={y} r="2.4" />
+        <Dot key={`n-${x}-${y}`} cx={x} cy={y} r={2.4} />
       ))}
       <circle className={`${styles.dot} ${styles.core}`} cx="200" cy="108" r="5" />
       {docs.map((doc, i) => (

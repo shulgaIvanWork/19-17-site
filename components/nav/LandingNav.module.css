@@ -307,11 +307,6 @@ html[data-theme='dark'] .active .label {
   .pagerChipHere {
     box-shadow: inset 0 -2px 0 var(--blue);
   }
-
-  :global(html:has([data-hub-pager])) {
-    --hub-pager: calc(56px + env(safe-area-inset-bottom, 0px));
-    scroll-padding-bottom: var(--hub-pager);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -307,6 +307,14 @@ html[data-theme='dark'] .navbtn-active:hover {
     scroll-padding-top: calc(var(--header-row) + env(safe-area-inset-top, 0px));
     scroll-padding-bottom: var(--hub-pager);
   }
+
+  /* Нижний пейджер разделов занимает полосу внизу: его высота уезжает в
+     --hub-pager, чтобы кнопки героя и «наверх» не прятались под ним.
+     Правило глобальное и живет здесь: в CSS-модуле чисто глобальный селектор
+     не проходит сборку (правила CSS-модулей требуют локальный класс). */
+  html:has([data-hub-pager]) {
+    --hub-pager: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
   .g2 { grid-template-columns: 1fr; }
   .g2 > * { min-width: 0; }
   .g3 { grid-template-columns: 1fr; gap: 44px; }
