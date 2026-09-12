@@ -2,7 +2,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
   border: 1px solid var(--cloud);
   border-radius: 12px;
@@ -96,4 +95,21 @@
 .links :global(.btn) {
   flex: none;
   white-space: nowrap;
+}
+
+/* Узкий экран: карточка в ленте (globals.css, .rail). Шесть строк - картинка,
+   название, цена, описание, список, кнопки - встают в строки ленты через
+   subgrid, и линия над списком у соседних карточек на одной высоте. */
+@media (max-width: 900px) {
+  .card {
+    --rail-rows: 6;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+
+  .copy {
+    grid-row: span 5;
+    display: grid;
+    grid-template-rows: subgrid;
+  }
 }

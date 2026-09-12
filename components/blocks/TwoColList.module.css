@@ -12,13 +12,19 @@
 
 /* Узкий экран: строка едет в ленте карточкой (рамку дает общий класс railcard
    из globals.css), заголовок пары становится крупнее и отделяется линейкой.
-   Селектор из двух классов перебивает .tworow независимо от порядка файлов. */
+   Заголовок и описание - две строки ленты через subgrid: заголовок растягивается
+   до самого высокого в ленте, и линия под ним у всех карточек на одной высоте.
+   Селекторы из двух классов перебивают .tworow независимо от порядка файлов. */
 @media (max-width: 900px) {
+  .list .row {
+    --rail-rows: 2;
+    grid-template-rows: subgrid;
+    align-items: stretch;
+  }
+
   .list .key {
     display: flex;
     align-items: flex-end;
-    min-height: 44px;
-    min-height: 2lh;
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1.5px solid var(--pale);

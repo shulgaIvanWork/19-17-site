@@ -341,12 +341,24 @@ html[data-theme='dark'] .navbtn-active:hover {
    два дерева - сетку и карусель на ручном перетаскивании, - а лишнее пряталось
    стилями. Размеры карточек те же, что были у карусели: 2.35 карточки в кадре,
    у .rail-one - 1.22. Блок идет после сеток: специфичность одинаковая,
-   побеждает последнее правило. */
+   побеждает последнее правило.
+
+   Лента - сетка в одну строку карточек, а не flex. Карточка занимает
+   --rail-rows строк ленты и может взять их себе через grid-template-rows:
+   subgrid: тогда заголовок, линия и остальные строки у соседних карточек стоят
+   на одной высоте при любом числе строк текста. Все карточки ленты одной высоты:
+   их растягивает сетка, поэтому height: 100% у карточек не нужен и мешал бы. */
 @media (max-width: 900px) {
   .rail {
-    display: flex;
+    --rail-card: calc((100vw - 2 * var(--gut)) / 2.35);
+    display: grid;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--rail-card);
     align-items: stretch;
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 0;
     width: calc(100% + 2 * var(--gut));
     margin-left: calc(var(--gut) * -1);
     padding-inline: var(--gut);
@@ -359,17 +371,22 @@ html[data-theme='dark'] .navbtn-active:hover {
   .rail::-webkit-scrollbar { display: none; }
 
   .rail > * {
-    flex: 0 0 calc((100vw - 2 * var(--gut)) / 2.35);
+    grid-row: span var(--rail-rows, 1);
     min-width: 0;
     scroll-snap-align: start;
   }
 
-  .rail-one > * { flex-basis: calc((100vw - 2 * var(--gut)) / 1.22); }
+  .rail-one { --rail-card: calc((100vw - 2 * var(--gut)) / 1.22); }
+
+  /* Появление карточек ленты без подъема (SiteMotion вешает .reveal на детей
+     .gcards и .g3). Сдвиг на 18px выводил карточки за низ ленты, пока их не
+     прокрутят в кадр, и лента прокручивалась еще и по вертикали. */
+  .rail > .reveal { transform: none; }
 }
 
 @media (max-width: 420px) {
-  .rail > * { flex-basis: calc((100vw - 2 * var(--gut)) / 2.12); }
-  .rail-one > * { flex-basis: calc((100vw - 2 * var(--gut)) / 1.16); }
+  .rail { --rail-card: calc((100vw - 2 * var(--gut)) / 2.12); }
+  .rail-one { --rail-card: calc((100vw - 2 * var(--gut)) / 1.16); }
 }
 
 /* Карточка ленты: одна рамка на три блока - пары, строки сравнения и тарифы.

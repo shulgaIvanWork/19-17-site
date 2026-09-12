@@ -34,18 +34,24 @@
 }
 
 /* Узкий экран: шапка уходит, строка становится карточкой ленты, а название
-   столбца печатается над значением. Селекторы из двух классов перебивают
-   .divrow из globals.css независимо от порядка подключения файлов. */
+   столбца печатается над значением. Заголовок и три ячейки - четыре строки
+   ленты через subgrid: линия под заголовком и ячейки у соседних карточек на
+   одной высоте. Селекторы из двух классов перебивают .divrow из globals.css
+   независимо от порядка подключения файлов. */
 @media (max-width: 900px) {
   .head {
     display: none;
   }
 
+  .table .row {
+    --rail-rows: 4;
+    grid-template-rows: subgrid;
+    align-items: stretch;
+  }
+
   .table .key {
     display: flex;
     align-items: flex-end;
-    min-height: 44px;
-    min-height: 2lh;
     margin-bottom: 6px;
     padding-bottom: 10px;
     border-bottom: 1.5px solid var(--pale);
