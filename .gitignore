@@ -1,10 +1,11 @@
 node_modules/
 .next/
-out/
 next-env.d.ts
 *.tsbuildinfo
+.env
 .env*.local
 .DS_Store
-.tmp-mobile/
-.tmp-verify/
-.env
+
+# Пишет сам next dev, в репозитории не нужны
+AGENTS.md
+CLAUDE.md
