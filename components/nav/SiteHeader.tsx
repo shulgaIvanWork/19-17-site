@@ -127,7 +127,10 @@ export function SiteHeader() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
             >
-              {menuMounted ? '×' : '≡'}
+              {/* Одни и те же три полосы: при открытом меню повернуты на 90°. */}
+              <svg className={styles.burgerIcon} viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
             </button>
           </div>
         </div>
@@ -141,7 +144,7 @@ export function SiteHeader() {
             <>
               <button
                 type="button"
-                className={[styles.scrim, menuEntered ? styles.scrimOpen : ''].filter(Boolean).join(' ')}
+                className={styles.scrim}
                 aria-label="Закрыть меню"
                 onClick={() => setMenuOpen(false)}
               />

@@ -123,6 +123,24 @@
   margin-right: calc(var(--gut) * -0.5);
 }
 
+.burgerIcon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  transition: transform var(--t);
+}
+
+.burger[aria-expanded='true'] .burgerIcon {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burgerIcon { transition: none; }
+}
+
 @media (max-width: 1120px) {
   .links { display: none; }
   .burger { display: inline-flex; }
@@ -160,6 +178,8 @@
   display: none;
 }
 
+/* Прозрачная подложка под панелью меню: закрывает меню по нажатию мимо панели.
+   Без размытия и затемнения, страница под меню остается видна как есть. */
 @media (max-width: 1120px) {
   .scrim {
     display: block;
@@ -171,21 +191,7 @@
     z-index: 18;
     padding: 0;
     border: none;
-    background: color-mix(in srgb, var(--white) 18%, transparent);
-    -webkit-backdrop-filter: blur(22px) saturate(1.35);
-    backdrop-filter: blur(22px) saturate(1.35);
+    background: transparent;
     cursor: pointer;
-    opacity: 0;
-    transition: opacity var(--t);
-  }
-
-  .scrimOpen {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scrim {
-    transition: none;
   }
 }

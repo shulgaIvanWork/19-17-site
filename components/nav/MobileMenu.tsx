@@ -24,9 +24,6 @@ function pathOf(href: string) {
 export function MobileMenu({ pathname, hash, open = true, onNavigate }: Props) {
   return (
     <div className={[styles.drawer, open ? styles.open : ''].filter(Boolean).join(' ')} id="mobile-menu">
-      <div className={styles.cta} onClick={onNavigate}>
-        <ContactSalesButton interest={interestFromLocation(pathname, hash)} />
-      </div>
       {links.map((item) => {
         const active = pathname === pathOf(item.href);
         return (
@@ -51,6 +48,9 @@ export function MobileMenu({ pathname, hash, open = true, onNavigate }: Props) {
           </Link>
         );
       })}
+      <div className={styles.cta} onClick={onNavigate}>
+        <ContactSalesButton interest={interestFromLocation(pathname, hash)} />
+      </div>
       <div className={styles.call}>
         <div className="label">Телефон</div>
         <a href={phoneHref} className={styles.phone} onClick={onNavigate}>

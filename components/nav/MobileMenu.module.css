@@ -1,20 +1,24 @@
+/* Небольшая панель под бургером, прижата к правому краю колонки. Бургер сдвинут
+   к краю на половину поля (SiteHeader.module.css, .burger), панель - так же. */
 .drawer {
   position: fixed;
-  top: calc(var(--header-row, 56px) + env(safe-area-inset-top, 0px));
-  right: 0;
-  left: 0;
+  top: calc(var(--header-row, 56px) + env(safe-area-inset-top, 0px) + 6px);
+  right: max(8px, calc(var(--gut) / 2), env(safe-area-inset-right, 0px));
   z-index: 19;
+  width: min(280px, calc(100vw - 16px));
   height: auto;
   max-height: calc(
-    100svh - var(--header-row, 56px) - env(safe-area-inset-top, 0px) - var(--hub-pager, 0px)
+    100svh - var(--header-row, 56px) - env(safe-area-inset-top, 0px) - var(--hub-pager, 0px) - 18px
   );
   overflow-y: auto;
   overscroll-behavior: contain;
   background: var(--white);
-  padding: 8px var(--gut) 16px;
-  border-bottom: 1px solid color-mix(in srgb, var(--pale) 70%, transparent);
-  box-shadow: 0 16px 40px rgba(23, 26, 32, 0.08);
-  transform: translate3d(0, -12px, 0);
+  padding: 8px 16px 16px;
+  border: 1px solid var(--cloud);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(23, 26, 32, 0.12);
+  transform: translate3d(0, -8px, 0) scale(0.98);
+  transform-origin: top right;
   opacity: 0;
   pointer-events: none;
   transition: transform var(--t), opacity var(--t);
@@ -30,10 +34,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 52px;
+  min-height: 46px;
   border-bottom: 1px solid var(--cloud);
   font-family: var(--text);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 20px;
   font-weight: 500;
   color: var(--pewter);
@@ -51,7 +55,7 @@
 }
 
 .cta {
-  padding: 8px 0 16px;
+  padding: 16px 0 0;
 }
 
 .cta :global(.btn) {
@@ -66,8 +70,8 @@
   display: block;
   margin-top: 4px;
   font-family: var(--text);
-  font-size: 22px;
-  line-height: 28px;
+  font-size: 18px;
+  line-height: 24px;
   font-weight: 500;
   color: var(--blue);
   letter-spacing: 0.02em;
@@ -87,6 +91,14 @@
 .label :global(.hitbadge) {
   position: static;
   transform: none;
+}
+
+/* Бургер виден только до 1120px (SiteHeader.module.css). Если окно расширили
+   при открытом меню, панель не должна остаться без кнопки закрытия. */
+@media (min-width: 1121px) {
+  .drawer {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
