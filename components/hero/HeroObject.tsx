@@ -205,6 +205,48 @@ function startHero(
   const follow = (current: number, target: number, dt: number, tau: number) =>
     current + (target - current) * (1 - Math.exp(-dt / tau));
 
+  // Ребра и точки рисуются корзинами прозрачности: одна обводка на корзину.
+  // Буферы корзин и строки цвета выделяются здесь один раз. Раньше draw() на
+  // каждом кадре создавал 2 x buckets объектов Path2D: в WebKit это нативная
+  // память, которую сборщик мусора почти не учитывает, и при прокрутке туда и
+  // обратно (модель перерисовывается каждый кадр) iOS Safari выгружал вкладку.
+  const lite = letters && mobile;
+  const buckets = lite ? 4 : 12;
+  const edgeAlphaMax = 0.3;
+  const pointAlphaMax = 0.58;
+  const edgeStyles = Array.from(
+    { length: buckets },
+    (_, bucket) => `rgba(${ink},${(edgeAlphaMax * ((bucket + 0.5) / buckets)).toFixed(3)})`,
+  );
+  const pointStyles = Array.from(
+    { length: buckets },
+    (_, bucket) => `rgba(${ink},${(pointAlphaMax * ((bucket + 0.5) / buckets)).toFixed(3)})`,
+  );
+  const edgeBucket = new Int8Array(edges.length);
+  const edgeOrder = new Uint32Array(edges.length);
+  const pointBucket = new Int8Array(points.length);
+  const pointOrder = new Uint32Array(points.length);
+  const bucketStart = new Uint32Array(buckets + 1);
+  const bucketCursor = new Uint32Array(buckets);
+
+  /** Сортировка подсчетом по корзинам с сохранением исходного порядка: индексы
+   *  корзины b лежат в order[bucketStart[b]] .. order[bucketStart[b + 1] - 1].
+   *  Корзина -1 - элемент не рисуется. */
+  const sortByBucket = (bucket: Int8Array, order: Uint32Array) => {
+    bucketStart.fill(0);
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i] >= 0) bucketStart[bucket[i] + 1] += 1;
+    }
+    for (let b = 0; b < buckets; b++) {
+      bucketStart[b + 1] += bucketStart[b];
+      bucketCursor[b] = bucketStart[b];
+    }
+    for (let i = 0; i < bucket.length; i++) {
+      const b = bucket[i];
+      if (b >= 0) order[bucketCursor[b]++] = i;
+    }
+  };
+
   const draw = (drawYaw: number, drawPitch: number) => {
     if (!w || !h) return;
     applyHeroScroll(shape, points, parts, along, scrollShown, live, basis);
@@ -240,49 +282,48 @@ function startHero(
     }
 
     ctx.clearRect(0, 0, w, h);
-    const lite = letters && mobile;
     ctx.lineWidth = lite ? 1.15 : 1.4;
-    const buckets = lite ? 4 : 12;
-    const edgeAlphaMax = 0.3;
-    const pointAlphaMax = 0.58;
-    const edgePaths = Array.from({ length: buckets }, () => new Path2D());
-    const pointPaths = Array.from({ length: buckets }, () => new Path2D());
-    const edgeUsed = new Uint8Array(buckets);
-    const pointUsed = new Uint8Array(buckets);
-    for (const [i, j] of edges) {
+    for (let k = 0; k < edges.length; k++) {
+      const [i, j] = edges[k];
+      edgeBucket[k] = -1;
       if (live.hide[i] || live.hide[j]) continue;
-      const az = projectedZ[i];
-      const bz = projectedZ[j];
-      const alpha = 0.14 * (1 - ((az + bz) / 2 + 1) / 2.9);
+      const alpha = 0.14 * (1 - ((projectedZ[i] + projectedZ[j]) / 2 + 1) / 2.9);
       if (alpha <= 0.005) continue;
-      const bucket = Math.min(buckets - 1, Math.floor((alpha / edgeAlphaMax) * buckets));
-      edgePaths[bucket].moveTo(projectedX[i], projectedY[i]);
-      edgePaths[bucket].lineTo(projectedX[j], projectedY[j]);
-      edgeUsed[bucket] = 1;
+      edgeBucket[k] = Math.min(buckets - 1, Math.floor((alpha / edgeAlphaMax) * buckets));
     }
-    edgePaths.forEach((path, bucket) => {
-      if (!edgeUsed[bucket]) return;
-      const alpha = edgeAlphaMax * ((bucket + 0.5) / buckets);
-      ctx.strokeStyle = `rgba(${ink},${alpha.toFixed(3)})`;
-      ctx.stroke(path);
-    });
+    sortByBucket(edgeBucket, edgeOrder);
+    for (let b = 0; b < buckets; b++) {
+      if (bucketStart[b] === bucketStart[b + 1]) continue;
+      ctx.beginPath();
+      for (let n = bucketStart[b]; n < bucketStart[b + 1]; n++) {
+        const [i, j] = edges[edgeOrder[n]];
+        ctx.moveTo(projectedX[i], projectedY[i]);
+        ctx.lineTo(projectedX[j], projectedY[j]);
+      }
+      ctx.strokeStyle = edgeStyles[b];
+      ctx.stroke();
+    }
 
     if (!lite) {
       for (let i = 0; i < points.length; i++) {
+        pointBucket[i] = -1;
         if (live.hide[i]) continue;
         const alpha = 0.34 * (1 - (projectedZ[i] + 1) / 2.9);
         if (alpha <= 0.005) continue;
-        const bucket = Math.min(buckets - 1, Math.floor((alpha / pointAlphaMax) * buckets));
-        pointPaths[bucket].moveTo(projectedX[i] + 1.7, projectedY[i]);
-        pointPaths[bucket].arc(projectedX[i], projectedY[i], 1.7, 0, Math.PI * 2);
-        pointUsed[bucket] = 1;
+        pointBucket[i] = Math.min(buckets - 1, Math.floor((alpha / pointAlphaMax) * buckets));
       }
-      pointPaths.forEach((path, bucket) => {
-        if (!pointUsed[bucket]) return;
-        const alpha = pointAlphaMax * ((bucket + 0.5) / buckets);
-        ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
-        ctx.fill(path);
-      });
+      sortByBucket(pointBucket, pointOrder);
+      for (let b = 0; b < buckets; b++) {
+        if (bucketStart[b] === bucketStart[b + 1]) continue;
+        ctx.beginPath();
+        for (let n = bucketStart[b]; n < bucketStart[b + 1]; n++) {
+          const i = pointOrder[n];
+          ctx.moveTo(projectedX[i] + 1.7, projectedY[i]);
+          ctx.arc(projectedX[i], projectedY[i], 1.7, 0, Math.PI * 2);
+        }
+        ctx.fillStyle = pointStyles[b];
+        ctx.fill();
+      }
     }
   };
 
