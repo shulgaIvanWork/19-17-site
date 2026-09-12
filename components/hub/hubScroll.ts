@@ -263,41 +263,62 @@ export function jumpHash(
   return true;
 }
 
+/** Кадров подряд без сдвига цели, после которых посадка на якорь закончена. */
+const HASH_STABLE_FRAMES = 3;
+/** Предел кадров на посадку, около секунды. */
+const HASH_MAX_FRAMES = 60;
+
 /** Прокрутка к якорю из адреса. Возвращает функцию отмены.
  *
- *  Если раздел еще не в DOM, одна попытка на следующем кадре. Второй проход -
- *  после загрузки шрифтов: подмена шрифта сдвигает блоки, и цель уезжает.
- *  Повтор делается, только если посетитель за это время не прокручивал сам,
- *  иначе он выдернул бы человека обратно. */
+ *  Посадка идет по кадрам, пока цель не простоит на месте HASH_STABLE_FRAMES
+ *  кадров. Одной мгновенной прокрутки мало: разделы выше цели с
+ *  content-visibility: auto отрисовываются уже после нее и сдвигают цель.
+ *  С футера главной на /websites#multipage промах был 192px (390px, 2026-09-13).
+ *  Место считается той же yOf, что и у прыжков по рельсу.
+ *
+ *  Если раздела еще нет в DOM, цикл ждет его на следующих кадрах. После
+ *  загрузки шрифтов посадка повторяется: подмена шрифта сдвигает блоки. И цикл,
+ *  и повтор останавливаются, если посетитель за это время прокрутил сам, иначе
+ *  его выдернуло бы обратно. */
 export function scrollToLocationHash(): () => void {
   if (menuScroll) return () => {};
 
   let cancelled = false;
   let frame: number | null = null;
-
-  const go = () => {
-    const id = window.location.hash.replace(/^#/, '');
-    const node = id ? document.getElementById(id) : null;
-    if (!node) return false;
-    node.scrollIntoView({ behavior: 'instant', block: 'start' });
-    return true;
-  };
+  let frames = 0;
+  let stable = 0;
+  let placed = -1;
 
   const settle = () => {
-    const landed = window.scrollY;
-    document.fonts?.ready.then(() => {
-      if (!cancelled && Math.abs(window.scrollY - landed) < 2) go();
-    });
+    frame = null;
+    if (cancelled) return;
+    const id = window.location.hash.replace(/^#/, '');
+    if (!id) return;
+    if (placed >= 0 && Math.abs(window.scrollY - placed) > 2) return;
+    const node = document.getElementById(id);
+    if (node) {
+      const target = yOf(node);
+      if (Math.abs(window.scrollY - target) <= 1) {
+        stable += 1;
+      } else {
+        stable = 0;
+        window.scrollTo({ top: target, behavior: 'instant' });
+      }
+      placed = window.scrollY;
+      if (stable >= HASH_STABLE_FRAMES) return;
+    }
+    frames += 1;
+    if (frames < HASH_MAX_FRAMES) frame = window.requestAnimationFrame(settle);
   };
 
-  if (go()) {
+  settle();
+  document.fonts?.ready.then(() => {
+    if (cancelled || frame !== null) return;
+    if (placed >= 0 && Math.abs(window.scrollY - placed) > 2) return;
+    frames = 0;
+    stable = 0;
     settle();
-  } else if (window.location.hash) {
-    frame = window.requestAnimationFrame(() => {
-      frame = null;
-      if (!cancelled && go()) settle();
-    });
-  }
+  });
 
   return () => {
     cancelled = true;
