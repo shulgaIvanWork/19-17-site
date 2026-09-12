@@ -54,7 +54,7 @@
   left: 50%;
   width: 1px;
   transform: translateX(-50%);
-  background: color-mix(in srgb, var(--pale) 70%, transparent);
+  background: var(--pale);
 }
 
 .sheet {
@@ -130,6 +130,8 @@
   cursor: grabbing;
 }
 
+/* Точки видны на любом фоне: обводка от цвета текста, заливка от фона страницы.
+   Раньше белая обводка с белой заливкой пропадала на светлых разделах. */
 .dot {
   flex-shrink: 0;
   box-sizing: border-box;
@@ -137,8 +139,8 @@
   height: 8px;
   margin: 0 10px;
   border-radius: 50%;
-  border: 1.5px solid #fff;
-  background: rgba(255, 255, 255, 0.28);
+  border: 1.5px solid color-mix(in srgb, var(--carbon) 45%, transparent);
+  background: color-mix(in srgb, var(--white) 72%, transparent);
 }
 
 .label {
@@ -146,7 +148,7 @@
   max-width: 0;
   margin-left: 20px;
   opacity: 0;
-  color: var(--pewter);
+  color: var(--graphite);
   font-family: var(--text);
   font-size: 14px;
   font-weight: 500;
@@ -175,29 +177,16 @@
   color: var(--carbon);
 }
 
-.active .label {
-  color: var(--carbon);
+/* Выбранный раздел синий, в том числе под курсором: правило идет после :hover
+   с той же специфичностью. Цвета из токенов, темная тема меняет их сама. */
+.item.active .label {
+  color: var(--blue);
 }
 
 html[data-theme='dark'] .capsule::before,
 html[data-theme='dark'] .sheet {
   border-color: color-mix(in srgb, #fff 12%, var(--pale));
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-}
-
-html[data-theme='dark'] .capsule::after {
-  background: color-mix(in srgb, #fff 14%, transparent);
-}
-
-html[data-theme='dark'] .dot {
-  border-color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.16);
-}
-
-html[data-theme='dark'] .item:hover .label,
-html[data-theme='dark'] .item:focus-visible .label,
-html[data-theme='dark'] .active .label {
-  color: var(--carbon);
 }
 
 @media (max-width: 900px) {
