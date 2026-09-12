@@ -301,7 +301,6 @@ html[data-theme='dark'] .navbtn-active:hover {
 }
 
 @media (max-width: 900px) {
-  .desk-only { display: none; }
   :root { --header-row: 44px; }
   html {
     scroll-padding-top: calc(var(--header-row) + env(safe-area-inset-top, 0px));
@@ -334,6 +333,43 @@ html[data-theme='dark'] .navbtn-active:hover {
     gap: 8px;
   }
   .section { padding: 64px 0; }
+}
+
+/* Лента карточек. На широком экране блок остается сеткой (.g3, .gcards или свой
+   класс страницы), на узком становится горизонтальной прокруткой с
+   примагничиванием. Разметка при этом одна: раньше каждый такой блок рендерил
+   два дерева - сетку и карусель на ручном перетаскивании, - а лишнее пряталось
+   стилями. Размеры карточек те же, что были у карусели: 2.35 карточки в кадре,
+   у .rail-one - 1.22. Блок идет после сеток: специфичность одинаковая,
+   побеждает последнее правило. */
+@media (max-width: 900px) {
+  .rail {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    width: calc(100% + 2 * var(--gut));
+    margin-left: calc(var(--gut) * -1);
+    padding-inline: var(--gut);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar { display: none; }
+
+  .rail > * {
+    flex: 0 0 calc((100vw - 2 * var(--gut)) / 2.35);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .rail-one > * { flex-basis: calc((100vw - 2 * var(--gut)) / 1.22); }
+}
+
+@media (max-width: 420px) {
+  .rail > * { flex-basis: calc((100vw - 2 * var(--gut)) / 2.12); }
+  .rail-one > * { flex-basis: calc((100vw - 2 * var(--gut)) / 1.16); }
 }
 
 /* ---- Products hover panel ------------------------------------------------

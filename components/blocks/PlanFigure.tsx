@@ -1,4 +1,5 @@
 import { EnquireLink } from '@/components/contact/ContactSalesButton';
+import styles from './PlanFigure.module.css';
 
 type Props = {
   /** The promotional numeral. Rendered by .figure, which is locked to the text
@@ -12,7 +13,7 @@ type Props = {
 
 export function PlanFigure({ figure, unit, name, body, interest }: Props) {
   return (
-    <div>
+    <div className={styles.plan}>
       <div className="figure">{figure}</div>
       <div className="label" style={{ marginTop: 4 }}>
         {unit}

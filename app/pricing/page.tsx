@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { LoopCarousel } from '@/components/blocks/LoopCarousel';
 import { PricingCard } from '@/components/blocks/PricingCard';
 import { PricingScene } from '@/components/scenes/PricingScene';
 import { Section } from '@/components/ui/Section';
@@ -36,18 +35,13 @@ export default function PricingPage() {
             <p className="body">{band.lede}</p>
           </div>
           <div
-            className={[styles.grid, band.offers.length % 2 === 0 ? styles.gridTwo : ''].filter(Boolean).join(' ')}
+            className={[styles.grid, band.offers.length % 2 === 0 ? styles.gridTwo : '', 'rail', 'rail-one']
+              .filter(Boolean)
+              .join(' ')}
           >
             {band.offers.map((offer) => (
               <PricingCard key={offer.name} offer={offer} />
             ))}
-          </div>
-          <div className={styles.carousel}>
-            <LoopCarousel peek="one" label={band.heading}>
-              {band.offers.map((offer) => (
-                <PricingCard key={offer.name} offer={offer} />
-              ))}
-            </LoopCarousel>
           </div>
           {index === pricingBands.length - 1 && (
             <p className="footnote" style={{ marginTop: 28, maxWidth: '64ch' }}>

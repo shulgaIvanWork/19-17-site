@@ -11,35 +11,27 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(24px, 3.2vw, 48px);
   margin-top: clamp(32px, 4vw, 48px);
 }
 
-.gridTwo {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+/* Сетка описана только для широкого экрана: на узком раскладку берет класс
+   rail из globals.css, и объявленный здесь display: grid перебил бы его -
+   правила из модуля подключаются позже общего файла. */
+@media (min-width: 901px) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3.2vw, 48px);
+  }
 
-@media (max-width: 1024px) {
-  .grid,
   .gridTwo {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.carousel {
-  display: none;
-}
-
-@media (max-width: 900px) {
+@media (min-width: 901px) and (max-width: 1024px) {
   .grid,
   .gridTwo {
-    display: none;
-  }
-
-  .carousel {
-    display: block;
-    margin-top: clamp(32px, 4vw, 48px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
