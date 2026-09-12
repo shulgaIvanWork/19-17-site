@@ -332,7 +332,6 @@ export function HubRail({ pathname, hash, stops }: { pathname: string; hash: str
         ref={triggerRef}
         className={styles.rail}
         aria-label="Разделы страницы"
-        aria-expanded={open}
         tabIndex={-1}
       >
         <span ref={thumbRef} className={styles.thumb} aria-hidden="true" />

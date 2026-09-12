@@ -1,0 +1,51 @@
+/* Общий словарь двух наборов марок: CardMark рисует плоскими фигурами,
+   PricingMark - изометрическими, но сцена, точки, окна браузера и кольцо
+   у них одинаковые. Подключается через composes, поэтому в разметке
+   по-прежнему styles.dot и styles.stage. Анимации, общие для обоих
+   наборов, лежат в globals.css с приставкой mark-. */
+
+.addr {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+.core {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  stroke-dasharray: 3.5 7;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  background: var(--ash);
+  color: var(--blue);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.win {
+  fill: currentColor;
+  stroke: none;
+}

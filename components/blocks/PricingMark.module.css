@@ -1,15 +1,9 @@
 .stage {
-  position: absolute;
-  inset: 0;
-  background: var(--ash);
-  color: var(--blue);
+  composes: stage from './markBase.module.css';
 }
 
 .svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  composes: svg from './markBase.module.css';
 }
 
 .line,
@@ -63,13 +57,11 @@
 }
 
 .dot {
-  fill: currentColor;
-  stroke: none;
+  composes: dot from './markBase.module.css';
 }
 
 .win {
-  fill: currentColor;
-  stroke: none;
+  composes: win from './markBase.module.css';
 }
 
 .ground {
@@ -102,8 +94,7 @@
 }
 
 .addr {
-  transform-box: fill-box;
-  transform-origin: left center;
+  composes: addr from './markBase.module.css';
 }
 
 .frameA,
@@ -131,20 +122,15 @@
 .shield { transform-origin: center 72%; }
 
 .ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  stroke-dasharray: 3.5 7;
+  composes: ring from './markBase.module.css';
 }
 
 .wave {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
+  composes: wave from './markBase.module.css';
 }
 
 .core {
-  transform-box: fill-box;
-  transform-origin: center;
+  composes: core from './markBase.module.css';
 }
 
 .sat0, .sat1, .sat2, .sat3, .sat4, .sat5, .sat6 {
@@ -215,21 +201,6 @@
   100% { transform: translate(260px, 132px); }
 }
 
-@keyframes addr {
-  0%, 100% { transform: scaleX(0.42); }
-  50% { transform: scaleX(0.86); }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.22; }
-}
-
-@keyframes breathe {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.62; }
-}
-
 @keyframes swapA {
   0%, 100% { transform: translate(-10px, -6px) scale(1); opacity: 1; }
   50% { transform: translate(18px, 12px) scale(0.88); opacity: 0.42; }
@@ -278,10 +249,6 @@
   100% { transform: translate(250px, 118px); opacity: 0; }
 }
 
-@keyframes dash {
-  to { stroke-dashoffset: -100; }
-}
-
 @keyframes packetEast {
   0% { transform: translate(174px, 86px); opacity: 0; }
   10% { opacity: 1; }
@@ -310,27 +277,6 @@
   100% { transform: translate(230px, 100px); opacity: 0; }
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes radar {
-  0% { transform: scale(0.35); opacity: 0.42; }
-  70% { transform: scale(1); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-@keyframes lockTick {
-  0%, 100% { transform: rotate(0deg); }
-  12% { transform: rotate(-9deg); }
-  22% { transform: rotate(0deg); }
-}
-
-@keyframes sat {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.28); opacity: 0.55; }
-}
-
 @keyframes rideHex {
   0%, 100% { transform: translate(200px, 52px); }
   16.67% { transform: translate(248px, 80px); }
@@ -343,11 +289,6 @@
 @keyframes core {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.45); }
-}
-
-@keyframes net {
-  0%, 100% { opacity: 0.34; }
-  50% { opacity: 0.78; }
 }
 
 @keyframes chatPop {
@@ -369,4 +310,53 @@
   .core, .rideHex, .net, .doc, .chat {
     animation: none;
   }
+}
+
+/* Анимации ниже повторяются в соседнем наборе марок. Вынести их не
+   получается: сборщик переименовывает имя анимации внутри модуля, и
+   ссылка на общий блок из другого файла перестает совпадать. Общими
+   сделаны правила классов - через composes из markBase.module.css. */
+@keyframes addr {
+  0%, 100% { transform: scaleX(0.42); }
+  50% { transform: scaleX(0.86); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.22; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes lockTick {
+  0%, 100% { transform: rotate(0deg); }
+  12% { transform: rotate(-9deg); }
+  22% { transform: rotate(0deg); }
+}
+
+@keyframes net {
+  0%, 100% { opacity: 0.34; }
+  50% { opacity: 0.78; }
+}
+
+@keyframes radar {
+  0% { transform: scale(0.35); opacity: 0.42; }
+  70% { transform: scale(1); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes sat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.28); opacity: 0.55; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

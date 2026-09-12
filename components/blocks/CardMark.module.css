@@ -1,15 +1,9 @@
 .stage {
-  position: absolute;
-  inset: 0;
-  background: var(--ash);
-  color: var(--blue);
+  composes: stage from './markBase.module.css';
 }
 
 .svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+  composes: svg from './markBase.module.css';
 }
 
 .still :is(
@@ -74,13 +68,11 @@
 }
 
 .dot {
-  fill: currentColor;
-  stroke: none;
+  composes: dot from './markBase.module.css';
 }
 
 .win {
-  fill: currentColor;
-  stroke: none;
+  composes: win from './markBase.module.css';
 }
 
 .ride {
@@ -93,8 +85,7 @@
 /* ---- websites ----------------------------------------------------------- */
 
 .addr {
-  transform-box: fill-box;
-  transform-origin: left center;
+  composes: addr from './markBase.module.css';
 }
 
 .rideSite { opacity: 0; }
@@ -153,15 +144,11 @@
 /* ---- vpn ---------------------------------------------------------------- */
 
 .ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  stroke-dasharray: 3.5 7;
+  composes: ring from './markBase.module.css';
 }
 
 .wave {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
+  composes: wave from './markBase.module.css';
 }
 
 .lock {
@@ -172,8 +159,7 @@
 /* ---- ai ----------------------------------------------------------------- */
 
 .core {
-  transform-box: fill-box;
-  transform-origin: center;
+  composes: core from './markBase.module.css';
 }
 
 .rideHex { opacity: 0; }
@@ -231,21 +217,6 @@
   100% { transform: translate(252px, 158px); }
 }
 
-@keyframes addr {
-  0%, 100% { transform: scaleX(0.42); }
-  50% { transform: scaleX(0.86); }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.22; }
-}
-
-@keyframes breathe {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.62; }
-}
-
 @keyframes storeTrack {
   0% { transform: translate(0, 0); }
   100% { transform: translate(-76px, 0); }
@@ -275,10 +246,6 @@
 @keyframes swapB {
   0%, 100% { transform: translate(16px, 10px) scale(0.9); opacity: 0.38; }
   50% { transform: translate(-14px, -8px) scale(1); opacity: 1; }
-}
-
-@keyframes dash {
-  to { stroke-dashoffset: -100; }
 }
 
 @keyframes rideEcg {
@@ -328,11 +295,6 @@
   50% { transform: scale(1.5); }
 }
 
-@keyframes net {
-  0%, 100% { opacity: 0.34; }
-  50% { opacity: 0.78; }
-}
-
 @keyframes kanban {
   0%, 8% { transform: translate(0, 0); opacity: 1; }
   28% { transform: translate(80px, -24px); opacity: 1; }
@@ -341,27 +303,6 @@
   72% { transform: translate(160px, 0); opacity: 0; }
   73% { transform: translate(0, 24px); opacity: 0; }
   86%, 100% { transform: translate(0, 0); opacity: 1; }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes radar {
-  0% { transform: scale(0.35); opacity: 0.42; }
-  70% { transform: scale(1); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-@keyframes lockTick {
-  0%, 100% { transform: rotate(0deg); }
-  12% { transform: rotate(-9deg); }
-  22% { transform: rotate(0deg); }
-}
-
-@keyframes sat {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.28); opacity: 0.55; }
 }
 
 
@@ -399,4 +340,53 @@
   .flowWest {
     animation: none;
   }
+}
+
+/* Анимации ниже повторяются в соседнем наборе марок. Вынести их не
+   получается: сборщик переименовывает имя анимации внутри модуля, и
+   ссылка на общий блок из другого файла перестает совпадать. Общими
+   сделаны правила классов - через composes из markBase.module.css. */
+@keyframes addr {
+  0%, 100% { transform: scaleX(0.42); }
+  50% { transform: scaleX(0.86); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.22; }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -100; }
+}
+
+@keyframes lockTick {
+  0%, 100% { transform: rotate(0deg); }
+  12% { transform: rotate(-9deg); }
+  22% { transform: rotate(0deg); }
+}
+
+@keyframes net {
+  0%, 100% { opacity: 0.34; }
+  50% { opacity: 0.78; }
+}
+
+@keyframes radar {
+  0% { transform: scale(0.35); opacity: 0.42; }
+  70% { transform: scale(1); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes sat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.28); opacity: 0.55; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
