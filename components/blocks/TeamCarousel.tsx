@@ -171,7 +171,7 @@ export function TeamCarousel({ people }: { people: Founder[] }) {
         <div ref={trackRef} className={styles.track}>
           {slides.map(({ person, copy, key }) => (
             <article key={key} className={styles.card} data-team-card aria-hidden={copy !== 1 || undefined}>
-              <Photo slot={person.image} ground="white" />
+              <Photo slot={person.image} ground="pale" />
               <h3 className="h3" style={{ marginTop: 16 }}>
                 {person.name}
               </h3>
