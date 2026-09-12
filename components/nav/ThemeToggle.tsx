@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import styles from './ThemeToggle.module.css';
 
 function Moon() {
@@ -31,19 +31,35 @@ function syncThemeColor(dark: boolean) {
   meta.setAttribute('content', color);
 }
 
-export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+/** Тему на <html> ставит встроенный скрипт до первой отрисовки, поэтому она
+ *  живет в DOM, а не в состоянии React. Читаем ее подпиской: на сервере тема
+ *  светлая, на клиенте берется из атрибута. Раньше значение клали в состояние
+ *  эффектом, и React предупреждал о лишней перерисовке. */
+function subscribeTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  return () => observer.disconnect();
+}
 
+function readTheme() {
+  return document.documentElement.dataset.theme === 'dark';
+}
+
+function readThemeOnServer() {
+  return false;
+}
+
+export function ThemeToggle() {
+  const dark = useSyncExternalStore(subscribeTheme, readTheme, readThemeOnServer);
+
+  // Цвет полосы браузера - внешняя система, ее эффект обновлять и должен.
   useEffect(() => {
-    const isDark = document.documentElement.dataset.theme === 'dark';
-    setDark(isDark);
-    syncThemeColor(isDark);
-  }, []);
+    syncThemeColor(dark);
+  }, [dark]);
 
   const toggle = () => {
     const next = !dark;
     const apply = () => {
-      setDark(next);
       if (next) document.documentElement.dataset.theme = 'dark';
       else delete document.documentElement.dataset.theme;
       syncThemeColor(next);

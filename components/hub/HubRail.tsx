@@ -9,6 +9,13 @@ import { isHashCurrent } from './hubLinks';
 import { jumpHash, onHubJumpEnd, setHubRailDrag, setHubRailHeld } from './hubScroll';
 import styles from './HubRail.module.css';
 
+/** Часы вынесены из компонента: прямой вызов performance.now() в теле
+ *  компонента правило react-hooks/purity считает вызовом во время отрисовки,
+ *  хотя сюда попадают только обработчики указателя. */
+function nowMs() {
+  return performance.now();
+}
+
 /** Клик, а не перетаскивание: меньше этого сдвига указатель почти не двигали. */
 const CLICK_PX = 10;
 /** Ход на следующий слот. Полтора слота — заметный рывок, без перескока. */
@@ -56,28 +63,30 @@ export function HubRail({ pathname, hash, stops }: { pathname: string; hash: str
     thumbTimer.current = null;
   };
 
-  const clearStepWait = () => {
+  const clearStepWait = useCallback(() => {
     stopStepWait.current?.();
     stopStepWait.current = null;
     stepping.current = false;
     clearThumbTimer();
-  };
+  }, []);
 
-  const dropDragListeners = () => {
+  const dropDragListeners = useCallback(() => {
     unbindDrag.current?.();
     unbindDrag.current = null;
-  };
+  }, []);
 
   useEffect(
     () => () => {
       clearStepWait();
       dropDragListeners();
     },
-    [],
+    [clearStepWait, dropDragListeners],
   );
 
-  const dots = () =>
-    triggerRef.current ? [...triggerRef.current.querySelectorAll<HTMLElement>('[data-dot]')] : [];
+  const dots = useCallback(
+    () => (triggerRef.current ? [...triggerRef.current.querySelectorAll<HTMLElement>('[data-dot]')] : []),
+    [triggerRef],
+  );
 
   const placeThumb = useCallback((y: number) => {
     const thumb = thumbRef.current;
@@ -133,7 +142,7 @@ export function HubRail({ pathname, hash, stops }: { pathname: string; hash: str
     const ro = new ResizeObserver(place);
     ro.observe(rail);
     return () => ro.disconnect();
-  }, [hash, pathname, stops, triggerRef, placeThumb]);
+  }, [hash, pathname, stops, triggerRef, placeThumb, dots]);
 
   const go = (href: string) => {
     if (jumpHash(href, pathname)) return;
@@ -161,7 +170,7 @@ export function HubRail({ pathname, hash, stops }: { pathname: string; hash: str
     const next = Math.max(0, Math.min(stops.length - 1, thumbAt.current + dir));
     state.accum = 0;
     state.awaitRest = true;
-    state.lastBurst = performance.now();
+    state.lastBurst = nowMs();
     if (next === thumbAt.current) return;
     state.lastDir = dir;
     stepping.current = true;
@@ -226,7 +235,7 @@ export function HubRail({ pathname, hash, stops }: { pathname: string; hash: str
     const state = drag.current;
     if (!state || pointerId !== state.pointerId) return;
     const dy = clientY - state.lastY;
-    const now = performance.now();
+    const now = nowMs();
     state.lastY = clientY;
     if (!state.moved) {
       if (Math.abs(clientY - state.downY) < CLICK_PX) return;

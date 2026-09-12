@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Photo } from '@/components/ui/Photo';
 import type { Founder } from '@/content/team';
 import styles from './TeamCarousel.module.css';
@@ -31,15 +31,15 @@ export function TeamCarousel({ people }: { people: Founder[] }) {
     people.map((person) => ({ person, copy, key: `${copy}-${person.image.id}` })),
   ).flat();
 
-  const stride = () => {
+  const stride = useCallback(() => {
     const track = trackRef.current;
     const card = track?.querySelector<HTMLElement>('[data-team-card]');
     if (!track || !card) return 0;
     const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
     return card.getBoundingClientRect().width + gap;
-  };
+  }, []);
 
-  const loop = () => stride() * people.length;
+  const loop = useCallback(() => stride() * people.length, [stride, people.length]);
 
   const dragGain = () => {
     const step = stride();
@@ -50,13 +50,13 @@ export function TeamCarousel({ people }: { people: Founder[] }) {
 
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const paint = (next: number, animate: boolean, ms = SNAP_MS) => {
+  const paint = useCallback((next: number, animate: boolean, ms = SNAP_MS) => {
     const track = trackRef.current;
     if (!track) return;
     offsetRef.current = next;
     track.style.transition = animate && !reduced() ? `transform ${ms}ms ${SNAP_EASE}` : 'none';
     track.style.transform = `translate3d(${-next}px, 0, 0)`;
-  };
+  }, []);
 
   const wrapQuiet = (value: number) => {
     const width = loop();
@@ -98,7 +98,7 @@ export function TeamCarousel({ people }: { people: Founder[] }) {
       ro?.disconnect();
       if (wrapTimer.current !== null) window.clearTimeout(wrapTimer.current);
     };
-  }, [people.length]);
+  }, [loop, paint]);
 
   const step = (direction: -1 | 1) => {
     const width = stride();

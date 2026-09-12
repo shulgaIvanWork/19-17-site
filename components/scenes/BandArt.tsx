@@ -13,7 +13,7 @@ export type SceneId =
   | 'crmPipe'
   | 'aiStack';
 
-const scenes: Record<SceneId, (props: { uid: string }) => ReactNode> = {
+const scenes: Record<SceneId, () => ReactNode> = {
   pagesSite: PagesSite,
   storeFloor: StoreFloor,
   auditSheet: AuditSheet,
@@ -32,7 +32,7 @@ export function ScenePanel({ kind }: { kind: SceneId }) {
       <div ref={ref} className={styles.frame} data-cursor-glow="scene">
         <div className={styles.stage}>
           <svg className={styles.svg} viewBox="0 0 500 400" fill="none">
-            <Scene uid={kind} />
+            <Scene />
           </svg>
         </div>
       </div>
@@ -230,7 +230,7 @@ function FakeBtn({
   );
 }
 
-function PagesSite({ uid }: { uid: string }) {
+function PagesSite() {
   return (
     <g>
       <path
@@ -345,7 +345,7 @@ function PagesSite({ uid }: { uid: string }) {
   );
 }
 
-function StoreFloor({ uid }: { uid: string }) {
+function StoreFloor() {
   const rows = [
     { name: 'Станок 16К20', price: '186 000 ₽', stock: '2 шт.', hot: true, write: 'B' as const },
     { name: 'Насос ЦНС 13-70', price: '24 400 ₽', stock: '12 шт.', hot: false, write: 'C' as const },
@@ -442,7 +442,7 @@ function StoreFloor({ uid }: { uid: string }) {
   );
 }
 
-function AuditSheet({ uid }: { uid: string }) {
+function AuditSheet() {
   const checks = [
     { label: 'Скорость', note: '2,8 с', on: true, write: 'B' as const },
     { label: 'Мобильная', note: 'есть', on: true, write: 'B' as const },
@@ -534,7 +534,7 @@ function AuditSheet({ uid }: { uid: string }) {
   );
 }
 
-function OnecSwap({ uid }: { uid: string }) {
+function OnecSwap() {
   const rows = [
     { code: '00-12', name: 'Насос ЦНС', price: '24 400', write: 'B' as const },
     { code: '00-18', name: 'Редуктор Ч-80', price: '9 870', write: 'C' as const },
@@ -677,7 +677,7 @@ function Deal({
   );
 }
 
-function CrmPipe({ uid }: { uid: string }) {
+function CrmPipe() {
   return (
     <g>
       <Piece kind="sortL" origin="100px 200px">
@@ -738,7 +738,7 @@ function CrmPipe({ uid }: { uid: string }) {
   );
 }
 
-function AiStack({ uid }: { uid: string }) {
+function AiStack() {
   return (
     <g>
       {/* Схема выровнена по одной оси y = 200: центр карточки документов,

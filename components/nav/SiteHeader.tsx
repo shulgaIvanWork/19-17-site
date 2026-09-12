@@ -33,25 +33,22 @@ export function SiteHeader() {
   const [menuEntered, setMenuEntered] = useState(false);
   const hash = useHubSectionHash(pathname);
 
-  // Смена маршрута закрывает мобильное меню.
-  useEffect(() => {
+  // Три правки состояния во время отрисовки вместо эффектов: смена маршрута
+  // закрывает меню, открытие монтирует ящик, закрытие снимает класс входа.
+  // В эффекте те же строки давали каскадную перерисовку и лишний кадр.
+  const [seenPath, setSeenPath] = useState(pathname);
+  if (seenPath !== pathname) {
+    setSeenPath(pathname);
     setMenuOpen(false);
-  }, [pathname]);
+  }
+  if (menuOpen && !menuMounted) setMenuMounted(true);
+  if (!menuOpen && menuEntered) setMenuEntered(false);
 
   useEffect(() => {
-    if (menuOpen) setMenuMounted(true);
-  }, [menuOpen]);
-
-  useEffect(() => {
-    if (!menuMounted) return;
-    if (!menuOpen) {
-      setMenuEntered(false);
-      return;
-    }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setMenuEntered(true);
-      return;
-    }
+    if (!menuMounted || !menuOpen) return;
+    // Класс входа ставится следующим кадром, иначе переход не запустится:
+    // браузер применит конечное состояние сразу. При сокращенных анимациях
+    // переход выключен стилями, и лишний кадр незаметен.
     let inner = 0;
     const outer = requestAnimationFrame(() => {
       inner = requestAnimationFrame(() => setMenuEntered(true));

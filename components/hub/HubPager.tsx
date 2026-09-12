@@ -28,9 +28,14 @@ export function HubPager({ pathname, hash, stops }: { pathname: string; hash: st
     stops.findIndex((item) => isHashCurrent(pathname, hash, item.href)),
   );
 
-  useEffect(() => {
+  // Раздел на экране сменился - листалка переходит к нему. Правка состояния
+  // во время отрисовки, а не в эффекте: иначе кадр успевает показать старый
+  // выбор, и React предупреждает о каскадной перерисовке.
+  const [shownIndex, setShownIndex] = useState(currentIndex);
+  if (shownIndex !== currentIndex) {
+    setShownIndex(currentIndex);
     setBrowse(currentIndex);
-  }, [currentIndex]);
+  }
 
   useEffect(
     () => () => {

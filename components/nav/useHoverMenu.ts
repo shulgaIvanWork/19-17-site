@@ -41,9 +41,13 @@ export function useHoverMenu<T extends HTMLElement>(pathname: string, delay = 20
 
   useEffect(() => cancelClose, [cancelClose]);
 
-  useEffect(() => {
-    close();
-  }, [pathname, close]);
+  // Смена маршрута закрывает меню. Правка состояния во время отрисовки, а не в
+  // эффекте: иначе кадр успевает показать меню открытым на новой странице.
+  const [seenPath, setSeenPath] = useState(pathname);
+  if (seenPath !== pathname) {
+    setSeenPath(pathname);
+    setOpen(false);
+  }
 
   const wrapProps = {
     ref: wrapRef,
