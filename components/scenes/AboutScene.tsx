@@ -140,9 +140,6 @@ export function AboutScene() {
         <circle className={`${styles.dot} ${styles.lock}`} cx="134" cy="300" r="2.3" />
         <circle className={`${styles.dot} ${styles.lock}`} cx="406" cy="300" r="2.3" />
 
-        <path className={`${styles.line} ${styles.lock}`} d="M 96 198 H 118" />
-        <path className={`${styles.line} ${styles.lock}`} d="M 422 198 H 444" />
-
         <g className={styles.bodyL}>
           <g className={styles.swayL}>
             <g className={styles.gazeL}>
