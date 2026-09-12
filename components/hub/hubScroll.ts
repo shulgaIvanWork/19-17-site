@@ -19,11 +19,13 @@ let pinnedId = '';
 let jumping = false;
 let scrollTick = 0;
 let railDrag = false;
-let chaseTo = 0;
-let chaseFrom = 0;
-let chaseStart = 0;
-let chaseMs = 340;
+let jumpNode: HTMLElement | null = null;
+let jumpFrom = 0;
+let jumpStart = 0;
+let jumpMs = 340;
 let chaseMode: 'ease' | 'chase' | null = null;
+/** Кадры доводки после конца кривой: см. startJump. */
+const LAND_FRAMES = 3;
 let pinFrame = 0;
 let jumpDir: -1 | 0 | 1 = 0;
 /** Длительность позы 3D при прыжке. Кивок — только после неё. */
@@ -180,75 +182,61 @@ function settleJump() {
   window.requestAnimationFrame(() => unpinSection());
 }
 
-function scrollToNode(node: HTMLElement) {
+/** Прыжок к разделу по кривой easeTo.
+ *
+ *  Цель пересчитывается на каждом кадре, а не один раз в начале. У .section стоит
+ *  content-visibility: auto (globals.css), и раздел, который еще не отрисовывался,
+ *  занимает 720px. По дороге разделы отрисовываются, почти все оказываются ниже,
+ *  и страница укорачивается на тысячи пикселей. С целью, посчитанной заранее,
+ *  прыжок с «Лендинга» на CRM заканчивался в футере, перелет 2325px (1440x900,
+ *  свежая загрузка, 2026-09-13). После конца кривой еще LAND_FRAMES кадров
+ *  доводки: разделы у места прибытия отрисовываются уже после прокрутки.
+ *
+ *  В режиме chase новая цель не перезапускает цикл, а меняет jumpNode и начало
+ *  кривой: цикл подхватит ее на следующем кадре, без рывка. */
+function startJump(node: HTMLElement, mode: 'ease' | 'chase') {
   markJump(node);
-  chaseMode = 'ease';
-  const target = yOf(node);
+  jumpNode = node;
+  jumpFrom = window.scrollY;
+  jumpStart = performance.now();
+  jumpMs = durationFor(yOf(node) - jumpFrom);
   lockBehavior();
+  if (mode === 'chase' && chaseMode === 'chase') return;
+  chaseMode = mode;
   const tick = ++scrollTick;
-
-  const finish = () => {
-    if (tick !== scrollTick) return;
-    window.scrollTo(0, target);
-    settleJump();
-  };
-
-  const from = window.scrollY;
-  const dist = target - from;
-  if (reducedMotion() || Math.abs(dist) < 2) {
-    finish();
-    return;
-  }
-
-  const ms = durationFor(dist);
-  const started = performance.now();
+  let landing = 0;
 
   const step = (now: number) => {
-    if (tick !== scrollTick) return;
-    const t = Math.min(1, (now - started) / ms);
-    window.scrollTo(0, from + dist * easeTo(t));
+    if (tick !== scrollTick || !jumpNode) return;
+    const to = yOf(jumpNode);
+    const done = reducedMotion() || Math.abs(to - jumpFrom) < 2;
+    const t = done ? 1 : Math.min(1, (now - jumpStart) / jumpMs);
     if (t < 1) {
+      landing = 0;
+      window.scrollTo(0, jumpFrom + (to - jumpFrom) * easeTo(t));
       window.requestAnimationFrame(step);
       return;
     }
-    finish();
+    window.scrollTo(0, to);
+    if (landing < LAND_FRAMES) {
+      landing += 1;
+      window.requestAnimationFrame(step);
+      return;
+    }
+    settleJump();
   };
 
   window.requestAnimationFrame(step);
 }
 
-/** Один цикл с тем же ease, что у клика. Новая точка только меняет цель
- *  и перезапускает кривую с текущей позиции — без телепорта на 0.28 за кадр. */
+function scrollToNode(node: HTMLElement) {
+  startJump(node, 'ease');
+}
+
+/** Перетаскивание по рельсу: та же точка повторно не перезапускает прыжок. */
 function chaseToNode(node: HTMLElement) {
-  const target = yOf(node);
-  if (chaseMode === 'chase' && Math.abs(chaseTo - target) < 2) return;
-  markJump(node);
-  chaseTo = target;
-  chaseFrom = window.scrollY;
-  chaseStart = performance.now();
-  chaseMs = durationFor(chaseTo - chaseFrom);
-  lockBehavior();
-  if (chaseMode === 'chase') return;
-  chaseMode = 'chase';
-  const tick = ++scrollTick;
-  const step = (now: number) => {
-    if (tick !== scrollTick) return;
-    const dist = chaseTo - chaseFrom;
-    if (reducedMotion() || Math.abs(dist) < 2) {
-      window.scrollTo(0, chaseTo);
-      settleJump();
-      return;
-    }
-    const t = Math.min(1, (now - chaseStart) / chaseMs);
-    window.scrollTo(0, chaseFrom + dist * easeTo(t));
-    if (t < 1) {
-      window.requestAnimationFrame(step);
-      return;
-    }
-    window.scrollTo(0, chaseTo);
-    settleJump();
-  };
-  window.requestAnimationFrame(step);
+  if (chaseMode === 'chase' && jumpNode === node) return;
+  startJump(node, 'chase');
 }
 
 export function jumpHash(
