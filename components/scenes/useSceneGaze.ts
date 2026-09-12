@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
-import { HUB_POSE_MS, hubRailBlocksLook, onHubJumpStart } from '@/components/nav/hubNav';
+import { HUB_POSE_MS, hubRailBlocksLook, onHubJumpStart } from '@/components/hub/hubScroll';
 
 function clamp(n: number) {
   return Math.max(-1, Math.min(1, n));

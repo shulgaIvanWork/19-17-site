@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useLayoutEffect, useRef, useState } from 'react';
-import { onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/nav/hubNav';
+import { onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/hub/hubScroll';
 import type { HeroShape } from './heroTypes';
 
 /** Loads the canvas object only where it is actually drawn. */

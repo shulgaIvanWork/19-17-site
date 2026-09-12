@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ComponentProps } from 'react';
-import { jumpHash } from './hubNav';
+import { jumpHash } from '@/components/hub/hubScroll';
 
 /** Next.js will not scroll to a hash on the page you are already on. */
 export function HashLink({

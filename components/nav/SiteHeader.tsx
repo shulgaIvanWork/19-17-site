@@ -9,7 +9,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { HubMenu } from './SitesMenu';
 import { MobileMenu } from './MobileMenu';
 import { NavButton } from './NavButton';
-import { useHubSectionHash } from './useHubSectionHash';
+import { useHubSectionHash } from '@/components/hub/useHubSectionHash';
 import {
   infraHubPaths,
   infraMenuGroups,
@@ -21,7 +21,7 @@ import {
   sitesTabHref,
   wordmark,
 } from '@/content/nav';
-import { interestFromLocation } from './hubNav';
+import { interestFromLocation } from '@/components/hub/hubLinks';
 import styles from './SiteHeader.module.css';
 
 const MENU_MS = 380;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { infraHubPaths, siteHubPaths } from '@/content/nav';
-import { isHubJumping, onHubPin, pinnedHubSection } from './hubNav';
+import { isHubJumping, onHubPin, pinnedHubSection } from './hubScroll';
 
 type Listener = (hash: string) => void;
 

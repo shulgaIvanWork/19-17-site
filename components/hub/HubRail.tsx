@@ -1,12 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
-import { usePathname } from 'next/navigation';
-import { hubStops, isHashCurrent, jumpHash, onHubJumpEnd, setHubRailDrag, setHubRailHeld } from './hubNav';
-import { useHoverMenu } from './useHoverMenu';
-import { useHubSectionHash } from './useHubSectionHash';
-import styles from './LandingNav.module.css';
+import { useRouter } from 'next/navigation';
+import type { NavItem } from '@/content/nav';
+import { useHoverMenu } from '@/components/nav/useHoverMenu';
+import { isHashCurrent } from './hubLinks';
+import { jumpHash, onHubJumpEnd, setHubRailDrag, setHubRailHeld } from './hubScroll';
+import styles from './HubRail.module.css';
 
 /** Клик, а не перетаскивание: меньше этого сдвига указатель почти не двигали. */
 const CLICK_PX = 10;
@@ -16,16 +17,15 @@ const PULL_SLOTS = 1.5;
 const REST_PX = 3;
 const REST_MS = 120;
 
-/** Точки слева на хабах «Сайты» и «VPN/AI». Без наведения видны только точки
- *  и линия между ними; капсула и подписи — по hover.
+/** Рельс разделов слева на хабах «Сайты» и «VPN/AI», широкий экран. Без
+ *  наведения видны только точки и линия между ними; капсула и подписи - по
+ *  наведению. Нижняя полоса для узкого экрана - отдельный компонент HubPager.
  *  Кружок не магнитится к курсору: его тащат, как бегунок скроллбара. Клик по
  *  слоту — прыжок. Один рывок — один раздел; следующий шаг только после
  *  короткой остановки курсора. Если перестали тянуть, страница остаётся
  *  на текущем слоте. */
-export function LandingNav() {
-  const pathname = usePathname();
-  const hash = useHubSectionHash(pathname);
-  const stops = hubStops(pathname);
+export function HubRail({ pathname, hash, stops }: { pathname: string; hash: string; stops: NavItem[] }) {
+  const router = useRouter();
   const { open, setOpen, openNow, cancelClose, closeSoon, wrapProps, triggerRef } =
     useHoverMenu<HTMLElement>(pathname);
   const thumbRef = useRef<HTMLSpanElement>(null);
@@ -49,15 +49,6 @@ export function LandingNav() {
   const stepping = useRef(false);
   const stopStepWait = useRef<(() => void) | null>(null);
   const unbindDrag = useRef<(() => void) | null>(null);
-  const pagerSwipe = useRef<{
-    pointerId: number;
-    downX: number;
-    moved: boolean;
-  } | null>(null);
-  const unbindPager = useRef<(() => void) | null>(null);
-  const swallowPagerClick = useRef(false);
-  const pagerTrackRef = useRef<HTMLDivElement>(null);
-  const [browse, setBrowse] = useState(0);
 
   const clearThumbTimer = () => {
     if (thumbTimer.current === null) return;
@@ -77,29 +68,13 @@ export function LandingNav() {
     unbindDrag.current = null;
   };
 
-  const dropPagerListeners = () => {
-    unbindPager.current?.();
-    unbindPager.current = null;
-  };
-
   useEffect(
     () => () => {
       clearStepWait();
       dropDragListeners();
-      dropPagerListeners();
     },
     [],
   );
-
-  useEffect(() => {
-    const list = hubStops(pathname);
-    if (!list || list.length < 2) return;
-    const idx = Math.max(
-      0,
-      list.findIndex((item) => isHashCurrent(pathname, hash, item.href)),
-    );
-    setBrowse(idx);
-  }, [hash, pathname]);
 
   const dots = () =>
     triggerRef.current ? [...triggerRef.current.querySelectorAll<HTMLElement>('[data-dot]')] : [];
@@ -160,11 +135,9 @@ export function LandingNav() {
     return () => ro.disconnect();
   }, [hash, pathname, stops, triggerRef, placeThumb]);
 
-  if (!stops || stops.length < 2) return null;
-
   const go = (href: string) => {
     if (jumpHash(href, pathname)) return;
-    window.location.assign(href);
+    router.push(href);
   };
 
   const jumpStop = (index: number) => {
@@ -327,85 +300,7 @@ export function LandingNav() {
     };
   };
 
-  const onGripMove = (event: ReactPointerEvent<HTMLSpanElement>) => {
-    pullByPointer(event.clientY, event.pointerId);
-  };
-
-  const onGripUp = (event: ReactPointerEvent<HTMLSpanElement>) => {
-    endDrag(event.pointerId);
-  };
-
-  const currentIndex = Math.max(
-    0,
-    stops.findIndex((item) => isHashCurrent(pathname, hash, item.href)),
-  );
-
-  const stepTo = (index: number) => {
-    const next = Math.max(0, Math.min(stops.length - 1, index));
-    setBrowse(next);
-    applyStop(next);
-  };
-
-  const browseTo = (index: number) => {
-    setBrowse(Math.max(0, Math.min(stops.length - 1, index)));
-  };
-
-  const onPagerDown = (event: ReactPointerEvent<HTMLElement>) => {
-    if (event.button !== 0) return;
-    pagerSwipe.current = {
-      pointerId: event.pointerId,
-      downX: event.clientX,
-      moved: false,
-    };
-    const track = pagerTrackRef.current;
-    if (track) {
-      track.dataset.dragging = 'true';
-      track.style.setProperty('--drag', '0px');
-    }
-    try {
-      event.currentTarget.setPointerCapture(event.pointerId);
-    } catch {
-      /* захват есть только у настоящего указателя */
-    }
-    const move = (next: PointerEvent) => {
-      const state = pagerSwipe.current;
-      if (!state || next.pointerId !== state.pointerId) return;
-      const dx = next.clientX - state.downX;
-      if (Math.abs(dx) >= CLICK_PX) state.moved = true;
-      pagerTrackRef.current?.style.setProperty('--drag', `${dx}px`);
-    };
-    const up = (next: PointerEvent) => {
-      const state = pagerSwipe.current;
-      if (!state || next.pointerId !== state.pointerId) return;
-      pagerSwipe.current = null;
-      dropPagerListeners();
-      const track = pagerTrackRef.current;
-      if (track) {
-        track.style.setProperty('--drag', '0px');
-        delete track.dataset.dragging;
-      }
-      if (!state.moved) return;
-      swallowPagerClick.current = true;
-      window.setTimeout(() => {
-        swallowPagerClick.current = false;
-      }, 0);
-      const dx = next.clientX - state.downX;
-      if (Math.abs(dx) < 48) return;
-      browseTo(browse + (dx < 0 ? 1 : -1));
-    };
-    dropPagerListeners();
-    window.addEventListener('pointermove', move, true);
-    window.addEventListener('pointerup', up, true);
-    window.addEventListener('pointercancel', up, true);
-    unbindPager.current = () => {
-      window.removeEventListener('pointermove', move, true);
-      window.removeEventListener('pointerup', up, true);
-      window.removeEventListener('pointercancel', up, true);
-    };
-  };
-
   return (
-    <>
     <div
       className={[styles.wrap, open ? styles.open : ''].filter(Boolean).join(' ')}
       data-hub-rail
@@ -432,9 +327,6 @@ export function LandingNav() {
         className={styles.grip}
         aria-hidden="true"
         onPointerDown={onGripDown}
-        onPointerMove={onGripMove}
-        onPointerUp={onGripUp}
-        onPointerCancel={onGripUp}
       />
       <nav
         ref={triggerRef}
@@ -474,59 +366,5 @@ export function LandingNav() {
         })}
       </nav>
     </div>
-    <nav className={styles.pager} data-hub-pager aria-label="Разделы страницы">
-      <button
-        type="button"
-        className={styles.pagerStep}
-        aria-label="Листать назад"
-        disabled={browse <= 0}
-        onClick={() => browseTo(browse - 1)}
-      >
-        ‹
-      </button>
-      <div
-        className={styles.pagerViewport}
-        onPointerDown={onPagerDown}
-        onClick={(event) => {
-          if (!swallowPagerClick.current) return;
-          event.preventDefault();
-          event.stopPropagation();
-        }}
-      >
-        <div
-          ref={pagerTrackRef}
-          className={styles.pagerTrack}
-          style={{ ['--i' as string]: browse }}
-        >
-          {stops.map((item, index) => (
-            <button
-              key={item.href}
-              type="button"
-              className={[
-                styles.pagerChip,
-                index === browse ? styles.pagerChipOn : '',
-                index === currentIndex ? styles.pagerChipHere : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              aria-current={index === currentIndex ? 'page' : undefined}
-              onClick={() => stepTo(index)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
-      <button
-        type="button"
-        className={styles.pagerStep}
-        aria-label="Листать вперёд"
-        disabled={browse >= stops.length - 1}
-        onClick={() => browseTo(browse + 1)}
-      >
-        ›
-      </button>
-    </nav>
-    </>
   );
 }

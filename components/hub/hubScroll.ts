@@ -1,40 +1,13 @@
-/** Навигация по хабам: /websites и /vpn-ai собраны из разделов с якорями.
+/** Прыжки по разделам хаба: прокрутка, закрепление раздела и подписки.
  *
- *  Вся логика прыжков по якорям живет здесь. Раньше она была размазана по
- *  content/nav.ts, content/site.ts и компонентам, а content/ по правилу
- *  проекта хранит только данные.
+ *  Модуль общий для трех потребителей: навигации по разделам (components/hub),
+ *  3D-героев (components/hero) и сцен (components/scenes). Раньше он лежал в
+ *  components/nav, и получалось, что папка меню управляет анимацией 3D.
  *
- *  - isHashCurrent, hubStops, interestFromLocation - чистые функции;
- *  - jumpHash - прыжок по якорю на той же странице;
- *  - scrollToLocationHash - прокрутка к якорю из адреса после смены маршрута.
- *  Какой раздел сейчас на экране, отслеживает хук useHubSectionHash. */
-
-import { hashFallbacks, infraMenuGroups, siteServices, type NavItem } from '@/content/nav';
-import { interestBySection } from '@/content/site';
-
-/** Активен ли пункт меню. Без якоря в адресе активным считается первый раздел хаба. */
-export function isHashCurrent(pathname: string, hash: string, href: string) {
-  const [path, id] = href.split('#');
-  if (pathname !== path) return false;
-  const have = hash.replace(/^#/, '');
-  const want = id ?? '';
-  if (!want) return true;
-  if (!have) return hashFallbacks[pathname] === want;
-  return have === want;
-}
-
-/** Разделы хаба в порядке страницы; null, если страница не хаб. */
-export function hubStops(pathname: string): NavItem[] | null {
-  if (pathname === '/websites') return siteServices;
-  if (pathname === '/vpn-ai') return infraMenuGroups.flatMap((group) => group.items);
-  return null;
-}
-
-/** Направление заявки по текущей странице и якорю раздела. */
-export function interestFromLocation(pathname: string, hash: string): string | undefined {
-  const id = hash.replace(/^#/, '') || hashFallbacks[pathname] || '';
-  return interestBySection[id];
-}
+ *  Состояние держится в переменных модуля, а не в React: прокрутка идет по
+ *  кадрам, и перерисовка на каждый кадр здесь не нужна. Кто на что подписан:
+ *  onHubJumpStart - начало прыжка, onHubJumpEnd - конец, onHubPin - смена
+ *  закрепленного раздела. */
 
 /** Прыжок по якорю на текущей странице: Next не прокручивает к якорю, если
  *  страница не меняется. Возвращает false, если ссылка ведет на другую
@@ -52,7 +25,6 @@ let chaseStart = 0;
 let chaseMs = 340;
 let chaseMode: 'ease' | 'chase' | null = null;
 let pinFrame = 0;
-let jumpHintUntil = 0;
 let jumpDir: -1 | 0 | 1 = 0;
 /** Длительность позы 3D при прыжке. Кивок — только после неё. */
 export const HUB_POSE_MS = 1040;
@@ -119,11 +91,6 @@ export function hubRailBlocksLook(clientX?: number, clientY?: number) {
   if (clientX === undefined || clientY === undefined || !Number.isFinite(clientX)) return false;
   const hit = document.elementFromPoint(clientX, clientY);
   return Boolean(hit?.closest('[data-hub-rail]'));
-}
-
-/** Короткое окно после прыжка: модель успевает монтнуться и кивнуть на курсор. */
-export function hubJumpHint() {
-  return performance.now() < jumpHintUntil;
 }
 
 function headerOffset() {
@@ -206,7 +173,6 @@ function writeHubHash(id: string) {
 
 function settleJump() {
   chaseMode = null;
-  jumpHintUntil = performance.now() + 800;
   unlockBehavior();
   for (const fn of jumpEnd) fn();
   if (railDrag) return;

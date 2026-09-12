@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { drawerLinks, hitBadge, infraTabHref, phoneHref, phoneLabel, sitesTabHref } from '@/content/nav';
-import { interestFromLocation } from './hubNav';
+import { interestFromLocation } from '@/components/hub/hubLinks';
 import styles from './MobileMenu.module.css';
 
 type Props = { pathname: string; hash: string; open?: boolean; onNavigate: () => void };

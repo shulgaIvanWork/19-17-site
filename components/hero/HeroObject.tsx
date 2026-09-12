@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { applyHeroScroll, heroApproachProgress, heroDockProgress, heroScrollProgress, scrollBasis, type LiveBuffers } from './heroScroll';
 import { isLetterShape, type HeroShape, type Mesh } from './heroTypes';
-import { HUB_POSE_MS, hubJumpDir, hubRailBlocksLook, isHubJumping, onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/nav/hubNav';
+import { HUB_POSE_MS, hubJumpDir, hubRailBlocksLook, isHubJumping, onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/hub/hubScroll';
 
 const meshCache = new Map<string, Promise<Mesh>>();
 let pointerX = Number.NaN;

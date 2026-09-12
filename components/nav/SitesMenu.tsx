@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { NavGroup } from '@/content/nav';
-import { isHashCurrent, jumpHash } from './hubNav';
+import { isHashCurrent } from '@/components/hub/hubLinks';
+import { jumpHash } from '@/components/hub/hubScroll';
 import { useHoverMenu } from './useHoverMenu';
 import navStyles from './NavButton.module.css';
 import styles from './SitesMenu.module.css';

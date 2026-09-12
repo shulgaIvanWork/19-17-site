@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
-import { onHubJumpEnd } from '@/components/nav/hubNav';
+import { onHubJumpEnd } from '@/components/hub/hubScroll';
 
 /** Scene is in view before the sort starts, and the pose lands while the
  *  picture is still fully on screen. Ease-out so the last frames arrive a
