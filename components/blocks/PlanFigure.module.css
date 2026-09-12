@@ -1,13 +1,10 @@
 /* На широком экране тариф - обычная колонка сетки .g3, рамки у него нет.
-   На узком он едет в ленте (.rail), и там ему нужна карточка. */
+   На узком он едет в ленте: рамку дает общий класс railcard из globals.css,
+   здесь остается только растяжка на всю высоту карточки. */
 @media (max-width: 900px) {
   .plan {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 16px;
-    border: 1px solid var(--pale);
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--frost) 78%, var(--white));
   }
 }

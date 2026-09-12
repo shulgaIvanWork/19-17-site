@@ -200,7 +200,6 @@ export function heroDockProgress(shape: HeroShape) {
 /** Поза за краем экрана: 1 — снизу, -1 — сверху. */
 export function heroApproachProgress(shape: HeroShape, fromDir: -1 | 1) {
   if (shape === 'pages' || shape === 'crm' || shape === 'support') return 0;
-  if (shape === 'store') return fromDir > 0 ? 0 : 1;
   return fromDir > 0 ? 0 : 1;
 }
 

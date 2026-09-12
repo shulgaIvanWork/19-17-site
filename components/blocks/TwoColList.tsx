@@ -8,7 +8,7 @@ export function TwoColList({ rows, caption }: { rows: TwoColRow[]; caption: stri
   return (
     <dl className={`${styles.list} rail`} aria-label={caption}>
       {rows.map((row) => (
-        <div className={['tworow', styles.row].join(' ')} key={row.k}>
+        <div className={['tworow', 'railcard'].join(' ')} key={row.k}>
           <dt className={styles.key}>{row.k}</dt>
           <dd className="body" style={{ margin: 0 }}>
             {row.v}

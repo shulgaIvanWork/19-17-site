@@ -1,10 +1,14 @@
-.table :global(.divrow:not(.divrow-head)) {
-  border-top-width: 1.5px;
-  border-top-color: var(--pale);
-}
+/* Линейки между строками нужны только широкой таблице: на узком экране
+   строка - карточка ленты со своей рамкой. */
+@media (min-width: 901px) {
+  .table :global(.divrow:not(.divrow-head)) {
+    border-top-width: 1.5px;
+    border-top-color: var(--pale);
+  }
 
-.table :global(.divrow-head) {
-  padding-bottom: 20px;
+  .table :global(.divrow-head) {
+    padding-bottom: 20px;
+  }
 }
 
 .header {
@@ -35,13 +39,6 @@
 @media (max-width: 900px) {
   .head {
     display: none;
-  }
-
-  .table .row {
-    padding: 16px;
-    border: 1px solid var(--pale);
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--frost) 78%, var(--white));
   }
 
   .table .key {

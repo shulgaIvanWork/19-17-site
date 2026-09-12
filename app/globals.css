@@ -372,6 +372,18 @@ html[data-theme='dark'] .navbtn-active:hover {
   .rail-one > * { flex-basis: calc((100vw - 2 * var(--gut)) / 1.16); }
 }
 
+/* Карточка ленты: одна рамка на три блока - пары, строки сравнения и тарифы.
+   Раньше эти четыре свойства были скопированы в три модуля. Блок идет после
+   .tworow и .divrow: специфичность одинаковая, побеждает последнее правило. */
+@media (max-width: 900px) {
+  .railcard {
+    padding: 16px;
+    border: 1px solid var(--pale);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--frost) 78%, var(--white));
+  }
+}
+
 /* ---- Products hover panel ------------------------------------------------
    The 10px offset below the trigger is transparent padding INSIDE the panel,
    not a margin: a real gap leaves a dead strip that closes the menu before the

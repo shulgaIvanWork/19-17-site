@@ -27,7 +27,7 @@ export function CompareTable({ headers, rows, headerStyle = 'label', caption }: 
         ))}
       </div>
       {rows.map((row) => (
-        <div className={['divrow', styles.row].join(' ')} role="row" key={row[0]}>
+        <div className={['divrow', 'railcard', styles.row].join(' ')} role="row" key={row[0]}>
           <div role="rowheader" className={styles.key}>
             {row[0]}
           </div>

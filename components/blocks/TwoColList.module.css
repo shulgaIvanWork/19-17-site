@@ -10,16 +10,10 @@
   color: var(--carbon);
 }
 
-/* Узкий экран: строка становится карточкой ленты. Селектор из двух классов
-   перебивает .tworow из globals.css независимо от порядка подключения файлов. */
+/* Узкий экран: строка едет в ленте карточкой (рамку дает общий класс railcard
+   из globals.css), заголовок пары становится крупнее и отделяется линейкой.
+   Селектор из двух классов перебивает .tworow независимо от порядка файлов. */
 @media (max-width: 900px) {
-  .list .row {
-    padding: 16px;
-    border: 1px solid var(--pale);
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--frost) 78%, var(--white));
-  }
-
   .list .key {
     display: flex;
     align-items: flex-end;

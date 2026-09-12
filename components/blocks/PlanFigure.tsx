@@ -13,7 +13,7 @@ type Props = {
 
 export function PlanFigure({ figure, unit, name, body, interest }: Props) {
   return (
-    <div className={styles.plan}>
+    <div className={['railcard', styles.plan].join(' ')}>
       <div className="figure">{figure}</div>
       <div className="label" style={{ marginTop: 4 }}>
         {unit}

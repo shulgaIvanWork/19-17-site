@@ -116,12 +116,10 @@
 .frameB { transform: translate(18px, 12px) scale(0.88); opacity: 0.42; }
 
 .shield,
-.wrench,
 .lock,
 .bag,
 .doc,
 .chat,
-.ticket,
 .block,
 .goods {
   transform-box: fill-box;
@@ -130,7 +128,6 @@
 
 .bag { transform-origin: center 30%; }
 .lock { transform-origin: center 18%; }
-.wrench { transform-origin: 300px 68px; }
 .shield { transform-origin: center 72%; }
 
 .ring {
@@ -183,9 +180,6 @@
   :global([data-mark-live]) .cart5 { animation-delay: 8s; }
   :global([data-mark-live]) .shield { animation: shieldPulse 3.6s ease-in-out infinite; }
   :global([data-mark-live]) .rideEcg { animation: rideEcg 1.6s linear infinite; }
-  :global([data-mark-live]) .wrench { animation: wrench 3.2s ease-in-out infinite; }
-  :global([data-mark-live]) .ticket { animation: breathe 4.2s ease-in-out infinite; }
-  :global([data-mark-live]) .tick { animation: tickPop 2.8s ease-in-out infinite; }
   :global([data-mark-live]) .flow {
     stroke-dasharray: 8 12;
     animation: dash 1.8s linear infinite;
@@ -284,18 +278,6 @@
   100% { transform: translate(250px, 118px); opacity: 0; }
 }
 
-@keyframes wrench {
-  0%, 100% { transform: rotate(0deg); }
-  40% { transform: rotate(-18deg); }
-  55% { transform: rotate(8deg); }
-}
-
-@keyframes tickPop {
-  0%, 100% { opacity: 1; }
-  45% { opacity: 0.2; }
-  60% { opacity: 1; }
-}
-
 @keyframes dash {
   to { stroke-dashoffset: -100; }
 }
@@ -380,7 +362,7 @@
   .block,
   .frameA, .frameB,
   .goods, .bag, .cart0, .cart1, .cart2, .cart3, .cart4, .cart5,
-  .shield, .rideEcg, .wrench, .ticket, .tick,
+  .shield, .rideEcg,
   .flow, .rideEast, .rideWest, .rideMail,
   .ring, .wave, .lock,
   .sat0, .sat1, .sat2, .sat3, .sat4, .sat5, .sat6,
