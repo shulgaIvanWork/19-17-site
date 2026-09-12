@@ -11,6 +11,12 @@ export type LiveBuffers = {
 const EXIT_X = 1.08;
 const EXIT_Y = 0.9;
 
+const TAU = Math.PI * 2;
+/** Постоянное вращение модели update: радиан на тик героя (16.67 мс), полный
+ *  оборот за 14 с. Угол берется от часов по модулю 2pi, поэтому скачка между
+ *  оборотами нет. */
+const UPDATE_SPIN = TAU / 840;
+
 function rotateXY(x: number, y: number, cx: number, cy: number, angle: number): [number, number] {
   const dx = x - cx;
   const dy = y - cy;
@@ -76,7 +82,8 @@ function flyOff(x: number, y: number, p: number): [number, number] {
   return [x + p * EXIT_X, y + p * EXIT_Y];
 }
 
-/** Scroll 0-1 drives a per-shape motion. Globe is unchanged. */
+/** Scroll 0-1 drives a per-shape motion. Globe is unchanged.
+ *  clock - время анимации героя в тиках (16.67 мс), для движения, не зависящего от прокрутки. */
 export function applyHeroScroll(
   shape: HeroShape,
   points: Point[],
@@ -85,6 +92,7 @@ export function applyHeroScroll(
   p: number,
   live: LiveBuffers,
   basis: ScrollBasis,
+  clock = 0,
 ) {
   const n = points.length;
   live.hide.fill(0);
@@ -99,6 +107,7 @@ export function applyHeroScroll(
 
   const t = ease(Math.min(1, Math.max(0, p)));
   const { centers, mid } = basis;
+  const spin = shape === 'update' ? (clock * UPDATE_SPIN) % TAU : 0;
 
   for (let i = 0; i < n; i++) {
     let [x, y, z] = points[i];
@@ -118,9 +127,10 @@ export function applyHeroScroll(
         y = ny;
       }
     } else if (shape === 'update') {
+      // Кивок от прокрутки (шестеренка и стрелки навстречу) поверх постоянного вращения.
       const c = centers.get(0) ?? mid;
-      const ang = part === 0 ? t * Math.PI * 0.7 : -t * Math.PI * 0.7;
-      const [nx, ny] = rotateXY(x, y, c[0], c[1], ang);
+      const nod = part === 0 ? t * Math.PI * 0.7 : -t * Math.PI * 0.7;
+      const [nx, ny] = rotateXY(x, y, c[0], c[1], nod + spin);
       x = nx;
       y = ny;
     } else if (shape === 'support') {
@@ -200,6 +210,10 @@ export function heroDockProgress(shape: HeroShape) {
 /** Поза за краем экрана: 1 — снизу, -1 — сверху. */
 export function heroApproachProgress(shape: HeroShape, fromDir: -1 | 1) {
   if (shape === 'pages' || shape === 'crm' || shape === 'support') return 0;
+  // Update кивает при прыжке с обеих сторон. По общему правилу снизу поза
+  // совпадала с позой посадки (0 и 0), и при прыжке рельсом сверху вниз
+  // модель стояла на месте, а снизу вверх кивала (1 -> 0).
+  if (shape === 'update') return 1;
   return fromDir > 0 ? 0 : 1;
 }
 

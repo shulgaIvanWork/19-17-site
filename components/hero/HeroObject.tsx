@@ -249,7 +249,7 @@ function startHero(
 
   const draw = (drawYaw: number, drawPitch: number) => {
     if (!w || !h) return;
-    applyHeroScroll(shape, points, parts, along, scrollShown, live, basis);
+    applyHeroScroll(shape, points, parts, along, scrollShown, live, basis, tick);
     const focal = 2.6;
     const camZ = 3.4;
     const cx = w / 2;
@@ -584,9 +584,11 @@ function startHero(
       scrollP = heroScrollProgress(surface, shape);
       scrollShown = follow(scrollShown, scrollP, step, 240);
     }
+    // На телефоне неподвижную модель не перерисовываем. Update вращается всегда.
     if (
       letters &&
       mobile &&
+      shape !== 'update' &&
       !jumpTween &&
       !dragging &&
       Math.abs(yaw - destYaw) < 0.004 &&
