@@ -264,9 +264,11 @@ export function jumpHash(
 }
 
 /** Кадров подряд без сдвига цели, после которых посадка на якорь закончена. */
-const HASH_STABLE_FRAMES = 3;
-/** Предел кадров на посадку, около секунды. */
-const HASH_MAX_FRAMES = 60;
+const HASH_STABLE_FRAMES = 10;
+/** Предел кадров на посадку, около 2.5 с. */
+const HASH_MAX_FRAMES = 150;
+/** Действия посетителя, после которых посадка на якорь уступает ему прокрутку. */
+const USER_INPUTS = ['touchstart', 'wheel', 'keydown', 'pointerdown'] as const;
 
 /** Прокрутка к якорю из адреса. Возвращает функцию отмены.
  *
@@ -276,25 +278,34 @@ const HASH_MAX_FRAMES = 60;
  *  С футера главной на /websites#multipage промах был 192px (390px, 2026-09-13).
  *  Место считается той же yOf, что и у прыжков по рельсу.
  *
+ *  Посадка уступает только действию посетителя (USER_INPUTS), а не любому
+ *  сдвигу прокрутки. При полной загрузке страницы с якорем браузер и Next сами
+ *  прокручивают к нему плавно, по раскладке до отрисовки разделов, и уводили
+ *  страницу на 1641px дальше раздела уже после нашей посадки; сравнение
+ *  позиции принимало это за прокрутку посетителя и останавливало посадку.
+ *  Мгновенная прокрутка на каждом кадре обрывает чужую плавную.
+ *
  *  Если раздела еще нет в DOM, цикл ждет его на следующих кадрах. После
- *  загрузки шрифтов посадка повторяется: подмена шрифта сдвигает блоки. И цикл,
- *  и повтор останавливаются, если посетитель за это время прокрутил сам, иначе
- *  его выдернуло бы обратно. */
+ *  загрузки шрифтов посадка повторяется: подмена шрифта сдвигает блоки. */
 export function scrollToLocationHash(): () => void {
   if (menuScroll) return () => {};
 
   let cancelled = false;
+  let userActed = false;
   let frame: number | null = null;
   let frames = 0;
   let stable = 0;
-  let placed = -1;
+
+  const onInput = () => {
+    userActed = true;
+  };
+  for (const type of USER_INPUTS) window.addEventListener(type, onInput, { capture: true, passive: true });
 
   const settle = () => {
     frame = null;
-    if (cancelled) return;
+    if (cancelled || userActed) return;
     const id = window.location.hash.replace(/^#/, '');
     if (!id) return;
-    if (placed >= 0 && Math.abs(window.scrollY - placed) > 2) return;
     const node = document.getElementById(id);
     if (node) {
       const target = yOf(node);
@@ -304,7 +315,6 @@ export function scrollToLocationHash(): () => void {
         stable = 0;
         window.scrollTo({ top: target, behavior: 'instant' });
       }
-      placed = window.scrollY;
       if (stable >= HASH_STABLE_FRAMES) return;
     }
     frames += 1;
@@ -313,8 +323,7 @@ export function scrollToLocationHash(): () => void {
 
   settle();
   document.fonts?.ready.then(() => {
-    if (cancelled || frame !== null) return;
-    if (placed >= 0 && Math.abs(window.scrollY - placed) > 2) return;
+    if (cancelled || userActed || frame !== null) return;
     frames = 0;
     stable = 0;
     settle();
@@ -322,6 +331,7 @@ export function scrollToLocationHash(): () => void {
 
   return () => {
     cancelled = true;
+    for (const type of USER_INPUTS) window.removeEventListener(type, onInput, { capture: true });
     if (frame !== null) window.cancelAnimationFrame(frame);
   };
 }
