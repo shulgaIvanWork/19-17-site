@@ -52,7 +52,7 @@
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(
-    420px circle at var(--mx, 50%) var(--my, 30%),
+    260px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.5),
     rgba(255, 255, 255, 0) 68%
   );
@@ -64,7 +64,7 @@
    края, иначе на темном фоне виден край круга. */
 :global(html[data-theme='dark']) .hero::after {
   background: radial-gradient(
-    480px circle at var(--mx, 50%) var(--my, 30%),
+    300px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.06) 0%,
     rgba(255, 255, 255, 0.035) 30%,
     rgba(255, 255, 255, 0.012) 62%,

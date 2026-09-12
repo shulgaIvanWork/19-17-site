@@ -56,6 +56,9 @@ export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
     };
 
     const onMove = (event: PointerEvent) => {
+      // Подсветка идет только за мышью. От пальца pointermove тоже приходит, и на
+      // телефоне пятно оставалось там, где коснулись экрана.
+      if (event.pointerType !== 'mouse') return;
       px = event.clientX;
       py = event.clientY;
       if (frame === null) frame = requestAnimationFrame(paint);

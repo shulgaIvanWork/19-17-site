@@ -470,7 +470,7 @@ html[data-theme='dark'] .navbtn-active:hover {
   pointer-events: none;
   border-radius: inherit;
   background: radial-gradient(
-    420px circle at var(--mx, 50%) var(--my, 30%),
+    260px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.5),
     rgba(255, 255, 255, 0) 68%
   );
@@ -489,7 +489,7 @@ html[data-theme='dark'] .navbtn-active:hover {
 
 [data-cursor-glow='scene']::after {
   background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 30%),
+    140px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.08),
     rgba(255, 255, 255, 0) 72%
   );
@@ -497,7 +497,7 @@ html[data-theme='dark'] .navbtn-active:hover {
 
 [data-cursor-glow='soft']::after {
   background: radial-gradient(
-    180px circle at var(--mx, 50%) var(--my, 30%),
+    120px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.16),
     rgba(255, 255, 255, 0) 72%
   );
@@ -507,7 +507,7 @@ html[data-theme='dark'] .navbtn-active:hover {
    яркость ниже, а затухание идет по нескольким точкам до самого края. */
 html[data-theme='dark'] [data-cursor-glow]::after {
   background: radial-gradient(
-    360px circle at var(--mx, 50%) var(--my, 30%),
+    220px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.07) 0%,
     rgba(255, 255, 255, 0.04) 30%,
     rgba(255, 255, 255, 0.015) 62%,
@@ -517,7 +517,7 @@ html[data-theme='dark'] [data-cursor-glow]::after {
 
 html[data-theme='dark'] [data-cursor-glow='scene']::after {
   background: radial-gradient(
-    260px circle at var(--mx, 50%) var(--my, 30%),
+    160px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.035) 0%,
     rgba(255, 255, 255, 0.02) 30%,
     rgba(255, 255, 255, 0.007) 62%,
@@ -527,7 +527,7 @@ html[data-theme='dark'] [data-cursor-glow='scene']::after {
 
 html[data-theme='dark'] [data-cursor-glow='soft']::after {
   background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 30%),
+    140px circle at var(--mx, 50%) var(--my, 30%),
     rgba(255, 255, 255, 0.05) 0%,
     rgba(255, 255, 255, 0.028) 30%,
     rgba(255, 255, 255, 0.01) 62%,
