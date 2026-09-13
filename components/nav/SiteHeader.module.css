@@ -9,13 +9,6 @@
   transition: background-color 0.55s ease;
 }
 
-.header[data-menu-open] {
-  position: fixed;
-  left: 0;
-  right: 0;
-  width: 100%;
-}
-
 /* Стекло на дочернем слое: iOS 26 семплит sticky-элемент и не должен
    видеть backdrop-filter на нём самом, иначе Dynamic Island становится плотным. */
 .header::before {
@@ -145,21 +138,6 @@
   .links { display: none; }
   .burger { display: inline-flex; }
   .deskCta { display: none; }
-}
-
-/* Узкий экран: шапка уезжает вверх при прокрутке вниз и возвращается при
-   прокрутке вверх. Атрибут data-scroll-dir на <html> ставит SiteHeader.tsx,
-   по нему же уезжает нижняя полоса разделов (HubPager.module.css). */
-@media (max-width: 900px) {
-  .header {
-    transition:
-      background-color 0.55s ease,
-      transform 0.3s cubic-bezier(0.22, 1, 0.32, 1);
-  }
-
-  :global(html[data-scroll-dir='down']) .header {
-    transform: translateY(-100%);
-  }
 }
 
 @media (max-width: 768px) {

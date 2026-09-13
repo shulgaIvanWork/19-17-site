@@ -26,8 +26,10 @@ import { interestFromLocation } from '@/components/hub/hubLinks';
 import styles from './SiteHeader.module.css';
 
 const MENU_MS = 380;
-/** Сдвиг за кадр, после которого шапка прячется или возвращается. */
-const HEADER_STEP_PX = 2;
+/** Ход в одну сторону, после которого нижняя полоса прячется или возвращается.
+ *  При пороге в 2 px за кадр полоса дергалась от медленного пальца и смены
+ *  направления на месте. */
+const DIR_PX = 24;
 /** Сколько после касания, колеса или клавиши прокрутка считается делом посетителя:
  *  на телефоне страница еще катится по инерции после того, как палец убран. */
 const USER_SCROLL_MS = 1500;
@@ -73,21 +75,24 @@ export function SiteHeader() {
     return () => window.clearTimeout(timer);
   }, [menuOpen, menuMounted]);
 
-  // Узкий экран: при прокрутке вниз уезжает шапка, при прокрутке вверх шапка
-  // возвращается, а уезжает нижняя полоса разделов (HubPager). Направление
-  // пишется атрибутом data-scroll-dir на <html>, его читают стили обоих
-  // компонентов. Атрибут ставится прямо на DOM, без состояния React: решение
-  // принимается на каждом кадре прокрутки. Учитывается только прокрутка
-  // посетителя. Прыжок по разделам, посадка на якорь и переход на страницу
-  // считают место с учетом высоты шапки (hubScroll, yOf), и спрятанная шапка
-  // оставила бы над разделом пустую полосу. У верха страницы, при открытом
-  // меню и в начале прыжка атрибут снимается, видны шапка и полоса.
+  // Узкий экран: при прокрутке вверх уезжает нижняя полоса разделов (HubPager),
+  // при прокрутке вниз возвращается. Шапка на месте всегда. Направление
+  // пишется атрибутом data-scroll-dir на <html>, его читают стили полосы.
+  // Атрибут ставится прямо на DOM, без состояния React: решение принимается на
+  // каждом кадре прокрутки. Учитывается только прокрутка посетителя, и только
+  // ход не меньше DIR_PX в одну сторону. Положение зажато в границы страницы:
+  // отскок на iOS у низа страницы давал ход вверх и прятал полосу. У верха
+  // страницы, при открытом меню и в начале прыжка по разделам атрибут
+  // снимается, полоса видна.
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
     const root = document.documentElement;
     const narrow = window.matchMedia('(max-width: 900px)');
-    let lastY = window.scrollY;
+    const clampY = () =>
+      Math.min(Math.max(window.scrollY, 0), Math.max(0, root.scrollHeight - window.innerHeight));
+    let lastY = clampY();
+    let travel = 0;
     let userAt = -Infinity;
     let frame: number | null = null;
 
@@ -97,16 +102,22 @@ export function SiteHeader() {
     };
     const update = () => {
       frame = null;
-      const y = window.scrollY;
+      const y = clampY();
       const dy = y - lastY;
       lastY = y;
       if (!narrow.matches || y <= header.offsetHeight || header.hasAttribute('data-menu-open') || isHubJumping()) {
+        travel = 0;
         setDir(null);
         return;
       }
-      if (performance.now() - userAt > USER_SCROLL_MS) return;
-      if (dy > HEADER_STEP_PX) setDir('down');
-      else if (dy < -HEADER_STEP_PX) setDir('up');
+      if (performance.now() - userAt > USER_SCROLL_MS) {
+        travel = 0;
+        return;
+      }
+      if (dy === 0) return;
+      travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy;
+      if (travel >= DIR_PX) setDir('down');
+      else if (travel <= -DIR_PX) setDir('up');
     };
     const onScroll = () => {
       if (frame === null) frame = window.requestAnimationFrame(update);
@@ -130,17 +141,17 @@ export function SiteHeader() {
     };
   }, []);
 
+  // Прокрутку при открытом меню держит только <html>. С overflow: hidden еще и
+  // на <body> тот становился контейнером прокрутки, sticky-шапка уезжала вместе
+  // со страницей, и ее переводили в position: fixed. Шапка выпадала из потока,
+  // страница прыгала вверх на ее высоту (правка заказчика 2026-09-13).
   useEffect(() => {
     if (!menuMounted) return;
     const html = document.documentElement;
-    const body = document.body;
     const prevHtml = html.style.overflow;
-    const prevBody = body.style.overflow;
     html.style.overflow = 'hidden';
-    body.style.overflow = 'hidden';
     return () => {
       html.style.overflow = prevHtml;
-      body.style.overflow = prevBody;
     };
   }, [menuMounted]);
 

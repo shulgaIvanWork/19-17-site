@@ -11,6 +11,10 @@ import styles from './HubPager.module.css';
 const CLICK_PX = 10;
 /** Короткий свайп не листает: его легко сделать случайно при прокрутке. */
 const SWIPE_PX = 48;
+/** Бросок: скорость пальца перед отпусканием продлевает ход на столько мс. */
+const FLICK_MS = 180;
+/** Палец остановился дольше этого перед отпусканием - броска нет. */
+const FLICK_IDLE_MS = 80;
 
 /** Нижняя полоса разделов на узком экране: стрелки, свайп и выбор раздела.
  *  Просмотр и положение страницы разделены намеренно: browse - что человек
@@ -18,7 +22,15 @@ const SWIPE_PX = 48;
  *  полоса жила в одном файле с рельсом точек, общего у них только список. */
 export function HubPager({ pathname, hash, stops }: { pathname: string; hash: string; stops: NavItem[] }) {
   const [browse, setBrowse] = useState(0);
-  const swipe = useRef<{ pointerId: number; downX: number; moved: boolean } | null>(null);
+  const swipe = useRef<{
+    pointerId: number;
+    downX: number;
+    moved: boolean;
+    lastX: number;
+    lastT: number;
+    /** Скорость пальца, px/мс, сглаженная по последним движениям. */
+    speed: number;
+  } | null>(null);
   const unbind = useRef<(() => void) | null>(null);
   const swallowClick = useRef(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -59,7 +71,14 @@ export function HubPager({ pathname, hash, stops }: { pathname: string; hash: st
    *  сборке 12.09.2026). Свайп ловят слушатели окна, им захват не нужен. */
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (event.button !== 0) return;
-    swipe.current = { pointerId: event.pointerId, downX: event.clientX, moved: false };
+    swipe.current = {
+      pointerId: event.pointerId,
+      downX: event.clientX,
+      moved: false,
+      lastX: event.clientX,
+      lastT: event.timeStamp,
+      speed: 0,
+    };
     const track = trackRef.current;
     if (track) {
       track.dataset.dragging = 'true';
@@ -70,6 +89,12 @@ export function HubPager({ pathname, hash, stops }: { pathname: string; hash: st
       if (!state || next.pointerId !== state.pointerId) return;
       const dx = next.clientX - state.downX;
       if (Math.abs(dx) >= CLICK_PX) state.moved = true;
+      const dt = next.timeStamp - state.lastT;
+      if (dt > 0) {
+        state.speed = 0.6 * ((next.clientX - state.lastX) / dt) + 0.4 * state.speed;
+        state.lastX = next.clientX;
+        state.lastT = next.timeStamp;
+      }
       trackRef.current?.style.setProperty('--drag', `${dx}px`);
     };
 
@@ -93,7 +118,15 @@ export function HubPager({ pathname, hash, stops }: { pathname: string; hash: st
       }, 0);
       const dx = next.clientX - state.downX;
       if (Math.abs(dx) < SWIPE_PX) return;
-      browseTo(browse + (dx < 0 ? 1 : -1));
+      // Листаем на столько разделов, сколько чипов протянули пальцем, плюс
+      // бросок. Раньше любой свайп сдвигал ровно на один раздел.
+      const chipPx = (trackRef.current?.firstElementChild as HTMLElement | null)?.offsetWidth || 1;
+      const speed = next.timeStamp - state.lastT > FLICK_IDLE_MS ? 0 : state.speed;
+      const dir = dx < 0 ? 1 : -1;
+      // Не меньше одного раздела и только в сторону свайпа, даже если палец
+      // перед отпусканием дернулся назад.
+      const steps = Math.max(1, dir * Math.round(-(dx + speed * FLICK_MS) / chipPx));
+      browseTo(browse + dir * steps);
     };
 
     unbind.current?.();
