@@ -6,7 +6,10 @@ import styles from './ThemeToggle.module.css';
 function Moon() {
   return (
     <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <path className={styles.fill} d="M7.49 4.8A8.5 8.5 0 1 0 19.2 16.51 8.3 8.3 0 0 1 7.49 4.8Z" />
+      <path
+        className={styles.line}
+        d="M8.87 5.81A7.5 7.5 0 1 0 18.19 15.13 6.6 6.6 0 0 1 8.87 5.81ZM14.2 7Q14.7 9.5 17.2 10 14.7 10.5 14.2 13 13.7 10.5 11.2 10 13.7 9.5 14.2 7ZM18.6 4.6V6.6M17.6 5.6H19.6"
+      />
     </svg>
   );
 }
