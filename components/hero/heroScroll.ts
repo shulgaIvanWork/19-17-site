@@ -12,10 +12,10 @@ const EXIT_X = 1.08;
 const EXIT_Y = 0.9;
 
 const TAU = Math.PI * 2;
-/** Постоянное вращение модели update: радиан на тик героя (16.67 мс), полный
- *  оборот за 14 с. Угол берется от часов по модулю 2pi, поэтому скачка между
- *  оборотами нет. */
-const UPDATE_SPIN = TAU / 840;
+/** Постоянное вращение стрелок модели update: радиан на тик героя (16.67 мс),
+ *  полный оборот за 18 с. Угол берется от часов по модулю 2pi, поэтому скачка
+ *  между оборотами нет. */
+const UPDATE_SPIN = TAU / 1080;
 
 function rotateXY(x: number, y: number, cx: number, cy: number, angle: number): [number, number] {
   const dx = x - cx;
@@ -127,12 +127,15 @@ export function applyHeroScroll(
         y = ny;
       }
     } else if (shape === 'update') {
-      // Кивок от прокрутки (шестеренка и стрелки навстречу) поверх постоянного вращения.
-      const c = centers.get(0) ?? mid;
-      const nod = part === 0 ? t * Math.PI * 0.7 : -t * Math.PI * 0.7;
-      const [nx, ny] = rotateXY(x, y, c[0], c[1], nod + spin);
-      x = nx;
-      y = ny;
+      // Шестеренка (part 0) стоит на месте. Стрелки поворачиваются от прокрутки
+      // и постоянно, оба раза по ходу своих наконечников: построенная в экранных
+      // координатах дуга после переворота y (heroShapes, EM) идет против часовой.
+      if (part === 1) {
+        const c = centers.get(0) ?? mid;
+        const [nx, ny] = rotateXY(x, y, c[0], c[1], -(t * Math.PI * 0.7 + spin));
+        x = nx;
+        y = ny;
+      }
     } else if (shape === 'support') {
       if (part === 1) {
         const c = centers.get(1) ?? mid;
