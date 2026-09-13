@@ -8,4 +8,10 @@
     display: grid;
     grid-template-rows: subgrid;
   }
+
+  /* Короткое название стоит по центру своей строки, а не у верха
+     (правка заказчика 2026-09-13). */
+  .plan > h3 {
+    align-self: center;
+  }
 }

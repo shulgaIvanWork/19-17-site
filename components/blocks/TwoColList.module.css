@@ -24,7 +24,7 @@
 
   .list .key {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1.5px solid var(--pale);

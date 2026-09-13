@@ -51,7 +51,7 @@
 
   .table .key {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     margin-bottom: 6px;
     padding-bottom: 10px;
     border-bottom: 1.5px solid var(--pale);
