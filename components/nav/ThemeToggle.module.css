@@ -39,8 +39,6 @@
   fill: currentColor;
 }
 
-/* Месяц контуром, а не заливкой: залитый читался жирным (правка заказчика 2026-09-13). */
-.line,
 .rays {
   fill: none;
   stroke: currentColor;
