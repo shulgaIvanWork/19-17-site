@@ -73,34 +73,40 @@ export function SiteHeader() {
     return () => window.clearTimeout(timer);
   }, [menuOpen, menuMounted]);
 
-  // Узкий экран: шапка уезжает вверх при прокрутке вниз и возвращается при
-  // прокрутке вверх. Атрибут ставится прямо на DOM, без состояния React: решение
-  // принимается на каждом кадре прокрутки. Прячется шапка только от прокрутки
+  // Узкий экран: при прокрутке вниз уезжает шапка, при прокрутке вверх шапка
+  // возвращается, а уезжает нижняя полоса разделов (HubPager). Направление
+  // пишется атрибутом data-scroll-dir на <html>, его читают стили обоих
+  // компонентов. Атрибут ставится прямо на DOM, без состояния React: решение
+  // принимается на каждом кадре прокрутки. Учитывается только прокрутка
   // посетителя. Прыжок по разделам, посадка на якорь и переход на страницу
   // считают место с учетом высоты шапки (hubScroll, yOf), и спрятанная шапка
-  // оставила бы над разделом пустую полосу. У верха страницы и при открытом
-  // меню шапка всегда на месте.
+  // оставила бы над разделом пустую полосу. У верха страницы, при открытом
+  // меню и в начале прыжка атрибут снимается, видны шапка и полоса.
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
+    const root = document.documentElement;
     const narrow = window.matchMedia('(max-width: 900px)');
     let lastY = window.scrollY;
     let userAt = -Infinity;
     let frame: number | null = null;
 
-    const setHidden = (hidden: boolean) => header.toggleAttribute('data-scroll-hidden', hidden);
+    const setDir = (dir: 'down' | 'up' | null) => {
+      if (dir) root.setAttribute('data-scroll-dir', dir);
+      else root.removeAttribute('data-scroll-dir');
+    };
     const update = () => {
       frame = null;
       const y = window.scrollY;
       const dy = y - lastY;
       lastY = y;
       if (!narrow.matches || y <= header.offsetHeight || header.hasAttribute('data-menu-open') || isHubJumping()) {
-        setHidden(false);
+        setDir(null);
         return;
       }
       if (performance.now() - userAt > USER_SCROLL_MS) return;
-      if (dy > HEADER_STEP_PX) setHidden(true);
-      else if (dy < -HEADER_STEP_PX) setHidden(false);
+      if (dy > HEADER_STEP_PX) setDir('down');
+      else if (dy < -HEADER_STEP_PX) setDir('up');
     };
     const onScroll = () => {
       if (frame === null) frame = window.requestAnimationFrame(update);
@@ -108,7 +114,7 @@ export function SiteHeader() {
     const onInput = () => {
       userAt = performance.now();
     };
-    const stopJump = onHubJumpStart(() => setHidden(false));
+    const stopJump = onHubJumpStart(() => setDir(null));
     const inputs = ['touchstart', 'touchmove', 'wheel', 'keydown'] as const;
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -116,6 +122,7 @@ export function SiteHeader() {
     narrow.addEventListener('change', onScroll);
     return () => {
       if (frame !== null) window.cancelAnimationFrame(frame);
+      setDir(null);
       stopJump();
       window.removeEventListener('scroll', onScroll);
       for (const type of inputs) window.removeEventListener(type, onInput);

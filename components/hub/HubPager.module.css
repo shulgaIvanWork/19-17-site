@@ -22,6 +22,13 @@
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.32, 1);
+  }
+
+  /* Прокрутка вверх: вернулась шапка, полоса уезжает вниз. Атрибут ставит
+     SiteHeader.tsx, при прокрутке вниз уезжает шапка, а полоса на месте. */
+  :global(html[data-scroll-dir='up']) .pager {
+    transform: translateY(100%);
   }
 
   .pager::before {
