@@ -50,17 +50,24 @@ function loadMesh(shape: HeroShape, count: number) {
 /** Общий размер моделей в героях: рамка модели вписывается в прямоугольник
  *  FIT_HEIGHT x FIT_WIDTH от холста, центр рамки - на FIT_CENTER_Y высоты.
  *  Поправки отдельных моделей - в SHAPE_FIT (scale - множитель размера,
- *  dy - сдвиг центра в долях высоты). Глобус главной сюда не входит. */
+ *  narrowScale - множитель уже 768 px вместо scale, dy - сдвиг центра в долях
+ *  высоты). Глобус главной сюда не входит. */
 const FIT_HEIGHT = 0.58;
 const FIT_WIDTH = 0.62;
 // Уже 768 px модель упирается в ширину: даем ей почти всю, как было до общего правила.
 const FIT_WIDTH_NARROW = 0.88;
 const FIT_CENTER_Y = 0.47;
-const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; dy?: number }>> = {
+const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; narrowScale?: number; dy?: number }>> = {
   // Магазин ближе к кнопкам (по просьбе заказчика, 2026-09-11).
-  store: { dy: 0.05 },
+  // На телефоне чуть меньше (правка заказчика 2026-09-14).
+  store: { dy: 0.05, narrowScale: 0.9 },
   // Курсор лендинга тоже ближе к кнопкам (по просьбе заказчика, 2026-09-11).
-  sites: { dy: 0.05 },
+  // На телефоне курсор упирался в высоту и выходил крупнее остальных (2026-09-14).
+  sites: { dy: 0.05, narrowScale: 0.8 },
+  // Рамка pages посчитана по разложенным страницам, а в покое они собраны в
+  // одну стопку втрое уже: на телефоне модель выходила мелкой (2026-09-14).
+  pages: { narrowScale: 1.5 },
+  vpn: { narrowScale: 0.85 },
 };
 
 type Props = {
@@ -259,7 +266,7 @@ function startHero(
     const scale = letters
       ? (Math.min((h * FIT_HEIGHT) / meshHeight, (w * (w < 768 ? FIT_WIDTH_NARROW : FIT_WIDTH)) / meshWidth) /
           (focal / camZ)) *
-        (fit?.scale ?? 1)
+        ((w < 768 ? fit?.narrowScale : undefined) ?? fit?.scale ?? 1)
       : Math.min(w, h) * 0.44;
     const sy = Math.sin(drawYaw);
     const cyw = Math.cos(drawYaw);

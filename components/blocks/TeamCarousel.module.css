@@ -42,8 +42,10 @@
   -webkit-user-drag: none;
 }
 
+/* На ПК четыре человека в ряд: при трех фото 4:5 занимали почти весь экран
+   (правка заказчика 2026-09-14). */
 .card {
-  flex: 0 0 calc((min(var(--max), 100vw) - 2 * var(--gut) - 2 * var(--team-gap)) / 3);
+  flex: 0 0 calc((min(var(--max), 100vw) - 2 * var(--gut) - 3 * var(--team-gap)) / 4);
   min-width: 0;
 }
 

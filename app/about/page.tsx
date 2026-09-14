@@ -5,6 +5,7 @@ import { Section } from '@/components/ui/Section';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { TeamCarousel } from '@/components/blocks/TeamCarousel';
 import { aboutHero, developers, founders, foundersBand, howWeOperate, teamBand } from '@/content/team';
+import styles from './about.module.css';
 
 export const metadata: Metadata = {
   title: 'О нас',
@@ -50,10 +51,7 @@ export default function AboutPage() {
           <p className="body" style={{ marginTop: 12, maxWidth: '46ch' }}>
             {foundersBand.body}
           </p>
-          <div
-            className="g2"
-            style={{ marginTop: 48, maxWidth: 720, gap: 'clamp(20px, 3vw, 32px)' }}
-          >
+          <div className={styles.founders}>
             {founders.map((founder) => (
               <div key={founder.image.id}>
                 <Photo slot={founder.image} ground="white" />

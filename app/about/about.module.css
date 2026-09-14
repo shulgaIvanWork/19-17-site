@@ -1,0 +1,17 @@
+/* Основатели в две колонки и на планшете. Раньше общий .g2 уже 900px
+   складывался в одну колонку шириной до 720px, и фото 4:5 вырастало почти до
+   900px в высоту (правка заказчика 2026-09-14). */
+.founders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+  max-width: 720px;
+  margin-top: 48px;
+}
+
+@media (max-width: 560px) {
+  .founders {
+    grid-template-columns: minmax(0, 360px);
+    gap: 40px;
+  }
+}
