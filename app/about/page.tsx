@@ -54,7 +54,7 @@ export default function AboutPage() {
           <div className={styles.founders}>
             {founders.map((founder) => (
               <div key={founder.image.id}>
-                <Photo slot={founder.image} ground="white" />
+                <Photo slot={founder.image} ground="white" sizes="(max-width: 560px) 92vw, 360px" />
                 <h3 className="h3" style={{ marginTop: 16 }}>
                   {founder.name}
                 </h3>

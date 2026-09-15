@@ -171,7 +171,16 @@ export function TeamCarousel({ people }: { people: Founder[] }) {
         <div ref={trackRef} className={styles.track}>
           {slides.map(({ person, copy, key }) => (
             <article key={key} className={styles.card} data-team-card aria-hidden={copy !== 1 || undefined}>
-              <Photo slot={person.image} ground="pale" />
+              {/* Фото грузятся сразу: лениво браузер запрашивал их только у самой
+                  карусели, а скрытые за краем - после нажатия стрелки
+                  (правка заказчика 2026-09-15). У трех копий ленты адрес общий,
+                  запрос на человека один. */}
+              <Photo
+                slot={person.image}
+                ground="pale"
+                sizes="(max-width: 768px) 42vw, (max-width: 1024px) 46vw, 320px"
+                eager
+              />
               <h3 className="h3" style={{ marginTop: 16 }}>
                 {person.name}
               </h3>
