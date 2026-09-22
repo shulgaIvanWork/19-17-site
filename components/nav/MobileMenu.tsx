@@ -2,22 +2,15 @@
 
 import Link from 'next/link';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
-import {
-  mainNav,
-  phoneHref,
-  phoneLabel,
-  serviceByPath,
-  serviceMenuGroups,
-  servicesHref,
-  servicesLabel,
-} from '@/content/nav';
+import { mainNav, phoneHref, phoneLabel, serviceByPath, serviceMenuGroups } from '@/content/nav';
 import styles from './MobileMenu.module.css';
 
 type Props = { pathname: string; open?: boolean; onNavigate: () => void };
 
 /** Страницы сайта на узком экране. Услуги показаны списком по группам: на
  *  телефоне выпадающая панель шапки недоступна, а услуг девять, и прятать их
- *  за одну строку «Услуги» значит спрятать половину сайта. */
+ *  за одну строку «Услуги» значит спрятать половину сайта. Отдельной строки
+ *  «Услуги» нет: она вела бы на блок главной, который тут же и расписан. */
 export function MobileMenu({ pathname, open = true, onNavigate }: Props) {
   const [home, ...company] = mainNav;
 
@@ -25,11 +18,6 @@ export function MobileMenu({ pathname, open = true, onNavigate }: Props) {
     <div className={[styles.drawer, open ? styles.open : ''].filter(Boolean).join(' ')} id="mobile-menu">
       <Row item={home} pathname={pathname} onNavigate={onNavigate} />
 
-      <Row
-        item={{ href: servicesHref, label: servicesLabel }}
-        pathname={pathname}
-        onNavigate={onNavigate}
-      />
       {serviceMenuGroups.map((group) => (
         <div key={group.title} className={styles.group}>
           <div className={styles.groupName}>{group.title}</div>

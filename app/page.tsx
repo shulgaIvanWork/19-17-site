@@ -1,4 +1,5 @@
 import { BoardScene } from '@/components/scenes/BoardScene';
+import { LegacyHashRedirect } from './LegacyHashRedirect';
 import { ButtonLink } from '@/components/ui/Button';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
@@ -10,9 +11,12 @@ import { heroes } from '@/content/site';
 export default function HomePage() {
   return (
     <>
+      <LegacyHashRedirect />
       <Hero copy={heroes.home} size="tall" object />
 
-      <Section>
+      {/* Единственный полный список услуг на сайте: вкладка «Услуги» в шапке
+          ведет сюда якорем, отдельной витрины нет. */}
+      <Section id="services">
         <div className="gcards rail rail-one">
           {paths.map((path) => (
             <ProductCard key={path.href} path={path} />

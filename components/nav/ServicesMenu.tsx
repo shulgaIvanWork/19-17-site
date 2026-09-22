@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { serviceMenuGroups, servicesHref, servicesLabel } from '@/content/nav';
+import type { MouseEvent } from 'react';
+import { isServicePath, serviceMenuGroups, servicesHref, servicesLabel } from '@/content/nav';
 import { useHoverMenu } from './useHoverMenu';
 import styles from './ServicesMenu.module.css';
 
@@ -11,13 +12,24 @@ import styles from './ServicesMenu.module.css';
  *  странице, и делить их на две вкладки по признаку «сайт или не сайт» было
  *  нечестно по отношению к VPN и локальному AI.
  *
+ *  Сама вкладка ведет на блок услуг главной. Когда главная уже открыта, Next к
+ *  якорю не прокручивает - страница не меняется, - поэтому прокрутка тут своя.
+ *
  *  Отступ 10px под кнопкой - это прозрачный padding ВНУТРИ `.menupanel`, а не
  *  margin: с margin между кнопкой и панелью остается мертвая полоса, и меню
  *  закрывается раньше, чем курсор дойдет. Открытие, задержку закрытия, Esc и
  *  потерю фокуса дает useHoverMenu; строки меню - настоящие ссылки. */
 export function ServicesMenu({ pathname }: { pathname: string }) {
   const { open, wrapProps, triggerRef } = useHoverMenu<HTMLAnchorElement>(pathname);
-  const active = pathname === servicesHref || pathname.startsWith(`${servicesHref}/`);
+  const active = isServicePath(pathname);
+
+  const goBlock = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== '/') return;
+    const block = document.getElementById('services');
+    if (!block) return;
+    event.preventDefault();
+    block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <div className={styles.wrap} {...wrapProps}>
@@ -27,6 +39,7 @@ export function ServicesMenu({ pathname }: { pathname: string }) {
         className={['navbtn', active ? 'navbtn-active' : ''].filter(Boolean).join(' ')}
         aria-expanded={open}
         aria-haspopup="true"
+        onClick={goBlock}
       >
         {servicesLabel}
       </Link>
@@ -65,11 +78,6 @@ export function ServicesMenu({ pathname }: { pathname: string }) {
               </ul>
             </div>
           ))}
-          <div className={styles.all}>
-            <Link href={servicesHref} className={['menurow', styles.row].join(' ')} tabIndex={open ? undefined : -1}>
-              <span className={styles.name}>Все услуги одной страницей</span>
-            </Link>
-          </div>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 /** Маршруты и навигация.
  *
  *  Услуги перечислены здесь ОДИН раз, списком `services`. Из него собираются
- *  панель «Услуги» в шапке, мобильное меню, подвал, витрина /services, карточки
- *  главной и предвыбор темы в форме заявки. Раньше те же девять услуг были
- *  выписаны в пяти местах отдельно, и списки разъезжались.
+ *  панель «Услуги» в шапке, мобильное меню, подвал, карточки главной и
+ *  предвыбор темы в форме заявки. Раньше те же девять услуг были выписаны в
+ *  пяти местах отдельно, и списки разъезжались.
  *
  *  Каждая услуга - своя страница /services/<slug>. До сентября 2026 они жили
  *  якорями на двух длинных страницах, /websites и /vpn-ai; разбор перехода - в
@@ -54,20 +54,29 @@ export const services: Service[] = [
   { slug: 'ai', label: 'Локальный AI', group: 'infra', interest: 'Локальный AI' },
 ];
 
-/** Витрина услуг. Сюда ведет сама вкладка в шапке. */
-export const servicesHref = '/services';
+/** Общее начало адресов услуг. */
+const servicePrefix = '/services';
+
+/** Куда ведет сама вкладка «Услуги»: на блок услуг главной. Отдельной витрины
+ *  нет - она повторяла этот блок (решение заказчика 2026-09-22). */
+export const servicesHref = '/#services';
 export const servicesLabel = 'Услуги';
 
 export function serviceHref(slug: string) {
-  return `${servicesHref}/${slug}`;
+  return `${servicePrefix}/${slug}`;
 }
 
 export const serviceBySlug = new Map(services.map((service) => [service.slug, service]));
 
 /** Услуга по адресу страницы. Нужна форме заявки и блоку «Другие услуги». */
 export function serviceByPath(pathname: string): Service | undefined {
-  const slug = pathname.startsWith(`${servicesHref}/`) ? pathname.slice(servicesHref.length + 1) : '';
+  const slug = pathname.startsWith(`${servicePrefix}/`) ? pathname.slice(servicePrefix.length + 1) : '';
   return slug ? serviceBySlug.get(slug) : undefined;
+}
+
+/** Открыта ли сейчас страница услуги. Подсвечивает вкладку в шапке. */
+export function isServicePath(pathname: string) {
+  return pathname.startsWith(`${servicePrefix}/`);
 }
 
 function itemsOf(group: ServiceGroupId): NavItem[] {
@@ -112,7 +121,7 @@ export const footerGroups: { title: string; items: NavItem[] }[] = [
 ];
 
 function isInfra(href: string) {
-  const slug = href.slice(servicesHref.length + 1);
+  const slug = href.slice(servicePrefix.length + 1);
   return serviceBySlug.get(slug)?.group === 'infra';
 }
 

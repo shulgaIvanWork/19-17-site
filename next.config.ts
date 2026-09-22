@@ -25,12 +25,17 @@ const nextConfig: NextConfig = {
    *
    *  До сентября 2026 девять услуг жили якорями на /websites и /vpn-ai. Якорь
    *  браузер серверу не отправляет, поэтому /websites#crm сюда приходит как
-   *  /websites: редирект ведет на витрину, а якорь браузер переносит сам, и
-   *  дальше его разбирает LegacyHashRedirect на самой витрине. */
+   *  /websites. У этих двух адресов назначение БЕЗ якоря намеренно: браузер
+   *  переносит исходный якорь сам, и на главной его разбирает
+   *  LegacyHashRedirect. У остальных якоря не бывает, они ведут сразу на блок
+   *  услуг главной. */
   async redirects() {
     return [
-      { source: '/websites', destination: '/services', permanent: false },
-      { source: '/vpn-ai', destination: '/services', permanent: false },
+      // Витрина /services существовала один день, 2026-09-22. Адрес мог
+      // разойтись по закладкам, поэтому ведет на блок услуг главной.
+      { source: '/services', destination: '/#services', permanent: false },
+      { source: '/websites', destination: '/', permanent: false },
+      { source: '/vpn-ai', destination: '/', permanent: false },
       { source: '/vpn', destination: '/services/vpn', permanent: false },
       { source: '/ai', destination: '/services/ai', permanent: false },
       { source: '/support', destination: '/services/support', permanent: false },
@@ -38,8 +43,8 @@ const nextConfig: NextConfig = {
       { source: '/online-store', destination: '/services/marketplace', permanent: false },
       { source: '/integrations/crm', destination: '/services/crm', permanent: false },
       { source: '/integrations/1c', destination: '/services/onec', permanent: false },
-      { source: '/integrations', destination: '/services', permanent: false },
-      { source: '/maintenance', destination: '/services', permanent: false },
+      { source: '/integrations', destination: '/#services', permanent: false },
+      { source: '/maintenance', destination: '/#services', permanent: false },
     ];
   },
 };
