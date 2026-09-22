@@ -1,50 +1,29 @@
 import type { Metadata } from 'next';
-import { ScenePanel } from '@/components/scenes/BandArt';
-import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
+import { ClaimRow } from '@/components/blocks/ClaimRow';
 import { Hero } from '@/components/hero/Hero';
-import { NumberedClaim } from '@/components/blocks/NumberedClaim';
-import { Section } from '@/components/ui/Section';
-import { TwoColList } from '@/components/blocks/TwoColList';
+import { SceneBand } from '@/components/blocks/SceneBand';
 import { redesignAreas, redesignBands, redesignFeatures } from '@/content/products';
+import { interestOf } from '@/content/services';
 import { footnotes, heroes, serviceMeta } from '@/content/site';
 
-export const metadata: Metadata = serviceMeta.redesign;
+const slug = 'redesign';
+export const metadata: Metadata = serviceMeta[slug];
 
 export default function RedesignPage() {
   return (
     <>
-      <Hero copy={heroes.redesign} object="redesign" />
-
-      <Section>
-        <div className="g4">
-          {redesignFeatures.map((feature) => (
-            <NumberedClaim key={feature.num} claim={feature} />
-          ))}
-        </div>
-      </Section>
-
-      <Section surface="ash">
-        <div className="g2" style={{ gap: 'clamp(32px, 5vw, 88px)', alignItems: 'start' }}>
-          <ScenePanel kind="auditSheet" />
-          <div>
-            <h2 className="h2" style={{ maxWidth: '18ch' }}>
-              {redesignBands.audit.title}
-            </h2>
-            <p className="body" style={{ marginTop: 16, maxWidth: '42ch' }}>
-              {redesignBands.audit.body}
-            </p>
-            <div style={{ marginTop: 24 }}>
-              <ContactSalesButton label={redesignBands.audit.cta} interest="Обновление сайта" />
-            </div>
-            <div style={{ marginTop: 40 }}>
-              <TwoColList rows={redesignAreas} caption="Что проверяем во время аудита" />
-            </div>
-          </div>
-        </div>
-        <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.redesign}
-        </p>
-      </Section>
+      <Hero copy={heroes[slug]} object={slug} />
+      <ClaimRow claims={redesignFeatures} />
+      <SceneBand
+        scene="auditSheet"
+        title={redesignBands.audit.title}
+        body={redesignBands.audit.body}
+        cta={redesignBands.audit.cta}
+        interest={interestOf(slug)}
+        rows={redesignAreas}
+        caption="Что проверяем во время аудита"
+        note={footnotes[slug]}
+      />
     </>
   );
 }

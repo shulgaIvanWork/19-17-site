@@ -84,6 +84,15 @@ export const serviceBySlug = new Map<ServiceSlug, Service>(
   services.map((service) => [service.slug, service]),
 );
 
+/** Тема заявки для страницы услуги. Страница называет свой slug один раз, а
+ *  тему берет отсюда: написанная руками, она может оказаться темой соседней
+ *  услуги, и компилятор такую подмену не заметит. */
+export function interestOf(slug: ServiceSlug): Interest {
+  const service = serviceBySlug.get(slug);
+  if (!service) throw new Error(`Услуга ${slug} не найдена в реестре`);
+  return service.interest;
+}
+
 /** Проверка строки из адреса или якоря: это slug услуги или что-то чужое. */
 export function isServiceSlug(raw: string): raw is ServiceSlug {
   return serviceBySlug.has(raw as ServiceSlug);

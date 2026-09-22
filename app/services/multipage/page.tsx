@@ -1,50 +1,29 @@
 import type { Metadata } from 'next';
-import { ScenePanel } from '@/components/scenes/BandArt';
-import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
+import { ClaimRow } from '@/components/blocks/ClaimRow';
 import { Hero } from '@/components/hero/Hero';
-import { NumberedClaim } from '@/components/blocks/NumberedClaim';
-import { Section } from '@/components/ui/Section';
-import { TwoColList } from '@/components/blocks/TwoColList';
+import { SceneBand } from '@/components/blocks/SceneBand';
 import { pagesAreas, pagesBand, pagesFeatures } from '@/content/products';
+import { interestOf } from '@/content/services';
 import { footnotes, heroes, serviceMeta } from '@/content/site';
 
-export const metadata: Metadata = serviceMeta.multipage;
+const slug = 'multipage';
+export const metadata: Metadata = serviceMeta[slug];
 
 export default function MultipagePage() {
   return (
     <>
-      <Hero copy={heroes.multipage} object="multipage" />
-
-      <Section>
-        <div className="g4">
-          {pagesFeatures.map((feature) => (
-            <NumberedClaim key={feature.num} claim={feature} />
-          ))}
-        </div>
-      </Section>
-
-      <Section surface="ash">
-        <div className="g2" style={{ gap: 'clamp(32px, 5vw, 88px)', alignItems: 'start' }}>
-          <ScenePanel kind="pagesSite" />
-          <div>
-            <h2 className="h2" style={{ maxWidth: '18ch' }}>
-              {pagesBand.title}
-            </h2>
-            <p className="body" style={{ marginTop: 16, maxWidth: '42ch' }}>
-              {pagesBand.body}
-            </p>
-            <div style={{ marginTop: 24 }}>
-              <ContactSalesButton label={pagesBand.cta} interest="Создание сайта" />
-            </div>
-            <div style={{ marginTop: 40 }}>
-              <TwoColList rows={pagesAreas} caption="Состав многостраничного сайта" />
-            </div>
-          </div>
-        </div>
-        <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.multipage}
-        </p>
-      </Section>
+      <Hero copy={heroes[slug]} object={slug} />
+      <ClaimRow claims={pagesFeatures} />
+      <SceneBand
+        scene="pagesSite"
+        title={pagesBand.title}
+        body={pagesBand.body}
+        cta={pagesBand.cta}
+        interest={interestOf(slug)}
+        rows={pagesAreas}
+        caption="Состав многостраничного сайта"
+        note={footnotes[slug]}
+      />
     </>
   );
 }
