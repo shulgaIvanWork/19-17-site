@@ -8,7 +8,6 @@ import { Manrope, Unbounded } from 'next/font/google';
 import { ClientDecor } from '@/components/site/ClientDecor';
 import { ContactProvider } from '@/components/contact/ContactContext';
 import { Footer } from '@/components/site/Footer';
-import { ScrollToHash } from '@/components/nav/ScrollToHash';
 import { SiteHeader } from '@/components/nav/SiteHeader';
 import { settings } from '@/content/settings';
 
@@ -80,7 +79,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body>
-        <ScrollToHash />
         <ClientDecor cursorHighlight={settings.cursorHighlight} />
         <ContactProvider>
           <SiteHeader />

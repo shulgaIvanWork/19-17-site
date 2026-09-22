@@ -13,7 +13,6 @@ const ScrollLinkedMarks = dynamic(
   { ssr: false },
 );
 const ScrollToTop = dynamic(() => import('./ScrollToTop').then((mod) => mod.ScrollToTop), { ssr: false });
-const HubNav = dynamic(() => import('@/components/hub/HubNav').then((mod) => mod.HubNav), { ssr: false });
 
 /** Подсветка и появление блоков подгружаются после первого кадра. */
 export function ClientDecor({ cursorHighlight }: { cursorHighlight: boolean }) {
@@ -36,7 +35,6 @@ export function ClientDecor({ cursorHighlight }: { cursorHighlight: boolean }) {
       <HeroCursorHighlight enabled={cursorHighlight} />
       <SiteMotion />
       <ScrollLinkedMarks />
-      <HubNav />
       <ScrollToTop />
     </>
   );

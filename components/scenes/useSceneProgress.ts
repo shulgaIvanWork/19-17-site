@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
-import { onHubJumpEnd } from '@/components/hub/hubScroll';
 
 /** Scene is in view before the sort starts, and the pose lands while the
  *  picture is still fully on screen. Ease-out so the last frames arrive a
@@ -15,7 +14,6 @@ function easeOut(t: number) {
 const nodes = new Set<HTMLElement>();
 let frame: number | null = null;
 let attached = false;
-let stopJump: (() => void) | null = null;
 
 function write() {
   frame = null;
@@ -41,14 +39,11 @@ function ensure() {
   write();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-  stopJump = onHubJumpEnd(write);
 }
 
 function release() {
   if (nodes.size > 0) return;
   attached = false;
-  stopJump?.();
-  stopJump = null;
   if (frame !== null) cancelAnimationFrame(frame);
   frame = null;
   window.removeEventListener('scroll', onScroll);

@@ -1,30 +1,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { applyHeroScroll, heroApproachProgress, heroDockProgress, heroScrollProgress, scrollBasis, type LiveBuffers } from './heroScroll';
+import { applyHeroScroll, heroScrollProgress, scrollBasis, type LiveBuffers } from './heroScroll';
 import { isLetterShape, type HeroShape, type Mesh } from './heroTypes';
-import { HUB_POSE_MS, hubJumpDir, hubRailBlocksLook, isHubJumping, onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/hub/hubScroll';
 
 const meshCache = new Map<string, Promise<Mesh>>();
-let pointerX = Number.NaN;
-let pointerY = Number.NaN;
-let pointerBound = false;
-
-function rememberPointer(clientX: number, clientY: number) {
-  pointerX = clientX;
-  pointerY = clientY;
-}
-
-function bindPointer() {
-  if (pointerBound) return;
-  pointerBound = true;
-  window.addEventListener(
-    'pointermove',
-    (event) => rememberPointer(event.clientX, event.clientY),
-    { passive: true },
-  );
-}
-
 function loadMesh(shape: HeroShape, count: number) {
   const key = `${shape}:${count}`;
   const hit = meshCache.get(key);
@@ -166,33 +146,6 @@ function startHero(
   const surface = host.closest<HTMLElement>('[data-hero]') ?? host;
   let scrollP = 0;
   let scrollShown = 0;
-  let jumpTween = false;
-  let jumpFrom = 0;
-  let jumpTo = 0;
-  let jumpT0 = 0;
-  let jumpId = '';
-  const JUMP_MS = HUB_POSE_MS;
-  const beginJumpPose = (id: string, dir: -1 | 1) => {
-    if (shape === 'globe') return;
-    const isDest = Boolean(id) && surface.id === id;
-    const destChanged = jumpId !== id;
-    jumpId = id;
-    if (isDest) {
-      jumpTo = heroDockProgress(shape);
-      jumpFrom = destChanged ? heroApproachProgress(shape, dir) : scrollShown;
-    } else {
-      jumpTo = heroApproachProgress(shape, dir > 0 ? -1 : 1);
-      jumpFrom = scrollShown;
-    }
-    if (Math.abs(jumpTo - jumpFrom) < 0.012) {
-      jumpTween = false;
-      scrollShown = jumpTo;
-      return;
-    }
-    jumpT0 = performance.now();
-    jumpTween = true;
-    scrollShown = jumpFrom;
-  };
   let lookYaw = 0;
   let lookPitch = 0;
   let orbitYaw = 0;
@@ -352,7 +305,6 @@ function startHero(
   let lastPointerX = 0;
   let lastPointerY = 0;
   let persistLook = false;
-  let glanceUntil = 0;
   let lastScrollY = window.scrollY;
   let calmUntil = 0;
   let paintBudget = restBudget;
@@ -374,17 +326,10 @@ function startHero(
   };
 
   const applyLook = (clientX: number, clientY: number) => {
-    rememberPointer(clientX, clientY);
-    if (hubRailBlocksLook(clientX, clientY)) {
-      hovering = false;
-      persistLook = false;
-      return;
-    }
     const over = pointIn(host.getBoundingClientRect(), clientX, clientY);
     hovering = over;
     persistLook = over;
     if (!over) return;
-    glanceUntil = 0;
     lookFromPoint(clientX, clientY);
   };
 
@@ -451,11 +396,6 @@ function startHero(
       }
       return;
     }
-    if (shape !== 'globe' && !reduced && isHubJumping() && !jumpTween) {
-      const dest = pinnedHubSection();
-      const dir = hubJumpDir();
-      if (dest && dir) beginJumpPose(dest, dir);
-    }
     resize();
     if (reduced) return;
     if (frame === null) {
@@ -483,34 +423,6 @@ function startHero(
   );
   intersectionObserver.observe(host);
   setVisible(viewFromRect());
-  bindPointer();
-  const startGlance = () => {
-    if (reduced || !inView || jumpTween || !Number.isFinite(pointerX)) return;
-    persistLook = false;
-    hovering = false;
-    lookFromPoint(pointerX, pointerY);
-    glanceUntil = performance.now() + 720;
-  };
-  const onJump = () => {
-    setVisible(viewFromRect());
-  };
-  const stopJump = onHubJumpEnd(onJump);
-  const stopJumpStart = onHubJumpStart((id, dir) => {
-    glanceUntil = 0;
-    persistLook = false;
-    hovering = false;
-    beginJumpPose(id, dir);
-    if (surface.id === id && !jumpTween) startGlance();
-  });
-  if (isHubJumping()) {
-    const dest = pinnedHubSection();
-    const dir = hubJumpDir();
-    if (dest && dir) {
-      beginJumpPose(dest, dir);
-      if (surface.id === dest && !jumpTween) startGlance();
-    }
-  }
-
   const onVisibility = () => setVisible();
   document.addEventListener('visibilitychange', onVisibility);
 
@@ -552,7 +464,6 @@ function startHero(
   };
 
   const onWindowMove = (event: PointerEvent) => {
-    rememberPointer(event.clientX, event.clientY);
     if (dragging || reduced || !inView) return;
     applyLook(event.clientX, event.clientY);
   };
@@ -567,9 +478,7 @@ function startHero(
     const scrollY = window.scrollY;
     const speed = Math.abs(scrollY - lastScrollY) / Math.max(dt, 1);
     lastScrollY = scrollY;
-    if (jumpTween) {
-      paintBudget = restBudget;
-    } else if (speed > 18) {
+    if (speed > 18) {
       paintBudget = 45;
       calmUntil = now + 120;
     } else if (now < calmUntil || speed > 10) {
@@ -580,7 +489,7 @@ function startHero(
     if (dt < paintBudget - 1) return;
     last = now;
     const step = Math.min(48, dt);
-    if (!jumpTween && !dragging && !persistLook && now >= glanceUntil) {
+    if (!dragging && !persistLook) {
       lookYaw = follow(lookYaw, 0, step, 260);
       lookPitch = follow(lookPitch, 0, step, 260);
     }
@@ -590,15 +499,7 @@ function startHero(
     pitch = follow(pitch, destPitch, step, 130);
     tick += step / 16.67;
     if (!letters && !reduced) spin += 0.0016 * (step / 16.67);
-    if (jumpTween) {
-      const t = Math.min(1, (now - jumpT0) / JUMP_MS);
-      const eased = t * t * (3 - 2 * t);
-      scrollShown = jumpFrom + (jumpTo - jumpFrom) * eased;
-      if (t >= 1) {
-        jumpTween = false;
-        if (jumpId && surface.id === jumpId) startGlance();
-      }
-    } else if (shape !== 'globe' && !reduced) {
+    if (shape !== 'globe' && !reduced) {
       scrollP = heroScrollProgress(surface, shape);
       scrollShown = follow(scrollShown, scrollP, step, 240);
     }
@@ -607,7 +508,6 @@ function startHero(
       letters &&
       mobile &&
       shape !== 'update' &&
-      !jumpTween &&
       !dragging &&
       Math.abs(yaw - destYaw) < 0.004 &&
       Math.abs(pitch - destPitch) < 0.004 &&
@@ -648,8 +548,6 @@ function startHero(
     document.removeEventListener('visibilitychange', onVisibility);
     resizeObserver.disconnect();
     intersectionObserver.disconnect();
-    stopJump();
-    stopJumpStart();
     releaseBuffer();
   };
 }

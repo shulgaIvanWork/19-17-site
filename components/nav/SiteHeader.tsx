@@ -2,45 +2,23 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
-import { isHubJumping, onHubJumpStart } from '@/components/hub/hubScroll';
 import { ThemeToggle } from './ThemeToggle';
-import { HubMenu } from './SitesMenu';
+import { ServicesMenu } from './ServicesMenu';
 import { MobileMenu } from './MobileMenu';
 import { NavButton } from './NavButton';
-import { useHubSectionHash } from '@/components/hub/useHubSectionHash';
-import {
-  infraHubPaths,
-  infraMenuGroups,
-  infraTabHref,
-  infraTabLabel,
-  hitBadge,
-  siteHubPaths,
-  siteMenuGroups,
-  sitesTabHref,
-  wordmark,
-} from '@/content/nav';
-import { interestFromLocation } from '@/components/hub/hubLinks';
+import { serviceByPath, wordmark } from '@/content/nav';
 import styles from './SiteHeader.module.css';
 
 const MENU_MS = 380;
-/** Ход в одну сторону, после которого нижняя полоса прячется или возвращается.
- *  При пороге в 2 px за кадр полоса дергалась от медленного пальца и смены
- *  направления на месте. */
-const DIR_PX = 24;
-/** Сколько после касания, колеса или клавиши прокрутка считается делом посетителя:
- *  на телефоне страница еще катится по инерции после того, как палец убран. */
-const USER_SCROLL_MS = 1500;
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const headerRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuEntered, setMenuEntered] = useState(false);
-  const hash = useHubSectionHash(pathname);
 
   // Три правки состояния во время отрисовки вместо эффектов: смена маршрута
   // закрывает меню, открытие монтирует ящик, закрытие снимает класс входа.
@@ -75,72 +53,6 @@ export function SiteHeader() {
     return () => window.clearTimeout(timer);
   }, [menuOpen, menuMounted]);
 
-  // Узкий экран: при прокрутке вверх уезжает нижняя полоса разделов (HubPager),
-  // при прокрутке вниз возвращается. Шапка на месте всегда. Направление
-  // пишется атрибутом data-scroll-dir на <html>, его читают стили полосы.
-  // Атрибут ставится прямо на DOM, без состояния React: решение принимается на
-  // каждом кадре прокрутки. Учитывается только прокрутка посетителя, и только
-  // ход не меньше DIR_PX в одну сторону. Положение зажато в границы страницы:
-  // отскок на iOS у низа страницы давал ход вверх и прятал полосу. У верха
-  // страницы, при открытом меню и в начале прыжка по разделам атрибут
-  // снимается, полоса видна.
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-    const root = document.documentElement;
-    const narrow = window.matchMedia('(max-width: 900px)');
-    const clampY = () =>
-      Math.min(Math.max(window.scrollY, 0), Math.max(0, root.scrollHeight - window.innerHeight));
-    let lastY = clampY();
-    let travel = 0;
-    let userAt = -Infinity;
-    let frame: number | null = null;
-
-    const setDir = (dir: 'down' | 'up' | null) => {
-      if (dir) root.setAttribute('data-scroll-dir', dir);
-      else root.removeAttribute('data-scroll-dir');
-    };
-    const update = () => {
-      frame = null;
-      const y = clampY();
-      const dy = y - lastY;
-      lastY = y;
-      if (!narrow.matches || y <= header.offsetHeight || header.hasAttribute('data-menu-open') || isHubJumping()) {
-        travel = 0;
-        setDir(null);
-        return;
-      }
-      if (performance.now() - userAt > USER_SCROLL_MS) {
-        travel = 0;
-        return;
-      }
-      if (dy === 0) return;
-      travel = Math.sign(dy) === Math.sign(travel) ? travel + dy : dy;
-      if (travel >= DIR_PX) setDir('down');
-      else if (travel <= -DIR_PX) setDir('up');
-    };
-    const onScroll = () => {
-      if (frame === null) frame = window.requestAnimationFrame(update);
-    };
-    const onInput = () => {
-      userAt = performance.now();
-    };
-    const stopJump = onHubJumpStart(() => setDir(null));
-    const inputs = ['touchstart', 'touchmove', 'wheel', 'keydown'] as const;
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    for (const type of inputs) window.addEventListener(type, onInput, { passive: true });
-    narrow.addEventListener('change', onScroll);
-    return () => {
-      if (frame !== null) window.cancelAnimationFrame(frame);
-      setDir(null);
-      stopJump();
-      window.removeEventListener('scroll', onScroll);
-      for (const type of inputs) window.removeEventListener(type, onInput);
-      narrow.removeEventListener('change', onScroll);
-    };
-  }, []);
-
   // Прокрутку при открытом меню держит только <html>. С overflow: hidden еще и
   // на <body> тот становился контейнером прокрутки, sticky-шапка уезжала вместе
   // со страницей, и ее переводили в position: fixed. Шапка выпадала из потока,
@@ -155,14 +67,11 @@ export function SiteHeader() {
     };
   }, [menuMounted]);
 
+  const interest = serviceByPath(pathname)?.interest;
+
   return (
     <>
-      <header
-        ref={headerRef}
-        className={styles.header}
-        data-header-glow
-        data-menu-open={menuMounted ? '' : undefined}
-      >
+      <header className={styles.header} data-header-glow data-menu-open={menuMounted ? '' : undefined}>
         <div className={styles.row}>
           <div className={styles.brand}>
             <Link href="/" className={styles.wordmark}>
@@ -170,26 +79,10 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          {/* «Сайты» и «VPN/AI» раскрываются группами. «Цены» - обычная вкладка. */}
+          {/* «Услуги» раскрываются панелью с группами. Остальные - обычные вкладки. */}
           <nav className={styles.links} aria-label="Основная навигация">
             <NavButton href="/" label="Главная" active={pathname === '/'} />
-            <HubMenu
-              pathname={pathname}
-              hash={hash}
-              label="Сайты"
-              tabHref={sitesTabHref}
-              groups={siteMenuGroups}
-              hubPaths={siteHubPaths}
-            />
-            <HubMenu
-              pathname={pathname}
-              hash={hash}
-              label={infraTabLabel}
-              tabHref={infraTabHref}
-              groups={infraMenuGroups}
-              hubPaths={infraHubPaths}
-              badge={hitBadge}
-            />
+            <ServicesMenu pathname={pathname} />
             <NavButton href="/works" label="Работы" active={pathname === '/works'} />
             <NavButton href="/pricing" label="Цены" active={pathname === '/pricing'} />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />
@@ -197,7 +90,7 @@ export function SiteHeader() {
 
           <div className={styles.right}>
             <span className={styles.deskCta}>
-              <ContactSalesButton interest={interestFromLocation(pathname, hash)} />
+              <ContactSalesButton interest={interest} />
             </span>
             <ThemeToggle />
             <button
@@ -229,12 +122,7 @@ export function SiteHeader() {
                 aria-label="Закрыть меню"
                 onClick={() => setMenuOpen(false)}
               />
-              <MobileMenu
-                pathname={pathname}
-                hash={hash}
-                open={menuEntered}
-                onNavigate={() => setMenuOpen(false)}
-              />
+              <MobileMenu pathname={pathname} open={menuEntered} onNavigate={() => setMenuOpen(false)} />
             </>,
             document.body,
           )

@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import { useLayoutEffect, useRef, useState } from 'react';
-import { onHubJumpEnd, onHubJumpStart, pinnedHubSection } from '@/components/hub/hubScroll';
 import type { HeroShape } from './heroTypes';
 
 /** Loads the canvas object only where it is actually drawn. */
@@ -38,40 +37,19 @@ export function HeroObjectMount({
   useLayoutEffect(() => {
     const host = hostRef.current;
     if (!host) return;
-    const hero = host.closest<HTMLElement>('[data-hero]');
 
-    const sync = () => {
-      const dest = pinnedHubSection();
-      if (dest && hero?.id === dest) {
-        setNear(true);
-        return;
-      }
-      setNear(isNear(host));
-    };
+    const sync = () => setNear(isNear(host));
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        const dest = pinnedHubSection();
-        if (dest && hero?.id === dest) {
-          setNear(true);
-          return;
-        }
-        setNear(entry.isIntersecting);
-      },
-      { root: null, rootMargin: nearMargin(), threshold: 0 },
-    );
+    const io = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), {
+      root: null,
+      rootMargin: nearMargin(),
+      threshold: 0,
+    });
     io.observe(host);
     sync();
     const later = window.requestAnimationFrame(sync);
-    const stopJump = onHubJumpEnd(sync);
-    const stopStart = onHubJumpStart((id) => {
-      if (hero?.id === id) setNear(true);
-      else sync();
-    });
     return () => {
       window.cancelAnimationFrame(later);
-      stopJump();
-      stopStart();
       io.disconnect();
     };
   }, []);

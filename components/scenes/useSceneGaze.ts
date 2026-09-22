@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
-import { HUB_POSE_MS, hubRailBlocksLook, onHubJumpStart } from '@/components/hub/hubScroll';
 
 function clamp(n: number) {
   return Math.max(-1, Math.min(1, n));
@@ -20,15 +19,6 @@ let py = 0;
 let finePointer = false;
 let persist = false;
 let glanceUntil = 0;
-let glanceTimer: number | null = null;
-let stopJump: (() => void) | null = null;
-
-function clearGlanceTimer() {
-  if (glanceTimer === null) return;
-  window.clearTimeout(glanceTimer);
-  glanceTimer = null;
-}
-
 function pointIn(node: HTMLElement, x: number, y: number) {
   const rect = node.getBoundingClientRect();
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
@@ -77,10 +67,6 @@ function lerpRest() {
 function onMove(event: PointerEvent) {
   px = event.clientX;
   py = event.clientY;
-  if (hubRailBlocksLook(px, py)) {
-    persist = false;
-    return;
-  }
   persist = false;
   for (const node of visible) {
     if (pointIn(node, px, py)) persist = true;
@@ -90,24 +76,6 @@ function onMove(event: PointerEvent) {
   if (!persist && glanceUntil === 0 && returnFrame === null) {
     returnFrame = window.requestAnimationFrame(lerpRest);
   }
-}
-
-function onJump() {
-  if (!finePointer || visible.size === 0) return;
-  persist = false;
-  for (const node of visible) lookAt(node);
-  glanceUntil = performance.now() + 720;
-  if (returnFrame === null) returnFrame = window.requestAnimationFrame(lerpRest);
-}
-
-function onJumpStart() {
-  clearGlanceTimer();
-  persist = false;
-  glanceUntil = 0;
-  glanceTimer = window.setTimeout(() => {
-    glanceTimer = null;
-    onJump();
-  }, HUB_POSE_MS);
 }
 
 function restVisible() {
@@ -121,7 +89,6 @@ function watchMove() {
   moveOn = true;
   window.addEventListener('pointermove', onMove, { passive: true });
   document.documentElement.addEventListener('pointerleave', restVisible);
-  if (!stopJump) stopJump = onHubJumpStart(onJumpStart);
 }
 
 function dropMove() {
@@ -133,9 +100,6 @@ function dropMove() {
   returnFrame = null;
   window.removeEventListener('pointermove', onMove);
   document.documentElement.removeEventListener('pointerleave', restVisible);
-  stopJump?.();
-  stopJump = null;
-  clearGlanceTimer();
 }
 
 function ensureObserver() {
