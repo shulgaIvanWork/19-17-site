@@ -22,6 +22,9 @@ type Enquiry = EnquiryInput & {
    *  они есть в каждом письме. */
   policyVersion: string;
   consentAt: string;
+  /** Что о редакции сообщила страница, если это не действующая редакция.
+   *  Пусто в обычном случае. */
+  claimedVersion?: string;
 };
 
 /** Не больше LIMIT заявок с одного адреса за WINDOW_MS. Счетчик в памяти
@@ -65,6 +68,9 @@ function mailText(enquiry: Enquiry): string {
     `Направления: ${enquiry.interests.join(', ')}`,
     '',
     `Согласие на обработку персональных данных: да, редакция политики ${enquiry.policyVersion}, ${consentAt} (МСК).`,
+    ...(enquiry.claimedVersion
+      ? [`Страница при отправке назвала другую редакцию: ${oneLine(enquiry.claimedVersion)}.`]
+      : []),
     '',
     enquiry.email ? 'Ответ на это письмо уйдет на почту клиента.' : 'Клиент оставил только телефон.',
   ].join('\n');
@@ -127,11 +133,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: checked.error }, { status: 400 });
   }
 
+  // Редакцию политики пишет сервер, а не страница. Раньше поле принималось
+  // из тела запроса как есть, и доказательство согласия по 152-ФЗ
+  // подделывалось подменой строки (аудит 2026-09-22). Прислала страница что-то
+  // другое - это идет в письмо отдельной строкой: так видно и открытую
+  // старую вкладку, и подлог, а действующей редакцией остается серверная.
   const sentVersion = (body as Record<string, unknown>).policyVersion;
+  const claimed = typeof sentVersion === 'string' ? sentVersion.slice(0, 40) : '';
   const enquiry: Enquiry = {
     ...checked.value,
-    policyVersion: typeof sentVersion === 'string' ? sentVersion : policyVersion,
+    policyVersion,
     consentAt: new Date().toISOString(),
+    claimedVersion: claimed && claimed !== policyVersion ? claimed : undefined,
   };
 
   try {
