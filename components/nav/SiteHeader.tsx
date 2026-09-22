@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { ThemeToggle } from './ThemeToggle';
-import { ServicesMenu } from './ServicesMenu';
+import { HomeMenu } from './HomeMenu';
 import { MobileMenu } from './MobileMenu';
 import { NavButton } from './NavButton';
 import { serviceByPath, wordmark } from '@/content/nav';
@@ -79,10 +79,10 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          {/* «Услуги» раскрываются панелью с группами. Остальные - обычные вкладки. */}
+          {/* Услуги раскрываются панелью под «Главной»: отдельной вкладки у них
+              нет, список услуг живет блоком на самой главной. */}
           <nav className={styles.links} aria-label="Основная навигация">
-            <NavButton href="/" label="Главная" active={pathname === '/'} />
-            <ServicesMenu pathname={pathname} />
+            <HomeMenu pathname={pathname} />
             <NavButton href="/works" label="Работы" active={pathname === '/works'} />
             <NavButton href="/pricing" label="Цены" active={pathname === '/pricing'} />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />

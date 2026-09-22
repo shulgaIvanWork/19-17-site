@@ -1,47 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import type { MouseEvent } from 'react';
-import { isServicePath, serviceMenuGroups, servicesHref, servicesLabel } from '@/content/nav';
+import { isServicePath, serviceMenuGroups } from '@/content/nav';
 import { useHoverMenu } from './useHoverMenu';
-import styles from './ServicesMenu.module.css';
+import styles from './HomeMenu.module.css';
 
-/** Вкладка «Услуги» и большая панель с группами.
+/** Вкладка «Главная» и большая панель со всеми услугами.
  *
- *  Одна вкладка вместо прежних «Сайты» и «VPN / AI»: у услуг теперь по своей
- *  странице, и делить их на две вкладки по признаку «сайт или не сайт» было
- *  нечестно по отношению к VPN и локальному AI.
- *
- *  Сама вкладка ведет на блок услуг главной. Когда главная уже открыта, Next к
- *  якорю не прокручивает - страница не меняется, - поэтому прокрутка тут своя.
+ *  Отдельной вкладки «Услуги» в шапке нет (решение заказчика 2026-09-22):
+ *  услуги раскрываются при наведении на «Главную», а сам список услуг живет
+ *  блоком на главной странице. Стрелка у названия - единственный знак, что
+ *  вкладка раскрывается: пункт «Главная» этого обычно не делает, и без метки
+ *  панель легко не заметить.
  *
  *  Отступ 10px под кнопкой - это прозрачный padding ВНУТРИ `.menupanel`, а не
  *  margin: с margin между кнопкой и панелью остается мертвая полоса, и меню
  *  закрывается раньше, чем курсор дойдет. Открытие, задержку закрытия, Esc и
  *  потерю фокуса дает useHoverMenu; строки меню - настоящие ссылки. */
-export function ServicesMenu({ pathname }: { pathname: string }) {
+export function HomeMenu({ pathname }: { pathname: string }) {
   const { open, wrapProps, triggerRef } = useHoverMenu<HTMLAnchorElement>(pathname);
-  const active = isServicePath(pathname);
-
-  const goBlock = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (pathname !== '/') return;
-    const block = document.getElementById('services');
-    if (!block) return;
-    event.preventDefault();
-    block.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const active = pathname === '/' || isServicePath(pathname);
 
   return (
     <div className={styles.wrap} {...wrapProps}>
       <Link
         ref={triggerRef}
-        href={servicesHref}
-        className={['navbtn', active ? 'navbtn-active' : ''].filter(Boolean).join(' ')}
+        href="/"
+        className={['navbtn', styles.trigger, active ? 'navbtn-active' : ''].filter(Boolean).join(' ')}
         aria-expanded={open}
         aria-haspopup="true"
-        onClick={goBlock}
       >
-        {servicesLabel}
+        Главная
+        <svg className={styles.chevron} viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M3 4.5L6 7.5L9 4.5" />
+        </svg>
       </Link>
 
       <div

@@ -2,6 +2,37 @@
   position: relative;
 }
 
+/* Стрелка у названия: знак, что вкладка раскрывается. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.55;
+  transition: transform var(--t), opacity var(--t);
+}
+
+.wrap:hover .chevron,
+.trigger:focus-visible .chevron {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
 /* Панель шире вкладки, поэтому привязана к ее середине, а не к левому краю.
    Смещение и въезд идут одним свойством transform: два transform на элементе
    не складываются, побеждает последний. */
