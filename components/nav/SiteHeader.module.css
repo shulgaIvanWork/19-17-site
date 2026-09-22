@@ -10,7 +10,7 @@
 }
 
 /* Стекло на дочернем слое: iOS 26 семплит sticky-элемент и не должен
-   видеть backdrop-filter на нём самом, иначе Dynamic Island становится плотным. */
+   видеть backdrop-filter на нем самом, иначе Dynamic Island становится плотным. */
 .header::before {
   content: '';
   position: absolute;

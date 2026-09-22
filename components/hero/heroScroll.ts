@@ -196,28 +196,11 @@ function clamp01(value: number) {
   return Math.min(1, Math.max(0, value));
 }
 
-/** 0 за обоими краями, 1 на пике (блок на экране). Дальше — зеркало, обратный ход. */
+/** 0 за обоими краями, 1 на пике (блок на экране). Дальше - зеркало, обратный ход. */
 function pingPong(top: number, enter: number, peak: number, gone: number) {
   if (top >= enter || top <= gone) return 0;
   if (top >= peak) return clamp01((enter - top) / (enter - peak || 1));
   return clamp01((top - gone) / (peak - gone || 1));
-}
-
-/** Поза, когда герой посажен под шапку. */
-export function heroDockProgress(shape: HeroShape) {
-  if (shape === 'pages' || shape === 'crm' || shape === 'support') return 1;
-  if (shape === 'store') return 0.5;
-  return 0;
-}
-
-/** Поза за краем экрана: 1 — снизу, -1 — сверху. */
-export function heroApproachProgress(shape: HeroShape, fromDir: -1 | 1) {
-  if (shape === 'pages' || shape === 'crm' || shape === 'support') return 0;
-  // Update кивает при прыжке с обеих сторон. По общему правилу снизу поза
-  // совпадала с позой посадки (0 и 0), и при прыжке рельсом сверху вниз
-  // модель стояла на месте, а снизу вверх кивала (1 -> 0).
-  if (shape === 'update') return 1;
-  return fromDir > 0 ? 0 : 1;
 }
 
 /** 0 when the hero is entering or at rest, 1 when it has fully left.

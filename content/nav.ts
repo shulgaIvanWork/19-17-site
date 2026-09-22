@@ -19,12 +19,12 @@ export type NavItem = {
 export type NavGroup = { title: string; href: string; items: NavItem[] };
 
 /** Метка «хит» у строки «Корпоративный VPN». */
-export const hitBadge = 'ХИТ';
+const hitBadge = 'ХИТ';
 
 /** Группы услуг в порядке показа в меню и подвале. */
 export type ServiceGroupId = 'build' | 'care' | 'integrations' | 'infra';
 
-export const serviceGroupTitles: Record<ServiceGroupId, string> = {
+const serviceGroupTitles: Record<ServiceGroupId, string> = {
   build: 'Разработка с нуля',
   care: 'Обслуживание сайтов',
   integrations: 'Интеграции',
@@ -89,7 +89,7 @@ export const serviceMenuGroups: NavGroup[] = (
 });
 
 /** Все услуги одним списком, в порядке групп. */
-export const serviceLinks: NavItem[] = serviceMenuGroups.flatMap((group) => group.items);
+const serviceLinks: NavItem[] = serviceMenuGroups.flatMap((group) => group.items);
 
 export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';

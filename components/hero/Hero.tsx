@@ -26,16 +26,13 @@ type Props = {
   secondaryHref?: string;
   /** Wireframe behind the type. `true` is the Home globe. */
   object?: boolean | HeroShape;
-  /** Section id for in-page jumps from the Sites menu. */
-  id?: string;
 };
 
-export function Hero({ copy, size = 'short', secondaryHref = '/pricing', object = false, id }: Props) {
+export function Hero({ copy, size = 'short', secondaryHref = '/pricing', object = false }: Props) {
   const shape: HeroShape | null = !object || !settings.heroObject ? null : object === true ? 'globe' : object;
 
   return (
     <section
-      id={id}
       className={[styles.hero, size === 'short' ? styles.short : ''].filter(Boolean).join(' ')}
       data-hero
     >
