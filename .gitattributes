@@ -1,0 +1,25 @@
+# Репозиторий и рабочая копия хранят текст в LF.
+#
+# Раньше файла не было, и концы строк ставил локальный core.autocrlf=true: в
+# индексе везде LF, а на диске 64 файла CRLF против 56 LF, в tsconfig.json оба
+# вида сразу. На одной машине это незаметно, на второй дает diff по всему файлу
+# вместо правки в две строки. Атрибут сильнее core.autocrlf, поэтому настройка
+# едет вместе с репозиторием и не зависит от машины (аудит 2026-09-22).
+* text=auto eol=lf
+
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.mjs text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
