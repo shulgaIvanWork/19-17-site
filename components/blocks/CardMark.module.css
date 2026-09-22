@@ -13,6 +13,10 @@
   .winC,
   .rideSite,
   .siteBlock,
+  .pageTab,
+  .pageBlock,
+  .sheetBack,
+  .sheetMid,
   .storeTrack,
   .bag,
   .rideCart,
@@ -89,6 +93,21 @@
 }
 
 .rideSite { opacity: 0; }
+
+/* ---- pages -------------------------------------------------------------- */
+
+/* Подсветка раздела переезжает по строке: шаг 40px, столько же между пунктами. */
+.pageTab {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* Листы за передней страницей чуть бледнее и слегка расходятся при наведении. */
+.sheetBack,
+.sheetMid {
+  transform-box: view-box;
+  transform-origin: 240px 120px;
+}
 
 /* ---- store -------------------------------------------------------------- */
 
@@ -173,6 +192,10 @@
     animation: rideSite 5.6s linear infinite;
   }
   :global([data-mark-live]) .siteBlock { animation: breathe 5.6s ease-in-out infinite; }
+  :global([data-mark-live]) .pageTab { animation: pageTab 5.4s ease-in-out infinite; }
+  :global([data-mark-live]) .pageBlock { animation: pageBlock 5.4s ease-in-out infinite; }
+  :global([data-mark-live]) .sheetBack { animation: sheetBack 5.4s ease-in-out infinite; }
+  :global([data-mark-live]) .sheetMid { animation: sheetMid 5.4s ease-in-out infinite; }
   :global([data-mark-live]) .storeTrack { animation: storeTrack 4.8s linear infinite; }
   :global([data-mark-live]) .bag { animation: bagNod 4.8s ease-in-out infinite; }
   :global([data-mark-live]) .rideCart { animation: dropCart 4.8s ease-in-out infinite; }
@@ -215,6 +238,34 @@
   60% { transform: translate(304px, 92px); }
   80% { transform: translate(304px, 176px); }
   100% { transform: translate(252px, 158px); }
+}
+
+@keyframes pageTab {
+  0%, 22% { transform: translate(0, 0); }
+  30%, 52% { transform: translate(40px, 0); }
+  60%, 82% { transform: translate(80px, 0); }
+  90%, 100% { transform: translate(0, 0); }
+}
+
+/* Блоки страницы гаснут на пересменке разделов: страница сменилась. */
+@keyframes pageBlock {
+  0%, 22% { opacity: 1; }
+  26% { opacity: 0.35; }
+  30%, 52% { opacity: 1; }
+  56% { opacity: 0.35; }
+  60%, 82% { opacity: 1; }
+  86% { opacity: 0.35; }
+  90%, 100% { opacity: 1; }
+}
+
+@keyframes sheetBack {
+  0%, 100% { transform: translate(0, 0); opacity: 0.34; }
+  50% { transform: translate(6px, -4px); opacity: 0.5; }
+}
+
+@keyframes sheetMid {
+  0%, 100% { transform: translate(0, 0); opacity: 0.34; }
+  50% { transform: translate(3px, -2px); opacity: 0.44; }
 }
 
 @keyframes storeTrack {
@@ -313,6 +364,10 @@
   .winC,
   .rideSite,
   .siteBlock,
+  .pageTab,
+  .pageBlock,
+  .sheetBack,
+  .sheetMid,
   .storeTrack,
   .bag,
   .rideCart,

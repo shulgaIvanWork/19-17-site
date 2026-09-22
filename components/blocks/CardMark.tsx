@@ -8,6 +8,7 @@ export function CardMark({ kind, still = false }: { kind: CardMarkId; still?: bo
     <div className={[styles.stage, still ? styles.still : ''].filter(Boolean).join(' ')} aria-hidden="true">
       <svg className={styles.svg} viewBox="0 0 480 240" fill="none">
         {kind === 'websites' && <Websites />}
+        {kind === 'pages' && <Pages />}
         {kind === 'store' && <Store />}
         {kind === 'redesign' && <Redesign />}
         {kind === 'support' && <Support />}
@@ -53,6 +54,32 @@ function Websites() {
       <Dot cx="158" cy="182" />
       <Dot cx="322" cy="182" />
       <circle className={`${styles.ride} ${styles.rideSite}`} r="2.5" />
+    </g>
+  );
+}
+
+/** Многостраничный сайт: стопка листов и строка разделов, по которой переезжает
+ *  подсветка. У лендинга знак с одним экраном браузера, и рядом в ряду карточек
+ *  они не должны читаться как одно и то же. */
+function Pages() {
+  return (
+    <g>
+      <rect className={`${styles.soft} ${styles.sheetBack}`} x="186" y="44" width="140" height="130" rx="8" />
+      <rect className={`${styles.soft} ${styles.sheetMid}`} x="172" y="54" width="154" height="134" rx="10" />
+      <rect className={styles.panel} x="152" y="66" width="176" height="124" rx="12" />
+      <path className={styles.line} d="M 152 92 H 328" />
+      <rect className={styles.soft} x="166" y="76" width="30" height="8" rx="4" />
+      <rect className={styles.soft} x="206" y="76" width="30" height="8" rx="4" />
+      <rect className={styles.soft} x="246" y="76" width="30" height="8" rx="4" />
+      <rect className={`${styles.pulse} ${styles.pageTab}`} x="166" y="76" width="30" height="8" rx="4" />
+      <rect className={`${styles.panel} ${styles.pageBlock}`} x="166" y="106" width="68" height="68" rx="4" />
+      <rect className={`${styles.panel} ${styles.pageBlock}`} x="246" y="106" width="68" height="20" rx="4" />
+      <rect className={`${styles.panel} ${styles.pageBlock}`} x="246" y="134" width="68" height="20" rx="4" />
+      <rect className={`${styles.panel} ${styles.pageBlock}`} x="246" y="162" width="68" height="12" rx="6" />
+      <Dot cx="166" cy="106" />
+      <Dot cx="314" cy="106" />
+      <Dot cx="166" cy="174" />
+      <Dot cx="314" cy="174" />
     </g>
   );
 }
