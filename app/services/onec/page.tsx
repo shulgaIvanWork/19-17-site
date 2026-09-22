@@ -5,7 +5,6 @@ import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { PlanFigure } from '@/components/blocks/PlanFigure';
 import { Section } from '@/components/ui/Section';
-import { ServiceMore } from '@/components/blocks/ServiceMore';
 import { TwoColList } from '@/components/blocks/TwoColList';
 import { onecAreas, onecBands, onecFeatures, onecPackages } from '@/content/products';
 import { footnotes, heroes, serviceMeta } from '@/content/site';
@@ -63,8 +62,6 @@ export default function OnecPage() {
           {footnotes.integrations}
         </p>
       </Section>
-
-      <ServiceMore current="onec" />
     </>
   );
 }

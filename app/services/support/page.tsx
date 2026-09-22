@@ -3,7 +3,6 @@ import { CompareTable } from '@/components/blocks/CompareTable';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { Section } from '@/components/ui/Section';
-import { ServiceMore } from '@/components/blocks/ServiceMore';
 import { supportBand, supportFeatures, supportRows, webTierNames } from '@/content/products';
 import { footnotes, heroes, serviceMeta } from '@/content/site';
 
@@ -37,8 +36,6 @@ export default function SupportPage() {
           {footnotes.support}
         </p>
       </Section>
-
-      <ServiceMore current="support" />
     </>
   );
 }

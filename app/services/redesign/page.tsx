@@ -4,7 +4,6 @@ import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { Hero } from '@/components/hero/Hero';
 import { NumberedClaim } from '@/components/blocks/NumberedClaim';
 import { Section } from '@/components/ui/Section';
-import { ServiceMore } from '@/components/blocks/ServiceMore';
 import { TwoColList } from '@/components/blocks/TwoColList';
 import { redesignAreas, redesignBands, redesignFeatures } from '@/content/products';
 import { footnotes, heroes, serviceMeta } from '@/content/site';
@@ -46,8 +45,6 @@ export default function RedesignPage() {
           {footnotes.redesign}
         </p>
       </Section>
-
-      <ServiceMore current="redesign" />
     </>
   );
 }
