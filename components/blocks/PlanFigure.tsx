@@ -1,4 +1,5 @@
 import { EnquireLink } from '@/components/contact/ContactSalesButton';
+import type { Interest } from '@/content/services';
 import styles from './PlanFigure.module.css';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
   unit: string;
   name: string;
   body: string;
-  interest?: string;
+  interest?: Interest;
 };
 
 export function PlanFigure({ figure, unit, name, body, interest }: Props) {

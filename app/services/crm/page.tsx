@@ -59,7 +59,7 @@ export default function CrmPage() {
           ))}
         </div>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.integrations}
+          {footnotes.crm}
         </p>
       </Section>
     </>

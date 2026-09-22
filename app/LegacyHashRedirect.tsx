@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { serviceBySlug, serviceHref } from '@/content/nav';
+import { isServiceSlug, serviceHref } from '@/content/services';
 
 /** Переводит старую ссылку с якорем на страницу услуги.
  *
@@ -19,7 +19,7 @@ export function LegacyHashRedirect() {
 
   useEffect(() => {
     const slug = window.location.hash.replace(/^#/, '');
-    if (slug && serviceBySlug.has(slug)) router.replace(serviceHref(slug));
+    if (isServiceSlug(slug)) router.replace(serviceHref(slug));
   }, [router]);
 
   return null;

@@ -40,13 +40,14 @@ const FIT_CENTER_Y = 0.47;
 const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; narrowScale?: number; dy?: number }>> = {
   // Магазин ближе к кнопкам (по просьбе заказчика, 2026-09-11).
   // На телефоне чуть меньше (правка заказчика 2026-09-14).
-  store: { dy: 0.05, narrowScale: 0.9 },
+  marketplace: { dy: 0.05, narrowScale: 0.9 },
   // Курсор лендинга тоже ближе к кнопкам (по просьбе заказчика, 2026-09-11).
   // На телефоне курсор упирался в высоту и выходил крупнее остальных (2026-09-14).
-  sites: { dy: 0.05, narrowScale: 0.8 },
-  // Рамка pages посчитана по разложенным страницам, а в покое они собраны в
-  // одну стопку втрое уже: на телефоне модель выходила мелкой (2026-09-14).
-  pages: { narrowScale: 1.5 },
+  landing: { dy: 0.05, narrowScale: 0.8 },
+  // Рамка многостраничного посчитана по разложенным страницам, а в покое они
+  // собраны в одну стопку втрое уже: на телефоне модель выходила мелкой
+  // (2026-09-14).
+  multipage: { narrowScale: 1.5 },
   vpn: { narrowScale: 0.85 },
 };
 
@@ -507,7 +508,7 @@ function startHero(
     if (
       letters &&
       mobile &&
-      shape !== 'update' &&
+      shape !== 'redesign' &&
       !dragging &&
       Math.abs(yaw - destYaw) < 0.004 &&
       Math.abs(pitch - destPitch) < 0.004 &&

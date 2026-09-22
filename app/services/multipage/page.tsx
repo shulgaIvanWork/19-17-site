@@ -13,7 +13,7 @@ export const metadata: Metadata = serviceMeta.multipage;
 export default function MultipagePage() {
   return (
     <>
-      <Hero copy={heroes.pages} object="pages" />
+      <Hero copy={heroes.multipage} object="multipage" />
 
       <Section>
         <div className="g4">
@@ -42,7 +42,7 @@ export default function MultipagePage() {
           </div>
         </div>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.pages}
+          {footnotes.multipage}
         </p>
       </Section>
     </>

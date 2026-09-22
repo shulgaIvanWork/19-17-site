@@ -107,17 +107,17 @@ export function applyHeroScroll(
 
   const t = ease(Math.min(1, Math.max(0, p)));
   const { centers, mid } = basis;
-  const spin = shape === 'update' ? (clock * UPDATE_SPIN) % TAU : 0;
+  const spin = shape === 'redesign' ? (clock * UPDATE_SPIN) % TAU : 0;
 
   for (let i = 0; i < n; i++) {
     let [x, y, z] = points[i];
     const part = parts?.[i] ?? 0;
 
-    if (shape === 'sites') {
+    if (shape === 'landing') {
       // Только плавный уход по диагонали. Нажатие (наклон, вдавливание и
       // сжатие в первой трети прокрутки) убрано по просьбе заказчика 2026-09-11.
       [x, y] = flyOff(x, y, t);
-    } else if (shape === 'store') {
+    } else if (shape === 'marketplace') {
       const shift = (t - 0.5) * (EXIT_X * 2);
       x += shift;
       if (part === 2 || part === 3) {
@@ -126,7 +126,7 @@ export function applyHeroScroll(
         x = nx;
         y = ny;
       }
-    } else if (shape === 'update') {
+    } else if (shape === 'redesign') {
       // Шестеренка (part 0) стоит на месте. Стрелки поворачиваются от прокрутки
       // и постоянно, оба раза по ходу своих наконечников: построенная в экранных
       // координатах дуга после переворота y (heroShapes, EM) идет против часовой.
@@ -173,7 +173,7 @@ export function applyHeroScroll(
         x += t * EXIT_X;
         y -= t * EXIT_Y;
       }
-    } else if (shape === 'pages') {
+    } else if (shape === 'multipage') {
       const home = centers.get(1) ?? mid;
       const c = centers.get(part) ?? mid;
       const spread = 1 - t;
@@ -211,14 +211,14 @@ export function heroScrollProgress(surface: HTMLElement, shape: HeroShape = 'glo
   const open = 64;
   const gone = -rect.height;
 
-  if (shape === 'pages') {
+  if (shape === 'multipage') {
     const span = view * 0.92 + rect.height * 0.22;
     const peak = open;
     const enter = peak + span;
     return pingPong(rect.top, enter, peak, gone);
   }
 
-  if (shape === 'store') {
+  if (shape === 'marketplace') {
     const enter = view * 1.2;
     if (rect.top > open) {
       return clamp01((0.5 * (enter - rect.top)) / (enter - open || 1));

@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
-import { mainNav, phoneHref, phoneLabel, serviceByPath, serviceMenuGroups } from '@/content/nav';
+import { mainNav, phoneHref, phoneLabel, serviceMenuGroups } from '@/content/nav';
+import { serviceByPath } from '@/content/services';
 import styles from './MobileMenu.module.css';
 
 type Props = { pathname: string; open?: boolean; onNavigate: () => void };

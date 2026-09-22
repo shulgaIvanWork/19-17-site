@@ -1,78 +1,23 @@
 /** Маршруты и навигация.
  *
- *  Услуги перечислены здесь ОДИН раз, списком `services`. Из него собираются
- *  панель под вкладкой «Главная», мобильное меню, подвал, карточки главной и
- *  предвыбор темы в форме заявки. Раньше те же девять услуг были выписаны в
- *  пяти местах отдельно, и списки разъезжались.
+ *  Сами услуги перечислены не здесь, а в `content/services.ts`: реестр нужен
+ *  и текстам, и знакам, и форме заявки, а не только меню. Отсюда собираются
+ *  панель под вкладкой «Главная», мобильное меню и подвал.
  *
  *  Каждая услуга - своя страница /services/<slug>. До сентября 2026 они жили
  *  якорями на двух длинных страницах, /websites и /vpn-ai; разбор перехода - в
  *  README. */
 
+import { serviceGroupTitles, serviceHref, services, type ServiceGroupId } from './services';
+
 export type NavItem = {
   href: string;
   label: string;
-  /** Метка рядом с пунктом меню. Текст метки - hitBadge ниже. */
+  /** Метка рядом с пунктом меню, например «ХИТ» у корпоративного VPN. */
   badge?: string;
 };
 
 export type NavGroup = { title: string; href: string; items: NavItem[] };
-
-/** Метка «хит» у строки «Корпоративный VPN». */
-const hitBadge = 'ХИТ';
-
-/** Группы услуг в порядке показа в меню и подвале. */
-export type ServiceGroupId = 'build' | 'care' | 'integrations' | 'infra';
-
-const serviceGroupTitles: Record<ServiceGroupId, string> = {
-  build: 'Разработка с нуля',
-  care: 'Обслуживание сайтов',
-  integrations: 'Интеграции',
-  infra: 'Инфраструктура',
-};
-
-export type Service = {
-  /** Часть адреса: /services/<slug>. Совпадает с прежним якорем раздела,
-   *  поэтому старые ссылки вида /websites#crm переводятся один к одному. */
-  slug: string;
-  label: string;
-  group: ServiceGroupId;
-  /** Тема, которую форма заявки выбирает заранее. */
-  interest: string;
-  badge?: string;
-};
-
-export const services: Service[] = [
-  { slug: 'landing', label: 'Лендинг', group: 'build', interest: 'Создание сайта' },
-  { slug: 'multipage', label: 'Многостраничный сайт', group: 'build', interest: 'Создание сайта' },
-  { slug: 'marketplace', label: 'Маркетплейс', group: 'build', interest: 'Интернет-магазин' },
-  { slug: 'redesign', label: 'Обновление дизайна', group: 'care', interest: 'Обновление сайта' },
-  { slug: 'support', label: 'Поддержка сайта', group: 'care', interest: 'Поддержка сайта' },
-  { slug: 'onec', label: 'Интеграция 1С', group: 'integrations', interest: 'Интеграция с 1С' },
-  { slug: 'crm', label: 'Интеграция CRM', group: 'integrations', interest: 'Интеграция с CRM' },
-  { slug: 'vpn', label: 'Корпоративный VPN', group: 'infra', interest: 'Корпоративный VPN', badge: hitBadge },
-  { slug: 'ai', label: 'Локальный AI', group: 'infra', interest: 'Локальный AI' },
-];
-
-/** Общее начало адресов услуг. */
-const servicePrefix = '/services';
-
-export function serviceHref(slug: string) {
-  return `${servicePrefix}/${slug}`;
-}
-
-export const serviceBySlug = new Map(services.map((service) => [service.slug, service]));
-
-/** Услуга по адресу страницы. Нужна форме заявки и блоку «Другие услуги». */
-export function serviceByPath(pathname: string): Service | undefined {
-  const slug = pathname.startsWith(`${servicePrefix}/`) ? pathname.slice(servicePrefix.length + 1) : '';
-  return slug ? serviceBySlug.get(slug) : undefined;
-}
-
-/** Открыта ли сейчас страница услуги. Подсвечивает вкладку в шапке. */
-export function isServicePath(pathname: string) {
-  return pathname.startsWith(`${servicePrefix}/`);
-}
 
 function itemsOf(group: ServiceGroupId): NavItem[] {
   return services
@@ -80,7 +25,7 @@ function itemsOf(group: ServiceGroupId): NavItem[] {
     .map(({ slug, label, badge }) => ({ href: serviceHref(slug), label, badge }));
 }
 
-/** Группы для панели «Услуги» и подвала. Порядок задан ключами объекта. */
+/** Группы для панели услуг и подвала. Порядок задан ключами объекта. */
 export const serviceMenuGroups: NavGroup[] = (
   Object.keys(serviceGroupTitles) as ServiceGroupId[]
 ).map((group) => {
@@ -88,13 +33,10 @@ export const serviceMenuGroups: NavGroup[] = (
   return { title: serviceGroupTitles[group], href: items[0].href, items };
 });
 
-/** Все услуги одним списком, в порядке групп. */
-const serviceLinks: NavItem[] = serviceMenuGroups.flatMap((group) => group.items);
-
 export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';
 
-/** Страницы компании. Услуги сюда не входят: у них свой список выше. */
+/** Страницы компании. Услуги сюда не входят: у них свой реестр. */
 const companyLinks: NavItem[] = [
   { href: '/works', label: 'Работы' },
   { href: '/pricing', label: 'Цены' },
@@ -108,16 +50,20 @@ const legalLinks: NavItem[] = [
   { href: '/privacy', label: 'Политика обработки персональных данных' },
 ];
 
+/** Подвал показывает услуги двумя колонками: сайты и интеграции в одной,
+ *  инфраструктура в другой. Деление берется из групп реестра. */
+const siteServices = services.filter((service) => service.group !== 'infra');
+const infraServices = services.filter((service) => service.group === 'infra');
+
+function linksOf(list: typeof services): NavItem[] {
+  return list.map(({ slug, label, badge }) => ({ href: serviceHref(slug), label, badge }));
+}
+
 export const footerGroups: { title: string; items: NavItem[] }[] = [
-  { title: 'Сайты и интеграции', items: serviceLinks.filter((item) => !isInfra(item.href)) },
-  { title: 'Инфраструктура', items: serviceLinks.filter((item) => isInfra(item.href)) },
+  { title: 'Сайты и интеграции', items: linksOf(siteServices) },
+  { title: 'Инфраструктура', items: linksOf(infraServices) },
   { title: 'Компания', items: companyLinks },
   { title: 'Документы', items: legalLinks },
 ];
-
-function isInfra(href: string) {
-  const slug = href.slice(servicePrefix.length + 1);
-  return serviceBySlug.get(slug)?.group === 'infra';
-}
 
 export const wordmark = '19×17';

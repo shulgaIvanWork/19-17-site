@@ -9,7 +9,8 @@ import { ThemeToggle } from './ThemeToggle';
 import { HomeMenu } from './HomeMenu';
 import { MobileMenu } from './MobileMenu';
 import { NavButton } from './NavButton';
-import { serviceByPath, wordmark } from '@/content/nav';
+import { wordmark } from '@/content/nav';
+import { serviceByPath } from '@/content/services';
 import styles from './SiteHeader.module.css';
 
 const MENU_MS = 380;

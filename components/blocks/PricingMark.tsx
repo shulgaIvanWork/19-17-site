@@ -67,8 +67,8 @@ export function PricingMark({ kind }: { kind: PricingMarkId }) {
       <svg className={styles.svg} viewBox="0 0 400 200" fill="none">
         <Ground />
         {kind === 'landing' && <WebNew />}
-        {kind === 'pages' && <Pages />}
-        {kind === 'store' && <Store />}
+        {kind === 'multipage' && <Pages />}
+        {kind === 'marketplace' && <Store />}
         {kind === 'redesign' && <WebRefresh />}
         {kind === 'support' && <WebCare />}
         {kind === 'onec' && <IntPair right="1С" />}

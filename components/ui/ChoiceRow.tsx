@@ -2,15 +2,18 @@
 
 import styles from './ChoiceRow.module.css';
 
-type Props = {
+type Props<T extends string> = {
   label: string;
-  options: string[];
-  value: string[];
-  onChange: (value: string[]) => void;
+  options: readonly T[];
+  value: T[];
+  onChange: (value: T[]) => void;
 };
 
-/** Independent chips: repeated click removes an option from the selection. */
-export function ChoiceRow({ label, options, value, onChange }: Props) {
+/** Независимые чипы: повторное нажатие снимает выбор.
+ *
+ *  Параметр типа держит связь со списком вариантов: форма заявки передает сюда
+ *  темы из реестра услуг, и обратно приходят они же, а не произвольные строки. */
+export function ChoiceRow<T extends string>({ label, options, value, onChange }: Props<T>) {
   return (
     <div className={styles.group} role="group" aria-label={label}>
       <div className={styles.label}>{label}</div>

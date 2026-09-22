@@ -3,12 +3,12 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import dynamic from 'next/dynamic';
-import { contactCopy } from '@/content/site';
+import type { Interest } from '@/content/services';
 
 const ContactModal = dynamic(() => import('./ContactModal').then((mod) => mod.ContactModal));
 
 type ContactValue = {
-  open: (interest?: string) => void;
+  open: (interest?: Interest) => void;
   close: () => void;
 };
 
@@ -23,10 +23,10 @@ export function useContact() {
 /** Holds the Contact Sales modal for every route. Mounted once, in the layout. */
 export function ContactProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [interests, setInterests] = useState<string[]>([]);
+  const [interests, setInterests] = useState<Interest[]>([]);
 
-  const open = useCallback((preset?: string) => {
-    setInterests(preset && contactCopy.interests.includes(preset) ? [preset] : []);
+  const open = useCallback((preset?: Interest) => {
+    setInterests(preset ? [preset] : []);
     setIsOpen(true);
   }, []);
 

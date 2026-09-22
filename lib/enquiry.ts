@@ -11,19 +11,22 @@
  *  основания нельзя. Порядок проверок совпадает с порядком полей в форме. */
 
 import { consentCopy } from '@/content/legal';
+import { isInterest, type Interest } from '@/content/services';
 import { contactCopy } from '@/content/site';
 
 export type EnquiryInput = {
   name: string;
   email: string;
   phone: string;
-  interests: string[];
+  interests: Interest[];
   consent: true;
 };
 
 export type EnquiryCheck = { ok: true; value: EnquiryInput } | { ok: false; error: string };
 
 const MAX = 200;
+/** Тем всего восемь; больше в заявке взяться неоткуда. */
+const MAX_INTERESTS = 8;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function checkEnquiry(raw: unknown): EnquiryCheck {
@@ -47,10 +50,13 @@ export function checkEnquiry(raw: unknown): EnquiryCheck {
   if (!email && !phone) return { ok: false, error: errors.contact };
   if (email && (email.length > MAX || !EMAIL.test(email))) return { ok: false, error: errors.email };
   if (phone && (phone.length < 6 || phone.length > 40)) return { ok: false, error: errors.phone };
-  if (interests.length === 0 || interests.some((interest) => !contactCopy.interests.includes(interest))) {
+  // Тем всего восемь, и повторов в заявке быть не может: без ограничения
+  // длины массив из тысячи одинаковых тем проходил проверку и уходил письмом.
+  const picked = [...new Set(interests)];
+  if (picked.length === 0 || picked.length > MAX_INTERESTS || !picked.every(isInterest)) {
     return { ok: false, error: errors.interests };
   }
   if (value.consent !== true) return { ok: false, error: consentCopy.error };
 
-  return { ok: true, value: { name, email, phone, interests, consent: true } };
+  return { ok: true, value: { name, email, phone, interests: picked, consent: true } };
 }

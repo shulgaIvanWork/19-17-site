@@ -59,7 +59,7 @@ export default function OnecPage() {
           ))}
         </div>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.integrations}
+          {footnotes.onec}
         </p>
       </Section>
     </>

@@ -1,21 +1,16 @@
 /** Страница «Цены». Цены «от» по согласованию с заказчиком 2026-09-13, точную сумму фиксируем после обсуждения задачи. */
 
+import type { Interest, ServiceSlug } from './services';
+
 export const pricingHero = {
   title: 'Как рассчитывается стоимость',
   lede: 'На этой странице — сводка наших основных услуг. Точную сумму обозначим после согласования состава работ и сроков выполнения.',
 };
 
-export type PricingMarkId =
-  | 'landing'
-  | 'pages'
-  | 'store'
-  | 'redesign'
-  | 'support'
-  | 'onec'
-  | 'crm'
-  | 'mail'
-  | 'vpn'
-  | 'ai';
+/** Знак тарифа. Тарифы повторяют услуги, поэтому зовутся их slug; лишний
+ *  здесь только `mail`: почта и уведомления продаются тарифом, но отдельной
+ *  услугой со своей страницей не являются. */
+export type PricingMarkId = ServiceSlug | 'mail';
 
 export type PricingOffer = {
   name: string;
@@ -24,7 +19,7 @@ export type PricingOffer = {
   body: string;
   items: string[];
   mark: PricingMarkId;
-  interest: string;
+  interest: Interest;
   href?: string;
 };
 
@@ -67,12 +62,12 @@ export const pricingBands: PricingBand[] = [
           'Формы, уведомления и аналитика',
           'Запуск и передача доступов',
         ],
-        mark: 'pages',
+        mark: 'multipage',
         interest: 'Создание сайта',
         href: '/services/multipage',
       },
       {
-        name: 'Маркетплейс',
+        name: 'Интернет-магазин',
         price: 'от 115 000 ₽',
         body: 'Каталог, оформление заказа и оплата. Товары, цены и остатки могут приходить из 1С или другой учетной системы, заказы уходят обратно. До оценки смотрим ассортимент, правила цены и порядок обработки заказа.',
         items: [
@@ -82,7 +77,7 @@ export const pricingBands: PricingBand[] = [
           'Обмен с учетной системой',
           'Личный кабинет покупателя',
         ],
-        mark: 'store',
+        mark: 'marketplace',
         interest: 'Интернет-магазин',
         href: '/services/marketplace',
       },
@@ -94,7 +89,7 @@ export const pricingBands: PricingBand[] = [
     surface: 'ash',
     offers: [
       {
-        name: 'Обновление дизайна',
+        name: 'Обновление сайта',
         price: 'от 10 000 ₽',
         body: 'Сначала проводим аудит: скорость, мобильная версия, формы, структура и техническое состояние. Затем разделяем исправления, обновление интерфейса и новые функции. Объем и цену фиксируем после этого плана, работу ведем этапами.',
         items: [
@@ -131,7 +126,7 @@ export const pricingBands: PricingBand[] = [
     surface: 'white',
     offers: [
       {
-        name: 'Интеграция 1С',
+        name: 'Интеграция с 1С',
         price: 'от 69 000 ₽',
         body: 'Сайт получает номенклатуру, цены и остатки из вашей конфигурации, заказы возвращаются в учет. Учитываем доработки 1С, виды цен и склады. Сначала описываем соответствия полей, затем запускаем обмен и журнал ошибок.',
         items: [
@@ -146,7 +141,7 @@ export const pricingBands: PricingBand[] = [
         href: '/services/onec',
       },
       {
-        name: 'Интеграция CRM',
+        name: 'Интеграция с CRM',
         price: 'от 59 000 ₽',
         body: 'Заявки с сайта, звонки и письма попадают в Битрикс24, amoCRM или другую CRM сразу в нужную воронку. Настраиваем поля, ответственных и, если нужно, возврат статусов на сайт.',
         items: [

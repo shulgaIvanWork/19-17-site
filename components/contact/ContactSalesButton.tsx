@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/Button';
 import { TextButton } from '@/components/ui/TextLink';
+import type { Interest } from '@/content/services';
 import { useContact } from './ContactContext';
 
 /** Синяя основная кнопка. Одна на полосу - второй основной кнопки система не допускает. */
@@ -12,7 +13,7 @@ export function ContactSalesButton({
 }: {
   hero?: boolean;
   label?: string;
-  interest?: string;
+  interest?: Interest;
 }) {
   const { open } = useContact();
   return (
@@ -28,7 +29,7 @@ export function EnquireLink({
   label = 'Обсудить задачу',
   className,
 }: {
-  interest?: string;
+  interest?: Interest;
   label?: string;
   className?: string;
 }) {

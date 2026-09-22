@@ -7,14 +7,15 @@ import { ChoiceRow } from '@/components/ui/ChoiceRow';
 import { Field } from '@/components/ui/Field';
 import { Overlay } from '@/components/ui/Overlay';
 import { policyVersion } from '@/content/legal';
+import type { Interest } from '@/content/services';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { contactCopy } from '@/content/site';
 import { checkEnquiry } from '@/lib/enquiry';
 import styles from './ContactModal.module.css';
 
 type Props = {
-  interests: string[];
-  onInterestsChange: (value: string[]) => void;
+  interests: Interest[];
+  onInterestsChange: (value: Interest[]) => void;
   onClose: () => void;
 };
 

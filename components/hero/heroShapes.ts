@@ -912,12 +912,12 @@ export function meshForShape(shape: HeroShape, nodes: number): Mesh {
 
   const icons: Partial<Record<HeroShape, StrokeShape>> = {
     onec: ONEC_SHAPE,
-    sites: SITES_SHAPE,
-    pages: PAGES_SHAPE,
+    landing: SITES_SHAPE,
+    multipage: PAGES_SHAPE,
     vpn: VPN_SHAPE,
     ai: AI_SHAPE,
-    store: STORE_SHAPE,
-    update: UPDATE_SHAPE,
+    marketplace: STORE_SHAPE,
+    redesign: UPDATE_SHAPE,
     support: SUPPORT_SHAPE,
     crm: CRM_SHAPE,
     works: WORKS_SHAPE,

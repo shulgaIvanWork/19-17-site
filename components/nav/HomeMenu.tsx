@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { isServicePath, serviceMenuGroups } from '@/content/nav';
+import { serviceMenuGroups } from '@/content/nav';
+import { isServicePath } from '@/content/services';
 import { useHoverMenu } from './useHoverMenu';
 import styles from './HomeMenu.module.css';
 

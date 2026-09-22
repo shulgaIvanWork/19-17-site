@@ -14,7 +14,7 @@ const rows = webRows.map((row) => [row.k, row.a, row.b, row.c] as [string, strin
 export default function LandingPage() {
   return (
     <>
-      <Hero copy={heroes.websites} object="sites" />
+      <Hero copy={heroes.landing} object="landing" />
 
       <Section>
         <div className="g4">
@@ -33,7 +33,7 @@ export default function LandingPage() {
           <CompareTable headers={headers} rows={rows} headerStyle="h3" caption="Сравнение форматов работы" />
         </div>
         <p className="footnote" style={{ marginTop: 20 }}>
-          {footnotes.websites}
+          {footnotes.landing}
         </p>
       </Section>
     </>

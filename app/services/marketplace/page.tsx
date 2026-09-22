@@ -14,7 +14,7 @@ export const metadata: Metadata = serviceMeta.marketplace;
 export default function MarketplacePage() {
   return (
     <>
-      <Hero copy={heroes.store} object="store" />
+      <Hero copy={heroes.marketplace} object="marketplace" />
 
       <Section>
         <div className="g4">
@@ -59,7 +59,7 @@ export default function MarketplacePage() {
           ))}
         </div>
         <p className="footnote" style={{ marginTop: 36, maxWidth: '62ch' }}>
-          {footnotes.store}
+          {footnotes.marketplace}
         </p>
       </Section>
     </>

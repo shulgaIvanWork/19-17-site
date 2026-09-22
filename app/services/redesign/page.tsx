@@ -13,7 +13,7 @@ export const metadata: Metadata = serviceMeta.redesign;
 export default function RedesignPage() {
   return (
     <>
-      <Hero copy={heroes.redesign} object="update" />
+      <Hero copy={heroes.redesign} object="redesign" />
 
       <Section>
         <div className="g4">

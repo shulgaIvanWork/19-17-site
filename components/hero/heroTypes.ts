@@ -1,15 +1,11 @@
-export type HeroShape =
-  | 'globe'
-  | 'sites'
-  | 'pages'
-  | 'vpn'
-  | 'ai'
-  | 'store'
-  | 'update'
-  | 'support'
-  | 'crm'
-  | 'onec'
-  | 'works';
+import type { ServiceSlug } from '@/content/services';
+
+/** Фигура в герое. У девяти услуг она зовется так же, как услуга в реестре
+ *  (`content/services.ts`), поэтому отдельного списка имен фигур больше нет:
+ *  раньше лендинг был `sites`, магазин `store`, обновление `update`, и связь
+ *  со страницей держалась глазами. Своя фигура есть еще у главной (глобус) и
+ *  у раздела работ. */
+export type HeroShape = ServiceSlug | 'globe' | 'works';
 export type Point = [number, number, number];
 export type Mesh = {
   points: Point[];

@@ -1,15 +1,16 @@
-import type { CardMarkId } from '@/content/products';
+import type { ServiceSlug } from '@/content/services';
 import styles from './CardMark.module.css';
 
-/** Geometric service marks. Rest pose is the logo; hover runs a closed loop
- *  in the same line-and-node language as the hero wireframes. */
-export function CardMark({ kind, still = false }: { kind: CardMarkId; still?: boolean }) {
+/** Линейные знаки услуг. В покое знак стоит как логотип, при наведении
+ *  проходит замкнутый цикл тем же языком линий и узлов, что и фигуры героев.
+ *  Знак называется так же, как услуга: отдельного списка имен знаков нет. */
+export function CardMark({ kind, still = false }: { kind: ServiceSlug; still?: boolean }) {
   return (
     <div className={[styles.stage, still ? styles.still : ''].filter(Boolean).join(' ')} aria-hidden="true">
       <svg className={styles.svg} viewBox="0 0 480 240" fill="none">
-        {kind === 'websites' && <Websites />}
-        {kind === 'pages' && <Pages />}
-        {kind === 'store' && <Store />}
+        {kind === 'landing' && <Websites />}
+        {kind === 'multipage' && <Pages />}
+        {kind === 'marketplace' && <Store />}
         {kind === 'redesign' && <Redesign />}
         {kind === 'support' && <Support />}
         {kind === 'crm' && <Crm />}

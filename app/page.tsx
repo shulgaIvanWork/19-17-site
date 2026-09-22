@@ -19,7 +19,7 @@ export default function HomePage() {
       <Section id="services">
         <div className="gcards rail rail-one">
           {paths.map((path) => (
-            <ProductCard key={path.href} path={path} />
+            <ProductCard key={path.slug} path={path} />
           ))}
         </div>
       </Section>
