@@ -7,7 +7,8 @@ import styles from './WorkCard.module.css';
  *  первый экран, по которому работа и узнается.
  *
  *  onOpen открывает макет целиком. Кнопка растянута на всю карточку: так
- *  нажимается любое место, а список состава работы не попадает внутрь кнопки. */
+ *  нажимается любое место, а список состава работы не попадает внутрь кнопки.
+ *  Подписи «Смотреть макет» при наведении нет: убрана по слову заказчика. */
 export function WorkCard({ work, onOpen }: { work: Work; onOpen?: () => void }) {
   return (
     <article className={[styles.card, onOpen ? styles.clickable : ''].filter(Boolean).join(' ')} data-cursor-glow>
@@ -28,7 +29,6 @@ export function WorkCard({ work, onOpen }: { work: Work; onOpen?: () => void }) 
         className={styles.shot}
         sizes="(max-width: 768px) 92vw, (max-width: 1100px) 46vw, 420px"
       />
-      {onOpen ? <span className={styles.peek} aria-hidden="true">Смотреть макет</span> : null}
       <div className={styles.copy}>
         <div className={styles.kind}>{work.kind}</div>
         <h2 className={styles.name}>{work.title}</h2>

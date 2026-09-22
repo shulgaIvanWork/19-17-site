@@ -97,29 +97,3 @@
   border-radius: 12px;
 }
 
-/* Подпись на снимке. Проявляется при наведении и при переходе с клавиатуры. */
-.peek {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: var(--frost);
-  color: var(--carbon);
-  font-size: 12px;
-  line-height: 16px;
-  opacity: 0;
-  transition: opacity var(--t);
-}
-
-.clickable:hover .peek,
-.card.clickable .hit:focus-visible ~ .peek {
-  opacity: 1;
-}
-
-@media (hover: none) {
-  .peek {
-    opacity: 1;
-  }
-}
