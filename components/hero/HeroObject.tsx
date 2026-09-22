@@ -219,8 +219,19 @@ function startHero(
   // обратно (модель перерисовывается каждый кадр) iOS Safari выгружал вкладку.
   const lite = letters && mobile;
   const buckets = lite ? 4 : 12;
-  const edgeAlphaMax = 0.3;
-  const pointAlphaMax = 0.58;
+  // Модели были бледными и терялись на светлом фоне героя (правка заказчика
+  // 2026-09-20). Подняты прозрачность ребра и точки, толщина линии и радиус
+  // точки. EDGE_ALPHA и POINT_ALPHA - прозрачность ближнего края модели,
+  // дальний край гаснет по z. Верхние границы корзин оставлены с запасом.
+  // В lite точки не рисуются, всю модель держат ребра - им даем больше.
+  const EDGE_ALPHA = lite ? 0.3 : 0.22;
+  const POINT_ALPHA = 0.46;
+  const POINT_R = 2;
+  // Потолок корзин равен максимуму формулы прозрачности. Раньше он стоял выше
+  // (0.3 и 0.58), поэтому верхние корзины не доставались никогда: на телефоне,
+  // где корзин всего 4, ближние ребра рисовались тусклее заданного.
+  const edgeAlphaMax = EDGE_ALPHA;
+  const pointAlphaMax = POINT_ALPHA;
   const edgeStyles = Array.from(
     { length: buckets },
     (_, bucket) => `rgba(${ink},${(edgeAlphaMax * ((bucket + 0.5) / buckets)).toFixed(3)})`,
@@ -289,12 +300,12 @@ function startHero(
     }
 
     ctx.clearRect(0, 0, w, h);
-    ctx.lineWidth = lite ? 1.15 : 1.4;
+    ctx.lineWidth = lite ? 1.4 : 1.7;
     for (let k = 0; k < edges.length; k++) {
       const [i, j] = edges[k];
       edgeBucket[k] = -1;
       if (live.hide[i] || live.hide[j]) continue;
-      const alpha = 0.14 * (1 - ((projectedZ[i] + projectedZ[j]) / 2 + 1) / 2.9);
+      const alpha = EDGE_ALPHA * (1 - ((projectedZ[i] + projectedZ[j]) / 2 + 1) / 2.9);
       if (alpha <= 0.005) continue;
       edgeBucket[k] = Math.min(buckets - 1, Math.floor((alpha / edgeAlphaMax) * buckets));
     }
@@ -315,7 +326,7 @@ function startHero(
       for (let i = 0; i < points.length; i++) {
         pointBucket[i] = -1;
         if (live.hide[i]) continue;
-        const alpha = 0.34 * (1 - (projectedZ[i] + 1) / 2.9);
+        const alpha = POINT_ALPHA * (1 - (projectedZ[i] + 1) / 2.9);
         if (alpha <= 0.005) continue;
         pointBucket[i] = Math.min(buckets - 1, Math.floor((alpha / pointAlphaMax) * buckets));
       }
@@ -325,8 +336,8 @@ function startHero(
         ctx.beginPath();
         for (let n = bucketStart[b]; n < bucketStart[b + 1]; n++) {
           const i = pointOrder[n];
-          ctx.moveTo(projectedX[i] + 1.7, projectedY[i]);
-          ctx.arc(projectedX[i], projectedY[i], 1.7, 0, Math.PI * 2);
+          ctx.moveTo(projectedX[i] + POINT_R, projectedY[i]);
+          ctx.arc(projectedX[i], projectedY[i], POINT_R, 0, Math.PI * 2);
         }
         ctx.fillStyle = pointStyles[b];
         ctx.fill();

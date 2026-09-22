@@ -280,6 +280,19 @@ function pageCard(part: number, x0: number, y0: number, x1: number, y1: number):
   ];
 }
 
+/** Раздел «Работы»: кольцо с галочкой внутри - работа принята. Кольцо повторяет
+ *  круг модели CRM: тот же центр и радиус 0.44, поэтому на экране фигуры выходят
+ *  одного размера. До него пробовали рамку экрана с плитками, карандаш, циркуль
+ *  и лупу - отклонены заказчиком 2026-09-20. */
+const WORKS_SHAPE: StrokeShape = {
+  width: 1,
+  tubeRadius: 0.04,
+  strokes: [
+    { part: 0, closed: true, radius: 0.04, points: closedCirclePath(0.5, 0.5, 0.44, 30) },
+    { part: 1, radius: 0.04, points: [[0.28, 0.52], [0.44, 0.35], [0.72, 0.66]] },
+  ],
+};
+
 const PAGES_SHAPE: StrokeShape = {
   width: 1,
   tubeRadius: 0.04,
@@ -907,6 +920,7 @@ export function meshForShape(shape: HeroShape, nodes: number): Mesh {
     update: UPDATE_SHAPE,
     support: SUPPORT_SHAPE,
     crm: CRM_SHAPE,
+    works: WORKS_SHAPE,
   };
   const quality = Math.max(0.38, Math.min(1, nodes / 110));
   return sampleStrokeShape(icons[shape] ?? SUPPORT_SHAPE, quality);

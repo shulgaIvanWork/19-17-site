@@ -8,7 +8,8 @@ export type HeroShape =
   | 'update'
   | 'support'
   | 'crm'
-  | 'onec';
+  | 'onec'
+  | 'works';
 export type Point = [number, number, number];
 export type Mesh = {
   points: Point[];
