@@ -13,14 +13,15 @@ type Props = {
   labelledBy: string;
   /** 'form' - узкая панель заявки, 'wide' - просмотр макета во всю страницу. */
   size?: 'form' | 'wide';
-  /** Change this when the panel swaps its contents (form to confirmation) so
-   *  focus follows into the new view instead of falling back to the body. */
+  /** Меняйте значение, когда панель подменяет содержимое (форма на
+   *  подтверждение): тогда фокус переходит в новый вид, а не падает на body. */
   focusOn?: string;
   children: ReactNode;
 };
 
-/** Level-2 elevation: a flat grey backdrop and one panel. The prototype had no
- *  focus trap, Esc or scroll lock; production needs all three. */
+/** Второй уровень над страницей: ровная серая подложка и одна панель. В
+ *  прототипе не было ни удержания фокуса, ни закрытия по Esc, ни блокировки
+ *  прокрутки; рабочему сайту нужны все три. */
 export function Overlay({ onClose, labelledBy, size = 'form', focusOn, children }: Props) {
   const panelRef = useRef<HTMLDivElement>(null);
   // Панель уходит в <body> через портал. На месте вызова она попадает внутрь
@@ -35,7 +36,7 @@ export function Overlay({ onClose, labelledBy, size = 'form', focusOn, children 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
 
-    // Scroll lock, compensating for the scrollbar so the page does not jump.
+    // Блокировка прокрутки с поправкой на ширину полосы: иначе страница прыгает.
     const { body, documentElement } = document;
     const gap = window.innerWidth - documentElement.clientWidth;
     const prevOverflow = body.style.overflow;
@@ -81,7 +82,7 @@ export function Overlay({ onClose, labelledBy, size = 'form', focusOn, children 
     };
   }, [onClose]);
 
-  // Move focus into the panel on open, and again whenever it swaps views.
+  // Фокус переводится в панель при открытии и снова при подмене вида.
   useEffect(() => {
     panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
   }, [focusOn, host]);

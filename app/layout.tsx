@@ -11,9 +11,9 @@ import { Footer } from '@/components/site/Footer';
 import { SiteHeader } from '@/components/nav/SiteHeader';
 import { settings } from '@/content/settings';
 
-/** Both faces are self-hosted at build time by next/font - no request ever
- *  reaches Google, which a financial-services site needs anyway.
- *  Both carry the Cyrillic subset: the site is Russian-language. */
+/** Обе гарнитуры next/font забирает к себе на сборке - ни одного запроса к
+ *  Google из браузера посетителя. Обе с кириллическим набором: сайт
+ *  русскоязычный. */
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '500'],
@@ -23,14 +23,14 @@ const manrope = Manrope({
   adjustFontFallback: true,
 });
 
-/** The display face for .h1 / .h2 and the product-card names.
+/** Дисплейная гарнитура для .h1 / .h2 и названий услуг на карточках.
  *
- *  Replaces Universal Sans Display, which had zero Cyrillic glyphs (0 of 66) -
- *  every Russian heading would have fallen through to Manrope - and was in any
- *  case a personal-use licence that could not ship. Unbounded is OFL, keeps the
- *  wide geometric character, and unlike the old face has lowercase and real
- *  digits. Headings are therefore set in sentence case, exactly as the design
- *  system says to author them. */
+ *  Заменяет Universal Sans Display: кириллических знаков там не было вовсе
+ *  (0 из 66), каждый русский заголовок проваливался в Manrope, да и лицензия
+ *  была на личное использование и до сайта не доезжала. У Unbounded лицензия
+ *  OFL, широкий геометрический характер сохранен, а в отличие от прежней
+ *  гарнитуры есть строчные и настоящие цифры. Поэтому заголовки набираются
+ *  как обычное предложение - ровно так, как предписывает дизайн-система. */
 const unbounded = Unbounded({
   subsets: ['latin', 'cyrillic'],
   weight: ['500'],

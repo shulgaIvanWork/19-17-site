@@ -69,7 +69,7 @@ export function ThemeToggle() {
       try {
         localStorage.setItem('theme', next ? 'dark' : 'light');
       } catch {
-        /* private mode */
+        /* приватный режим */
       }
     };
     if (typeof document.startViewTransition === 'function') {

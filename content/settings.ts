@@ -1,18 +1,18 @@
-/** Build-time settings.
+/** Переключатели, которые читаются на сборке.
  *
- *  The prototype exposes these as design-time toggles and the client has been
- *  switching them on and off, so the shipped default is an open question. They
- *  live here so the answer is one edit, not a hunt through components.
+ *  В прототипе это были настройки времени проектирования, и заказчик включал
+ *  их то так, то эдак, поэтому итоговое значение пока открыто. Лежат здесь,
+ *  чтобы ответ был одной правкой, а не поиском по компонентам.
  *
- *  Both motion features are deliberate departures from Showroom's no-motion
- *  rule and are client-directed. Both are also disabled automatically under
+ *  Обе анимации - осознанное отступление от правила дизайн-системы Showroom
+ *  «без движения», обе по слову заказчика. Обе выключаются сами при
  *  `prefers-reduced-motion`. */
 
 export const settings = {
-  /** Radial highlight following the pointer inside heroes and the header. */
+  /** Круглая подсветка, идущая за курсором внутри героев и шапки. */
   cursorHighlight: true,
-  /** Wireframe objects in the Home and service-page heroes. */
+  /** Проволочные фигуры в героях главной и страниц услуг. */
   heroObject: true,
-  /** Node count for the Home globe only. Service meshes are sampled sparser. */
+  /** Число узлов только для глобуса главной. Фигуры услуг набираются реже. */
   heroObjectNodes: 110,
 };

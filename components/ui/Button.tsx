@@ -11,7 +11,7 @@ const variantClass: Record<Variant, string> = {
 
 type BaseProps = {
   variant?: Variant;
-  /** Hero buttons carry the canonical 200px minimum width. */
+  /** У кнопок героя минимальная ширина 200px по дизайн-системе. */
   hero?: boolean;
   className?: string;
   children: ReactNode;
@@ -26,7 +26,8 @@ function classes({ variant = 'blue', hero, className }: BaseProps) {
     .join(' ');
 }
 
-/** The system's only button. Three variants, no border, no shadow, colour-only hover. */
+/** Единственная кнопка системы. Три вида, без рамки и тени, при наведении
+ *  меняется только цвет. */
 export function Button({ variant, hero, className, children, ...rest }: ButtonProps) {
   return (
     <button type="button" className={classes({ variant, hero, className, children })} {...rest}>
@@ -35,7 +36,7 @@ export function Button({ variant, hero, className, children, ...rest }: ButtonPr
   );
 }
 
-/** The same control rendered as a route link. */
+/** Та же кнопка в виде ссылки на маршрут. */
 export function ButtonLink({ variant, hero, className, children, href, ...rest }: LinkProps) {
   return (
     <Link href={href} className={classes({ variant, hero, className, children })} {...rest}>

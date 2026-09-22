@@ -3,7 +3,7 @@ import styles from './CompareTable.module.css';
 type Props = {
   headers: [string, string, string, string];
   rows: [string, string, string, string][];
-  /** Tier names read as headings in the wide table. */
+  /** Названия форматов читаются заголовками в широкой таблице. */
   headerStyle?: 'label' | 'h3';
   caption: string;
 };

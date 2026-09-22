@@ -20,7 +20,7 @@ export function useContact() {
   return value;
 }
 
-/** Holds the Contact Sales modal for every route. Mounted once, in the layout. */
+/** Держит окно заявки для всех маршрутов. Подключается один раз, в layout. */
 export function ContactProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [interests, setInterests] = useState<Interest[]>([]);

@@ -17,7 +17,7 @@ export function TextLink({
   );
 }
 
-/** The same affordance where the action is not navigation (opening the modal). */
+/** Та же ссылка там, где действие не переход, а открытие окна заявки. */
 export function TextButton({
   children,
   className,

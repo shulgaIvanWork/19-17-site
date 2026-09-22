@@ -1,9 +1,9 @@
 import type { CSSProperties, ReactNode } from 'react';
 
 type Props = {
-  /** The two documented surfaces. Nothing else is a section ground. */
+  /** Две описанные подложки. Другого фона у полосы не бывает. */
   surface?: 'white' | 'ash';
-  /** Drop the max-width wrapper when the band lays out its own container. */
+  /** Снять колонку по ширине, когда полоса сама задает свой контейнер. */
   bare?: boolean;
   className?: string;
   style?: CSSProperties;
@@ -12,7 +12,7 @@ type Props = {
   children: ReactNode;
 };
 
-/** A page band: vertical rhythm plus the content column. */
+/** Полоса страницы: вертикальный ритм и колонка содержимого. */
 export function Section({ surface = 'white', bare, className, style, id, children }: Props) {
   return (
     <section

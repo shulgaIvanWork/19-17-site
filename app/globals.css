@@ -12,7 +12,7 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  /* colour */
+  /* цвет */
   --blue: #3e6ae1;
   --blue-press: #3457b8;
   --carbon: #171a20;
@@ -32,21 +32,21 @@
   --scene-spot: rgba(62, 106, 225, 0.18);
   --hover-rim: rgba(255, 255, 255, 0.86);
 
-  /* type - both variables are injected by next/font in app/layout.tsx.
-     Swapping the display face is this one line. */
+  /* гарнитуры: обе переменные подставляет next/font в app/layout.tsx.
+     Смена дисплейной гарнитуры - эта одна строка. */
   --display: var(--font-unbounded), var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   --text: var(--font-manrope), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 
-  /* motion - the only transition in the system */
+  /* движение: единственный переход в системе */
   --t: 0.33s cubic-bezier(0.5, 0, 0, 0.75);
 
-  /* layout */
+  /* раскладка */
   --gut: clamp(20px, 4vw, 56px);
   --max: 1383px;
   --header-row: 56px;
   --hub-pager: 0px;
 
-  /* the one authorised gradient */
+  /* единственный разрешенный градиент */
   --grad: linear-gradient(180deg, #c9d5e4 0%, #d6dde7 28%, #e4e5e6 58%, #ebeae7 80%, #dddcda 100%);
 }
 
@@ -148,11 +148,11 @@ img { display: block; max-width: 100%; }
 
 .h1 { font-family: var(--display); font-size: 40px; line-height: 48px; font-weight: 500; }
 .h2 { font-family: var(--display); font-size: 32px; line-height: 40px; font-weight: 500; }
-/* The explicit text-face override matters: the element selector `h1, h2, h3`
-   above would otherwise capture every <h3 class="h3"> and force item headings
-   into the caps-only display face. */
+/* Явное указание текстовой гарнитуры важно: иначе селектор `h1, h2, h3`
+   выше захватил бы каждый <h3 class="h3"> и увел заголовки пунктов в
+   дисплейную гарнитуру, у которой только прописные. */
 .h3 { font-family: var(--text); font-size: 17px; line-height: 20px; font-weight: 500; }
-/* Promotional numeral. Text face, always - the display face has no usable digits. */
+/* Крупное число тарифа. Всегда текстовой гарнитурой: у дисплейной нет цифр. */
 .figure { font-family: var(--text); font-size: 40px; line-height: 48px; font-weight: 400; color: var(--blue); }
 .phone {
   display: inline-block;
@@ -452,8 +452,8 @@ html[data-theme='dark'] .navbtn-active:hover {
 
 /* ---- scroll, cursor, reveal --------------------------------------------- */
 
-/* White cursor wash - same recipe as the 3D heroes, reused on scenes, cards
-   and the landing nav panel. Heroes and the header keep their own ::after. */
+/* Белая подсветка под курсором - тот же рецепт, что у 3D-героев, применен к
+   сценам, карточкам и панели меню. У героев и шапки свой ::after. */
 [data-cursor-glow] {
   position: relative;
   isolation: isolate;
@@ -478,9 +478,9 @@ html[data-theme='dark'] .navbtn-active:hover {
   transition: opacity var(--t);
 }
 
-/* Controls sit above the wash so a nearby spotlight never tints a button.
-   Header glow is already behind .row - do not lift header links, or the
-   Sites / VPN menus paint under neighbouring nav items. */
+/* Элементы управления лежат поверх подсветки, чтобы соседнее пятно не
+   перекрашивало кнопку. Свечение шапки и так под .row - ссылки шапки не
+   поднимать, иначе панель меню рисуется под соседними пунктами. */
 [data-cursor-glow] :is(.btn, button, .navbtn, .actionlink, [data-cursor-skip]),
 [data-hero] :is(.btn, button) {
   position: relative;

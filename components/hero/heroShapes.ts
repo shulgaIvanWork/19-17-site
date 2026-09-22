@@ -1,8 +1,8 @@
-/** Point clouds for the hero wireframe.
+/** Облака точек для проволочных фигур героя.
  *
- *  Home is the original Fibonacci sphere - do not change it.
- *  Product heroes are rounded 3D letters and icons sampled in regular tube
- *  rings. The Home globe remains independent from this pipeline. */
+ *  На главной - исходная сфера Фибоначчи, ее не менять.
+ *  У услуг это скругленные объемные буквы и значки, набранные кольцами по
+ *  трубке. Глобус главной через этот конвейер не проходит. */
 
 import { globeMesh } from './heroGlobe';
 import type { HeroShape, Mesh, Point } from './heroTypes';
@@ -13,7 +13,8 @@ const RING = 4;
 const ALONG_STEP = 0.18;
 const TUBE_R = 0.075;
 const CAP_LAYERS = 1;
-/** Shared em: cap-height = 1, baseline = 0. Never rescale a word by its bbox. */
+/** Общий кегль: высота прописной = 1, базовая линия = 0. Слово никогда не
+ *  масштабируется по своей рамке. */
 const EM = 0.78;
 
 type Poly = [number, number][];
@@ -256,7 +257,7 @@ const SITES_SHAPE: StrokeShape = {
   ],
 };
 
-/** Three page cards with content stripes. Scroll gathers them into one stack. */
+/** Три карточки страниц с полосами содержимого. Прокрутка собирает их в стопку. */
 function pageCard(part: number, x0: number, y0: number, x1: number, y1: number): Stroke[] {
   const inset = (x1 - x0) * 0.16;
   const step = (y1 - y0) * 0.13;
@@ -340,7 +341,7 @@ const AI_SHAPE: StrokeShape = {
   ],
 };
 
-/** Official 1C wordmark: inner+outer contours from the company SVG. */
+/** Официальный знак 1С: внутренний и внешний контуры из фирменного SVG. */
 const ONEC_ONE_A: Poly = [
   [0.4741, 0.0005],
   [0.3409, 0.0005],
@@ -461,7 +462,7 @@ function arcVia(
   return { pts, sweep };
 }
 
-/** Acute corners (A, V, N): one tube around the vertex, not two bars jammed together. */
+/** Острые углы (A, V, N): одна трубка вокруг вершины, а не две сведенные полосы. */
 function vertexArc(p0: [number, number], corner: [number, number], p2: [number, number], r: number): Poly {
   const to0 = [p0[0] - corner[0], p0[1] - corner[1]];
   const to2 = [p2[0] - corner[0], p2[1] - corner[1]];
@@ -720,11 +721,11 @@ function addCap(
   }
 }
 
-/** Predictable tube builder for the newer pictograms.
- *  Strokes never delete ring vertices or infer junctions from proximity:
- *  every open end gets a complete rounded cap and every loop closes ring to
- *  ring. This keeps the point rhythm of the approved letters without the
- *  fragile cleanup heuristics their bespoke junctions require. */
+/** Предсказуемая сборка трубки для поздних значков.
+ *  Штрихи не удаляют вершины колец и не угадывают стыки по близости: у
+ *  каждого открытого конца полная скругленная шапка, каждая петля замыкается
+ *  кольцо в кольцо. Так сохраняется ритм точек утвержденных букв без хрупких
+ *  правил очистки, которых требуют их самодельные стыки. */
 /** Замкнутый контур начинается с середины первого ребра, а не с вершины.
  *  fillet() скругляет только внутренние вершины, и контур, начатый в углу,
  *  оставлял этот угол острым, а кольца трубки на стыке шли с разными

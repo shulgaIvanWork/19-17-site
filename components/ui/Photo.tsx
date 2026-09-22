@@ -8,7 +8,7 @@ type Props = {
   src?: string;
   /** 12px radius on every photographic frame. */
   rounded?: boolean;
-  /** The ground an unfilled slot shows. Portraits sit on ash, so they take white.
+  /** Подложка незаполненного слота. Портреты стоят на сером, поэтому берут белую.
    *  pale - заметная серая заглушка на месте фото, которого пока нет. */
   ground?: keyof typeof grounds;
   className?: string;

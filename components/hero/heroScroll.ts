@@ -7,7 +7,7 @@ export type LiveBuffers = {
   hide: Uint8Array;
 };
 
-/** Same travel the cursor uses to leave the canvas. */
+/** Тот же путь, которым курсор уходит за пределы холста. */
 const EXIT_X = 1.08;
 const EXIT_Y = 0.9;
 
@@ -69,7 +69,7 @@ export type ScrollBasis = {
   mid: Point;
 };
 
-/** Centroids are fixed for a mesh - compute once, not every frame. */
+/** Центры тяжести у сетки постоянны - считаются один раз, а не каждый кадр. */
 export function scrollBasis(points: Point[], parts: number[] | undefined): ScrollBasis {
   return { centers: centroids(points, parts), mid: allCentroid(points) };
 }
@@ -82,7 +82,7 @@ function flyOff(x: number, y: number, p: number): [number, number] {
   return [x + p * EXIT_X, y + p * EXIT_Y];
 }
 
-/** Scroll 0-1 drives a per-shape motion. Globe is unchanged.
+/** Прокрутка 0-1 задает свое движение каждой фигуре. Глобус не трогается.
  *  clock - время анимации героя в тиках (16.67 мс), для движения, не зависящего от прокрутки. */
 export function applyHeroScroll(
   shape: HeroShape,

@@ -2,9 +2,9 @@
 
 import { useEffect, type RefObject } from 'react';
 
-/** Scene is in view before the sort starts, and the pose lands while the
- *  picture is still fully on screen. Ease-out so the last frames arrive a
- *  little early and then hold - visible process, no leftover scrub. */
+/** Сцена попадает в экран до начала сборки, а конечная поза наступает, пока
+ *  картинка еще целиком видна. Замедление к концу: последние кадры приходят
+ *  чуть раньше и держатся - процесс виден, доматывать нечего. */
 const START = 0.98;
 const END = 0.18;
 

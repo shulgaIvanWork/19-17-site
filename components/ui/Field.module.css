@@ -19,7 +19,7 @@
 
 .input::placeholder { color: var(--fog); }
 
-/* The focus affordance is the rule turning blue - not an outline ring, which
+/* Признак фокуса - посинение линии, а не рамка вокруг поля: рамка
    would double up with the underline on a borderless field. */
 .input:focus,
 .input:focus-visible {

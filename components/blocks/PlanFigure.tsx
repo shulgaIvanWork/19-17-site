@@ -3,8 +3,8 @@ import type { Interest } from '@/content/services';
 import styles from './PlanFigure.module.css';
 
 type Props = {
-  /** The promotional numeral. Rendered by .figure, which is locked to the text
-   *  face: Universal Sans Display has no digits, only a watermark ornament. */
+  /** Крупное число тарифа. Рисует его класс .figure, закрепленный за текстовой
+   *  гарнитурой: у Universal Sans Display цифр нет, только орнамент. */
   figure: string;
   unit: string;
   name: string;

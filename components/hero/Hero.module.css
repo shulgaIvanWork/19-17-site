@@ -1,5 +1,6 @@
-/* Hero - the one authorised gradient, and the only absolutely positioned row
-   in the system. Ported from .hero / .hero-sm / .herocta in the prototype. */
+/* Герой - единственный разрешенный градиент и единственная полоса с
+   абсолютным позиционированием. Перенесен из .hero / .hero-sm / .herocta
+   прототипа. */
 
 .hero {
   position: relative;
@@ -42,9 +43,9 @@
   justify-content: center;
 }
 
-/* The cursor highlight - the second authorised gradient. --mx/--my/--mo are
-   written by HeroCursorHighlight; with no pointer the opacity is 0 and nothing
-   paints, so the hero is unchanged for keyboard and touch users. */
+/* Подсветка под курсором - второй разрешенный градиент. --mx/--my/--mo пишет
+   HeroCursorHighlight; без курсора непрозрачность 0 и ничего не рисуется,
+   поэтому для клавиатуры и касания герой прежний. */
 .hero::after {
   content: '';
   position: absolute;
@@ -72,14 +73,15 @@
   );
 }
 
-/* Lift hero content above the highlight and the canvas. The two exclusions
-   matter: .cta must stay absolutely positioned, and .object must stay behind
-   the type - a blanket `.hero > *` silently overrides both, because it has the
-   same specificity and simply comes later in the file. */
+/* Содержимое героя поднято над подсветкой и холстом. Оба исключения важны:
+   .cta должна остаться абсолютно позиционированной, а .object - позади
+   текста. Общее правило `.hero > *` молча перебивает оба: та же
+   специфичность, а стоит ниже по файлу. */
 .hero > *:not(.object):not(.cta) { position: relative; z-index: 1; }
 
-/* The wireframe sits behind the type. Fine pointers tilt the mesh toward the
-   cursor and may drag to orbit; touch ignores the canvas so a swipe scrolls. */
+/* Проволочная фигура стоит за текстом. Точный курсор наклоняет сетку к себе
+   и может вращать ее перетаскиванием; касание холст не трогает, чтобы
+   смахивание прокручивало страницу. */
 .object {
   position: absolute;
   inset: 0;

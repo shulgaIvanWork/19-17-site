@@ -129,8 +129,8 @@ function releaseObserver() {
   dropMove();
 }
 
-/** Gaze follows the pointer while it is over the figure. After a hub jump
- *  the figure glances toward the cursor, then eases back to rest. */
+/** Взгляд следует за курсором, пока тот над фигурой. После перехода фигура
+ *  косится в сторону курсора и плавно возвращается в покой. */
 export function useSceneGaze(ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const node = ref.current;

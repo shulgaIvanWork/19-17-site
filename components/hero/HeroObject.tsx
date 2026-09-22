@@ -16,16 +16,18 @@ function loadMesh(shape: HeroShape, count: number) {
   return pending;
 }
 
-/** Wireframe object in the hero. Home is the original Fibonacci globe and is
- *  left as-is. Service pages reuse the same projection and size. Drag orbits
- *  any mesh without an angle cap. The globe still idle-spins when the pointer
- *  is up.
+/** Проволочная фигура в герое. На главной стоит исходный глобус Фибоначчи,
+ *  он оставлен как был. Страницы услуг берут ту же проекцию и тот же размер.
+ *  Перетаскивание вращает любую сетку без ограничения угла. Глобус продолжает
+ *  медленно крутиться, пока курсор его не держит.
  *
- *  Three behaviours the original notes call out and this keeps:
- *   - ResizeObserver drives sizing AND calls draw (first layout is 0×0, so
- *     painting has to be tied to sizing rather than to the first frame);
- *   - IntersectionObserver pauses the loop off-screen;
- *   - prefers-reduced-motion skips idle motion but still allows drag. */
+ *  Три особенности, названные в исходных заметках, сохранены:
+ *   - ResizeObserver задает размер И сам вызывает отрисовку (первая раскладка
+ *     приходит нулевой, поэтому рисование привязано к размеру, а не к первому
+ *     кадру);
+ *   - IntersectionObserver останавливает цикл за пределами экрана;
+ *   - при prefers-reduced-motion фоновое движение выключается, а вращение
+ *     перетаскиванием остается. */
 
 /** Общий размер моделей в героях: рамка модели вписывается в прямоугольник
  *  FIT_HEIGHT x FIT_WIDTH от холста, центр рамки - на FIT_CENTER_Y высоты.
@@ -53,7 +55,7 @@ const SHAPE_FIT: Partial<Record<HeroShape, { scale?: number; narrowScale?: numbe
 
 type Props = {
   nodes?: number;
-  /** Line/node colour as an "r,g,b" triple. Electric Blue by default. */
+  /** Цвет линий и узлов тройкой "r,g,b". По умолчанию синий Electric Blue. */
   ink?: string;
   shape?: HeroShape;
 };
@@ -436,7 +438,7 @@ function startHero(
     try {
       host.setPointerCapture(event.pointerId);
     } catch {
-      /* capture is optional */
+      /* перехват не обязателен */
     }
     event.preventDefault();
   };

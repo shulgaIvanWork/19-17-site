@@ -5,8 +5,8 @@ import styles from './AboutScene.module.css';
 import { useSceneGaze } from './useSceneGaze';
 import { useSceneProgress } from './useSceneProgress';
 
-/** How the two founders work - the About page's main presentational scene.
- *  Scroll sorts a brief into a structured project; two figures run the board. */
+/** Как работают основатели - главная сцена страницы «О нас». Прокрутка
+ *  превращает бриф в собранный проект, доской управляют две фигуры. */
 export function AboutScene() {
   const ref = useRef<HTMLDivElement>(null);
   useSceneProgress(ref);

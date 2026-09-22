@@ -1,7 +1,7 @@
 import type { TwoColRow } from '@/content/products';
 import styles from './TwoColList.module.css';
 
-/** The .tworow list: a 1fr / 1.3fr split under a 1px pale rule.
+/** Список .tworow: колонки 1fr и 1.3fr под светлой линией в 1px.
  *  Разметка одна на обе ширины: на узком экране те же строки становятся
  *  карточками горизонтальной ленты (класс rail в globals.css). */
 export function TwoColList({ rows, caption }: { rows: TwoColRow[]; caption: string }) {

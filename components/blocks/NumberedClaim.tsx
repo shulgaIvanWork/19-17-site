@@ -1,7 +1,7 @@
 import type { Claim } from '@/content/products';
 
-/** A numbered claim: pewter label, 17/500 title, body. The numeral sits in the
- *  text face - the display face has no usable digits. */
+/** Пронумерованный признак: метка цветом pewter, заголовок 17/500, текст.
+ *  Номер набран текстовой гарнитурой: у дисплейной нет пригодных цифр. */
 export function NumberedClaim({ claim }: { claim: Claim }) {
   return (
     <div>

@@ -6,7 +6,7 @@ import type { Founder } from '@/content/team';
 import styles from './TeamCarousel.module.css';
 
 const COPIES = 3;
-/** From the screen midpoint to the edge the strip should advance this many people. */
+/** От середины экрана до края лента должна проехать столько человек. */
 const DRAG_PEOPLE = 0.8;
 const SNAP_MS = 880;
 const SNAP_EASE = 'cubic-bezier(0.22, 1, 0.32, 1)';

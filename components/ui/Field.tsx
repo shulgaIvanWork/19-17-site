@@ -15,8 +15,8 @@ type Props = {
 
 /** Underline-only input without a visible label (по просьбе заказчика
  *  2026-09-11): label goes to aria-label, so screen readers still name the
- *  field. The rule goes Electric Blue on focus. There is no red border
- *  anywhere: an error is a sentence. */
+ *  поля. При фокусе линия синеет. Красной рамки нет нигде: ошибка - это
+ *  предложение, а не подсветка. */
 export function Field({
   label,
   name,

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useLayoutEffect, useRef, useState } from 'react';
 import type { HeroShape } from './heroTypes';
 
-/** Loads the canvas object only where it is actually drawn. */
+/** Грузит холст с фигурой только там, где ее действительно рисуют. */
 const HeroObject = dynamic(() => import('./HeroObject').then((m) => m.HeroObject), {
   ssr: false,
 });

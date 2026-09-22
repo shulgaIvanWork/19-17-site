@@ -2,20 +2,20 @@
 
 import { useEffect } from 'react';
 
-/** Clickable controls must not pick up the cursor wash: the spotlight would
- *  sit on the control and tint its hover. Card photos stay out of this list
- *  on purpose - they are links, but the glow on the illustration is wanted. */
+/** Нажимаемые элементы подсветку не берут: пятно легло бы на сам элемент и
+ *  перекрасило его наведение. Плашки карточек в список намеренно не входят -
+ *  они ссылки, но свечение на рисунке там нужно. */
 const CURSOR_SKIP =
   'button, a.btn, .navbtn, .menurow, .actionlink, [role="button"], [data-cursor-skip], input, select, textarea, summary, [data-header-glow] a';
 
-/** Writes --mx / --my / --mo on highlighted surfaces as the pointer moves.
- *  Mounted once in the layout: one listener for the whole site, and no React
- *  re-render per pointer move.
+/** Пишет --mx / --my / --mo на подсвечиваемых поверхностях по мере движения
+ *  курсора. Подключается один раз в layout: один обработчик на весь сайт и
+ *  ни одной перерисовки React на движение мыши.
  *
- *  Two details carried over from the prototype, both of which were bugs there
- *  first: the rAF token is a closure-local (an instance field broke on hot
- *  reload), and the leave handler sits on documentElement, because a window
- *  `pointerleave` does not fire reliably. */
+ *  Две детали перенесены из прототипа, и обе там сперва были ошибками: номер
+ *  кадра rAF хранится в замыкании (поле объекта ломалось при горячей
+ *  перезагрузке), а обработчик ухода висит на documentElement, потому что
+ *  `pointerleave` у window срабатывает не всегда. */
 export function HeroCursorHighlight({ enabled = true }: { enabled?: boolean }) {
   useEffect(() => {
     if (!enabled) return;

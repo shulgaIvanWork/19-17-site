@@ -5,8 +5,8 @@ import styles from './BoardScene.module.css';
 import { useSceneGaze } from './useSceneGaze';
 import { useSceneProgress } from './useSceneProgress';
 
-/** Board as a site, figure as the contractor. Scroll down sorts the layout,
- *  scroll up undoes it. Progress is scrubbed from the scene's place in view. */
+/** Доска - это сайт, фигура - подрядчик. Прокрутка вниз собирает раскладку,
+ *  вверх разбирает. Ход сцены считается по ее положению в экране. */
 export function BoardScene() {
   const ref = useRef<HTMLDivElement>(null);
   useSceneProgress(ref);

@@ -9,11 +9,11 @@ import styles from './Hero.module.css';
 
 type Props = {
   copy: HeroCopy;
-  /** 'tall' is Home; every product route uses 'short'. */
+  /** 'tall' - главная; у страниц услуг всегда 'short'. */
   size?: 'tall' | 'short';
-  /** Where the white CTA goes. Pricing on every route in the approved design. */
+  /** Куда ведет белая кнопка. В утвержденном дизайне это цены на всех страницах. */
   secondaryHref?: string;
-  /** Wireframe behind the type. `true` is the Home globe. */
+  /** Проволочная фигура за текстом. `true` - глобус главной. */
   object?: boolean | HeroShape;
 };
 
