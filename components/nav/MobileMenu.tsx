@@ -12,6 +12,7 @@ const links: { href: string; label: string; badge?: string }[] = [
   { href: '/', label: 'Главная' },
   { href: sitesTabHref, label: 'Сайты' },
   { href: infraTabHref, label: 'VPN / AI', badge: hitBadge },
+  { href: '/works', label: 'Работы' },
   { href: '/pricing', label: 'Цены' },
   { href: '/about', label: 'О нас' },
 ];

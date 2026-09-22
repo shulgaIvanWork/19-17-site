@@ -93,6 +93,14 @@ export const heroes = {
     blockWidth: '760px',
     secondaryCta: 'Узнать стоимость',
   },
+  works: {
+    title: 'Наши работы',
+    lede: 'Сайты и лендинги, которые мы спроектировали и собрали. У каждой работы показан состав: структура, подбор материалов, оформление и готовые экраны.',
+    titleWidth: '16ch',
+    ledeWidth: '56ch',
+    blockWidth: '760px',
+    secondaryCta: 'Узнать стоимость',
+  },
 } satisfies Record<string, Hero>;
 
 /** Сноски под блоками - 12px, цвет fog. */

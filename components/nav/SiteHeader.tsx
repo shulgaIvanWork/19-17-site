@@ -190,6 +190,7 @@ export function SiteHeader() {
               hubPaths={infraHubPaths}
               badge={hitBadge}
             />
+            <NavButton href="/works" label="Работы" active={pathname === '/works'} />
             <NavButton href="/pricing" label="Цены" active={pathname === '/pricing'} />
             <NavButton href="/about" label="О нас" active={pathname === '/about'} />
           </nav>

@@ -1,0 +1,140 @@
+/* Холст с разбором работы. Лист широкий и мелкий в деталях, поэтому занимает
+   всю колонку, а не половину рядом с текстом. */
+.board {
+  margin: 40px 0 0;
+  max-width: 1040px;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--cloud);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color var(--t);
+}
+
+.frame:hover {
+  border-color: var(--pale);
+}
+
+/* Кнопка накрывает холст целиком. Имя класса задается вместе с .frame:
+   глобальное правило в globals.css ставит кнопкам position: relative, и одного
+   класса мало - разбор этой грабли в README. */
+.frame .hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.frame .hit:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+/* Подпись на холсте. Проявляется при наведении и при переходе с клавиатуры. */
+.peek {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--frost);
+  color: var(--carbon);
+  font-size: 12px;
+  line-height: 16px;
+  opacity: 0;
+  transition: opacity var(--t);
+}
+
+.frame:hover .peek,
+.frame .hit:focus-visible ~ .peek {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .peek {
+    opacity: 1;
+  }
+}
+
+.board figcaption {
+  margin-top: 12px;
+}
+
+/* Шапка просмотра - как у макетов работ. */
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--cloud);
+}
+
+.kind {
+  font-family: var(--display);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pewter);
+}
+
+.title {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+.close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cloud);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--carbon);
+  cursor: pointer;
+  transition: background-color var(--t), border-color var(--t);
+}
+
+.close:hover {
+  background: var(--ash);
+  border-color: var(--pale);
+}
+
+.close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.paper {
+  background: var(--ash);
+}
+
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}

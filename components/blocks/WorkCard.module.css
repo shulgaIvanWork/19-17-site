@@ -1,0 +1,125 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cloud);
+  border-radius: 12px;
+  background: var(--white);
+  transition: background-color var(--t), border-color var(--t);
+}
+
+.card:hover {
+  background: var(--ash);
+  border-color: var(--pale);
+}
+
+.shot {
+  border-bottom: 1px solid var(--cloud);
+  border-radius: 0;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 20px 20px;
+}
+
+.kind {
+  font-family: var(--display);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pewter);
+}
+
+.name {
+  margin: 6px 0 0;
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+/* Состав работы. Точка-разделитель ставится псевдоэлементом, чтобы в списке
+   не появлялись маркеры и лишние отступы. */
+.parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: auto 0 0;
+  padding: 16px 0 0;
+  list-style: none;
+}
+
+.parts li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--pewter);
+}
+
+.parts li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--pewter);
+  opacity: 0.55;
+}
+
+/* Нажимаемая карточка: кнопка накрывает ее целиком и лежит поверх снимка,
+   поэтому текст карточки остается обычным текстом, а не содержимым кнопки. */
+.clickable {
+  position: relative;
+  cursor: pointer;
+}
+
+.card.clickable .hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.card.clickable .hit:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+/* Подпись на снимке. Проявляется при наведении и при переходе с клавиатуры. */
+.peek {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--frost);
+  color: var(--carbon);
+  font-size: 12px;
+  line-height: 16px;
+  opacity: 0;
+  transition: opacity var(--t);
+}
+
+.clickable:hover .peek,
+.card.clickable .hit:focus-visible ~ .peek {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .peek {
+    opacity: 1;
+  }
+}

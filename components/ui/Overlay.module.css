@@ -31,3 +31,20 @@
     border-radius: 4px;
   }
 }
+
+/* Просмотр макета: панель во всю ширину страницы, снимок прокручивается внутри.
+   overflow здесь не переопределяем: от .panel приходит overflow-y: auto, и
+   макет в 5000 пикселей высотой прокручивается внутри панели. С overflow:
+   hidden он обрезался по высоте экрана без возможности пролистать. */
+.wide {
+  width: min(1040px, 100%);
+  padding: 0;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .wide {
+    padding: 0;
+    border-radius: 8px;
+  }
+}

@@ -17,13 +17,16 @@ type Props = {
   sizes?: string;
   /** Грузить сразу, а не при подходе к экрану. */
   eager?: boolean;
+  /** Чем кадрировать высокий снимок: top - держать верх изображения.
+   *  Нужно снимкам макетов: лендинг длинный, узнается по первому экрану. */
+  align?: 'top';
 };
 
 const grounds = { ash: 'var(--ash)', white: 'var(--white)', pale: 'var(--pale)' } as const;
 
 /** Слот без src остается пустой рамкой фона ground. Подпись имени и пропорции
  *  внутри рамки была заготовкой макета; имя уходит в aria-label. */
-export function Photo({ slot, src, rounded = true, ground = 'ash', className, sizes, eager }: Props) {
+export function Photo({ slot, src, rounded = true, ground = 'ash', className, sizes, eager, align }: Props) {
   const imageSrc = src ?? slot.src;
   const blur = imageSrc ? photoBlur[imageSrc] : undefined;
 
@@ -47,7 +50,13 @@ export function Photo({ slot, src, rounded = true, ground = 'ash', className, si
           placeholder={blur ? 'blur' : 'empty'}
           blurDataURL={blur}
           quality={82}
-          className={[styles.img, slot.ratio === '4/5' ? styles.portrait : ''].filter(Boolean).join(' ')} />
+          className={[
+            styles.img,
+            align === 'top' ? styles.top : '',
+            !align && slot.ratio === '4/5' ? styles.portrait : '',
+          ]
+            .filter(Boolean)
+            .join(' ')} />
       ) : null}
     </div>
   );

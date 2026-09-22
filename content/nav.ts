@@ -24,6 +24,7 @@ const nav: NavItem[] = [
   { href: '/websites#crm', label: 'Интеграция CRM' },
   { href: '/vpn-ai#vpn', label: 'Корпоративный VPN' },
   { href: '/vpn-ai#ai', label: 'Локальный AI' },
+  { href: '/works', label: 'Работы' },
   { href: '/pricing', label: 'Цены' },
   { href: '/about', label: 'О нас' },
 ];
@@ -108,7 +109,7 @@ export const footerGroups: { title: string; items: NavItem[] }[] = [
   },
   {
     title: 'Компания',
-    items: nav.filter(({ href }) => href === '/pricing' || href === '/about'),
+    items: nav.filter(({ href }) => href === '/works' || href === '/pricing' || href === '/about'),
   },
   {
     title: 'Документы',
