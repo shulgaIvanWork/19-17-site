@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react';
 import { Photo } from '@/components/ui/Photo';
-import type { Founder } from '@/content/team';
+import type { Person } from '@/content/team';
 import styles from './TeamCarousel.module.css';
 
 const COPIES = 3;
@@ -20,7 +20,7 @@ type Drag = {
   axis: 'none' | 'x' | 'y';
 };
 
-export function TeamCarousel({ people }: { people: Founder[] }) {
+export function TeamCarousel({ people }: { people: Person[] }) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(0);

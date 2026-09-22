@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import { AboutScene } from '@/components/scenes/AboutScene';
-import { Photo } from '@/components/ui/Photo';
 import { Section } from '@/components/ui/Section';
 import { phoneHref, phoneLabel } from '@/content/nav';
 import { TeamCarousel } from '@/components/blocks/TeamCarousel';
-import { aboutHero, developers, founders, foundersBand, howWeOperate, teamBand } from '@/content/team';
-import styles from './about.module.css';
+import { aboutHero, howWeOperate, team, teamBand } from '@/content/team';
 
 export const metadata: Metadata = {
   title: 'О нас',
@@ -45,35 +43,15 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section surface="ash" style={{ paddingTop: 0 }}>
-        <div style={{ paddingTop: 'clamp(64px, 9vw, 140px)' }}>
-          <h2 className="h2">{foundersBand.title}</h2>
-          <p className="body" style={{ marginTop: 12, maxWidth: '46ch' }}>
-            {foundersBand.body}
-          </p>
-          <div className={styles.founders}>
-            {founders.map((founder) => (
-              <div key={founder.image.id}>
-                <Photo slot={founder.image} ground="white" sizes="(max-width: 560px) 92vw, 360px" />
-                <h3 className="h3" style={{ marginTop: 16 }}>
-                  {founder.name}
-                </h3>
-                <div className="label">{founder.role}</div>
-                <p className="body" style={{ marginTop: 10 }}>
-                  {founder.body}
-                </p>
-              </div>
-            ))}
-          </div>
-          <h2 className="h2" style={{ marginTop: 'clamp(64px, 8vw, 104px)' }}>
-            {teamBand.title}
-          </h2>
-          <p className="body" style={{ marginTop: 12, maxWidth: '46ch' }}>
-            {teamBand.body}
-          </p>
-          <div style={{ marginTop: 48 }}>
-            <TeamCarousel people={developers} />
-          </div>
+      {/* Одна лента на всех: основатели идут ее первыми карточками. Отдельной
+          полосы с их портретами больше нет (правка заказчика 2026-09-22). */}
+      <Section surface="ash">
+        <h2 className="h2">{teamBand.title}</h2>
+        <p className="body" style={{ marginTop: 12, maxWidth: '52ch' }}>
+          {teamBand.body}
+        </p>
+        <div style={{ marginTop: 48 }}>
+          <TeamCarousel people={team} />
         </div>
       </Section>
     </>
