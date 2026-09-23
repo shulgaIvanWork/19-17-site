@@ -1,22 +1,165 @@
-/* Холст с разбором работы. Лист широкий и мелкий в деталях, поэтому занимает
-   всю колонку, а не половину рядом с текстом. Нажатия у холста нет: он показан
-   целиком, поэтому ни курсора-указателя, ни подписи про просмотр здесь нет. */
-.board {
-  margin: 40px 0 0;
-  max-width: 1040px;
+/* Путь проекта по этапам: строка на этап. Слева описание, справа лист. */
+
+.caption {
+  margin: 12px 0 0;
 }
 
-.frame {
+.flow {
+  margin: clamp(32px, 4vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(28px, 3.4vw, 44px) 0;
+  border-top: 1px solid var(--cloud);
+}
+
+/* Описание едет рядом с длинным листом, а не уходит вверх экрана. Отступ
+   сверху - высота шапки сайта с запасом. */
+.copy {
+  align-self: start;
+  position: sticky;
+  top: 96px;
+}
+
+/* Пропорцию кадра ставит компонент: она же ограничена сверху, чтобы длинный
+   лист не занял экран целиком. Обрезанный лист открывается по нажатию. */
+/* Номер этапа. Текстовой гарнитурой: у дисплейной нет пригодных цифр. */
+.num {
+  font-family: var(--text);
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 400;
+  color: var(--pewter);
+}
+
+.sheet {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
   overflow: hidden;
   border: 1px solid var(--cloud);
   border-radius: 12px;
+  background: var(--white);
+  cursor: zoom-in;
+  transition: border-color var(--t);
 }
 
-.board figcaption {
-  margin-top: 12px;
+.sheet:hover {
+  border-color: var(--pewter);
 }
 
+/* Лист прижат к верху: у обрезанных листов начало важнее конца. */
 .shot {
+  object-fit: cover;
+  object-position: top;
+}
+
+.more {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 44px 16px 12px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--graphite);
+  text-align: center;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0), rgb(255 255 255 / 0.92) 62%);
+}
+
+/* Целый лист на ПК читается и без подписи. */
+@media (min-width: 901px) {
+  .onlyNarrow {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .copy {
+    position: static;
+  }
+
+}
+
+/* ---- просмотр листа целиком -------------------------------------------- */
+
+/* Шапка остается на месте, пока лист прокручивается под ней. */
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--cloud);
+}
+
+.kind {
+  font-family: var(--display);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pewter);
+}
+
+.title {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+  color: var(--carbon);
+}
+
+.close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cloud);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--carbon);
+  cursor: pointer;
+  transition: background-color var(--t), border-color var(--t);
+}
+
+.close:hover {
+  background: var(--ash);
+  border-color: var(--pale);
+}
+
+.close svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.page {
+  background: var(--ash);
+}
+
+.full {
   display: block;
   width: 100%;
   height: auto;

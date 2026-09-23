@@ -30,7 +30,7 @@ export default function WorksPage() {
         </p>
         {/* Разбор одной работы по листам: то же, что описано выше, но на
             реальном проекте - от задачи до готовой страницы. */}
-        <ProjectFlow plan={worksBand.plan} />
+        <ProjectFlow steps={worksBand.steps} caption={worksBand.caption} />
       </Section>
     </>
   );
