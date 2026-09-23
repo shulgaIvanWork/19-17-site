@@ -35,34 +35,24 @@
   color: var(--pewter);
 }
 
-/* Пропорцию кадра ставит компонент: у целого листа своя, у обрезанного предел.
-   Рамка общая, нажимается только обрезанный лист. */
+/* Пропорцию кадра ставит компонент по размерам листа. */
 .sheet {
   position: relative;
   display: block;
   width: 100%;
-  padding: 0;
   overflow: hidden;
   border: 1px solid var(--cloud);
   border-radius: 12px;
   background: var(--white);
 }
 
-.zoom {
-  cursor: zoom-in;
-  transition: border-color var(--t);
-}
-
-.zoom:hover {
-  border-color: var(--pewter);
-}
-
-/* Лист прижат к верху: у обрезанных листов начало важнее конца. */
+/* Лист ведет себя как часть страницы: не тянется мышью и не выделяется, как и
+   весь остальной текст сайта. Курсора-лупы на нем тоже нет - открывать лист
+   нечем, он и так виден целиком. Тот же прием у снимков в ленте команды. */
 .shot {
   object-fit: cover;
-  object-position: top;
+  -webkit-user-drag: none;
 }
-
 
 @media (max-width: 900px) {
   .step {
@@ -73,78 +63,4 @@
   .copy {
     position: static;
   }
-
-}
-
-/* ---- просмотр листа целиком -------------------------------------------- */
-
-/* Шапка остается на месте, пока лист прокручивается под ней. */
-.head {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 18px 20px;
-  background: var(--white);
-  border-bottom: 1px solid var(--cloud);
-}
-
-.kind {
-  font-family: var(--display);
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--pewter);
-}
-
-.title {
-  margin: 4px 0 0;
-  font-family: var(--display);
-  font-size: 20px;
-  line-height: 26px;
-  font-weight: 500;
-  color: var(--carbon);
-}
-
-.close {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--cloud);
-  border-radius: 50%;
-  background: var(--white);
-  color: var(--carbon);
-  cursor: pointer;
-  transition: background-color var(--t), border-color var(--t);
-}
-
-.close:hover {
-  background: var(--ash);
-  border-color: var(--pale);
-}
-
-.close svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-
-.page {
-  background: var(--ash);
-}
-
-.full {
-  display: block;
-  width: 100%;
-  height: auto;
 }

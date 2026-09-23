@@ -52,7 +52,7 @@ export type FlowStep = {
   /** Что на этом этапе делается. */
   body: string;
   /** Лист с результатом этапа. Слот не ImageSlot: у того пропорции ограничены
-   *  3/2 и 4/5, а у листов они свои - от 5:1 у задачи до 1:2 у готовой
+   *  3/2 и 4/5, а у листов они свои - от 4:1 у задачи до 1:2 у готовой
    *  страницы. Размеры держат место до загрузки, чтобы страница не прыгала. */
   shot: { src: string; width: number; height: number; alt: string };
 };
@@ -71,7 +71,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/01-task.webp',
         width: 1600,
-        height: 300,
+        height: 410,
         alt: 'Лист задачи: назначение страницы и три опорных слова',
       },
     },
@@ -82,7 +82,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/02-associations.webp',
         width: 1600,
-        height: 870,
+        height: 1024,
         alt: 'Три колонки ассоциаций и отобранные из них слова',
       },
     },
@@ -93,7 +93,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/03-references.webp',
         width: 1600,
-        height: 2405,
+        height: 2567,
         alt: 'Сетка референсов по теме: продукты, фрукты, готовые блюда',
       },
     },
@@ -104,7 +104,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/04-photos.webp',
         width: 1600,
-        height: 1745,
+        height: 1897,
         alt: 'Отобранные снимки смузи-боулов',
       },
     },
@@ -115,7 +115,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/05-palette.webp',
         width: 1600,
-        height: 341,
+        height: 497,
         alt: 'Четыре цвета палитры: красный, темно-серый, салатовый и светлый фон',
       },
     },
@@ -126,7 +126,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/06-fonts.webp',
         width: 1600,
-        height: 1379,
+        height: 1523,
         alt: 'Одна фраза, набранная разными гарнитурами',
       },
     },
@@ -137,7 +137,7 @@ export const worksBand = {
       shot: {
         src: '/works/flow/07-concepts.webp',
         width: 1600,
-        height: 1090,
+        height: 1178,
         alt: 'Шесть вариантов первого экрана с разными шрифтами и фоном',
       },
     },
