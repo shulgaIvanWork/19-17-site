@@ -8,14 +8,15 @@ import type { FlowStep } from '@/content/works';
 import { versioned } from '@/lib/assets';
 import styles from './ProjectFlow.module.css';
 
-/** Предел высоты кадра: лист не бывает выше своей ширины, деленной на это
- *  число. Без предела сетка референсов и готовая страница занимают по экрану
- *  каждая. Предел задан пропорцией, а не пикселями, нарочно: тогда обрезка
- *  наступает на всех ширинах в одних и тех же листах, и подпись «смотреть
- *  целиком» совпадает с тем, что видно. Значение выбрано так, чтобы лист с
- *  вариантами первого экрана проходил целиком, а следующие за ним по высоте
- *  обрезались. */
-const minRatio = 1.45;
+/** Предел высоты кадра: лист не бывает выше собственной ширины. Без предела
+ *  сетка референсов, отобранные снимки и готовая страница занимают по экрану
+ *  каждая. Предел задан пропорцией, а не пикселями: тогда обрезаются одни и те
+ *  же листы на любой ширине экрана.
+ *
+ *  Под предел попадают три листа из восьми, они и открываются по нажатию.
+ *  Остальные видны целиком, и раскрывать у них нечего (правка заказчика
+ *  2026-09-24). */
+const minRatio = 1;
 
 /** Путь проекта по этапам: на каждый этап своя строка - номер, что на нем
  *  делается и лист с результатом. Раньше все восемь листов были сведены в один
@@ -37,6 +38,19 @@ export function ProjectFlow({ steps, caption }: { steps: FlowStep[]; caption: st
           const clipped = ratio < minRatio;
           const blur = photoBlur[step.shot.src];
 
+          const sheet = (
+            <Image
+              src={versioned(step.shot.src)}
+              alt={step.shot.alt}
+              fill
+              sizes="(max-width: 900px) 92vw, 1000px"
+              quality={82}
+              placeholder={blur ? 'blur' : 'empty'}
+              blurDataURL={blur}
+              className={styles.shot}
+            />
+          );
+
           return (
             <li key={step.n} className={styles.step}>
               <div className={styles.copy}>
@@ -49,30 +63,25 @@ export function ProjectFlow({ steps, caption }: { steps: FlowStep[]; caption: st
                 </p>
               </div>
 
-              <button
-                type="button"
-                className={styles.sheet}
-                style={{ aspectRatio: Math.max(ratio, minRatio) }}
-                onClick={() => setOpenN(step.n)}
-                data-cursor-skip
-                aria-label={`Открыть лист целиком: ${step.title}`}
-              >
-                <Image
-                  src={versioned(step.shot.src)}
-                  alt={step.shot.alt}
-                  fill
-                  sizes="(max-width: 900px) 92vw, 1000px"
-                  quality={82}
-                  placeholder={blur ? 'blur' : 'empty'}
-                  blurDataURL={blur}
-                  className={styles.shot}
-                />
-                {/* У обрезанного листа подпись стоит всегда. У целого она нужна
-                    только на узком экране: там мелок и целый лист. */}
-                <span className={[styles.more, clipped ? '' : styles.onlyNarrow].filter(Boolean).join(' ')}>
-                  Смотреть целиком
-                </span>
-              </button>
+              {/* Обрезанный лист открывается по нажатию, целый остается
+                  картинкой: нажимать на него незачем. Подписи про просмотр нет,
+                  она закрывала собой низ листа. */}
+              {clipped ? (
+                <button
+                  type="button"
+                  className={[styles.sheet, styles.zoom].join(' ')}
+                  style={{ aspectRatio: minRatio }}
+                  onClick={() => setOpenN(step.n)}
+                  data-cursor-skip
+                  aria-label={`Открыть лист целиком: ${step.title}`}
+                >
+                  {sheet}
+                </button>
+              ) : (
+                <div className={styles.sheet} style={{ aspectRatio: ratio }}>
+                  {sheet}
+                </div>
+              )}
             </li>
           );
         })}

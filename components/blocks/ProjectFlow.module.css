@@ -26,8 +26,6 @@
   top: 96px;
 }
 
-/* Пропорцию кадра ставит компонент: она же ограничена сверху, чтобы длинный
-   лист не занял экран целиком. Обрезанный лист открывается по нажатию. */
 /* Номер этапа. Текстовой гарнитурой: у дисплейной нет пригодных цифр. */
 .num {
   font-family: var(--text);
@@ -37,6 +35,8 @@
   color: var(--pewter);
 }
 
+/* Пропорцию кадра ставит компонент: у целого листа своя, у обрезанного предел.
+   Рамка общая, нажимается только обрезанный лист. */
 .sheet {
   position: relative;
   display: block;
@@ -46,11 +46,14 @@
   border: 1px solid var(--cloud);
   border-radius: 12px;
   background: var(--white);
+}
+
+.zoom {
   cursor: zoom-in;
   transition: border-color var(--t);
 }
 
-.sheet:hover {
+.zoom:hover {
   border-color: var(--pewter);
 }
 
@@ -60,25 +63,6 @@
   object-position: top;
 }
 
-.more {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 44px 16px 12px;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--graphite);
-  text-align: center;
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0), rgb(255 255 255 / 0.92) 62%);
-}
-
-/* Целый лист на ПК читается и без подписи. */
-@media (min-width: 901px) {
-  .onlyNarrow {
-    display: none;
-  }
-}
 
 @media (max-width: 900px) {
   .step {
