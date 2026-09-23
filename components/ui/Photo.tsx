@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { ImageSlot } from '@/content/products';
 import { photoBlur } from '@/content/photoBlur';
+import { versioned } from '@/lib/assets';
 import styles from './Photo.module.css';
 
 type Props = {
@@ -28,6 +29,7 @@ const grounds = { ash: 'var(--ash)', white: 'var(--white)', pale: 'var(--pale)' 
  *  внутри рамки была заготовкой макета; имя уходит в aria-label. */
 export function Photo({ slot, src, rounded = true, ground = 'ash', className, sizes, eager, align }: Props) {
   const imageSrc = src ?? slot.src;
+  // Превью размытия ищется по настоящему пути, в разметку уходит путь с версией.
   const blur = imageSrc ? photoBlur[imageSrc] : undefined;
 
   return (
@@ -42,7 +44,7 @@ export function Photo({ slot, src, rounded = true, ground = 'ash', className, si
     >
       {imageSrc ? (
         <Image
-          src={imageSrc}
+          src={versioned(imageSrc)}
           alt={slot.alt}
           fill
           sizes={sizes ?? '(max-width: 768px) 100vw, 50vw'}

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Overlay } from '@/components/ui/Overlay';
 import { WorkCard } from './WorkCard';
 import type { Work } from '@/content/works';
+import { versioned } from '@/lib/assets';
 import styles from './WorksGallery.module.css';
 
 /** Сетка работ. В карточке виден только первый экран макета; нажатие открывает
@@ -41,7 +42,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
             {/* Ширину держит панель, высоту задает само изображение: макеты
                 разной длины, фиксированной пропорции у них нет. */}
             <Image
-              src={open.full.src}
+              src={versioned(open.full.src)}
               alt={`${open.title}: макет целиком`}
               width={open.full.width}
               height={open.full.height}
