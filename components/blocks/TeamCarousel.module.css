@@ -49,6 +49,27 @@
   min-width: 0;
 }
 
+/* Метка основателя. Пустая плашка у остальных карточек держит ту же высоту,
+   поэтому рамку ей снимаем, а место оставляем. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  margin-top: 14px;
+  padding: 0 10px;
+  border: 1px solid var(--pale);
+  border-radius: 999px;
+  font-family: var(--text);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--pewter);
+}
+
+.tag:empty {
+  border-color: transparent;
+}
+
 .arrow {
   position: absolute;
   z-index: 4;

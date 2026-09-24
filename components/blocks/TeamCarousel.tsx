@@ -181,7 +181,10 @@ export function TeamCarousel({ people }: { people: Person[] }) {
                 sizes="(max-width: 768px) 42vw, (max-width: 1024px) 46vw, 320px"
                 eager
               />
-              <h3 className="h3" style={{ marginTop: 16 }}>
+              {/* Плашка есть у двоих, но место под нее занято у всех: иначе имена
+                  в ленте встают на разной высоте. */}
+              <div className={styles.tag}>{person.founder ? 'Основатель' : ''}</div>
+              <h3 className="h3" style={{ marginTop: 6 }}>
                 {person.name}
               </h3>
               <div className="label">{person.role}</div>
