@@ -36,6 +36,11 @@ export const serviceMenuGroups: NavGroup[] = (
 export const phoneHref = 'tel:+79959009404';
 export const phoneLabel = '+7 (995) 900-94-04';
 
+/** Почта стоит рядом с телефоном везде, где он показан: подвал, мобильное
+ *  меню, форма заявки и страница «О нас» (правка заказчика 2026-09-24). */
+export const mailHref = 'mailto:info@1917.online';
+export const mailLabel = 'info@1917.online';
+
 /** Страницы компании. Услуги сюда не входят: у них свой реестр. */
 const companyLinks: NavItem[] = [
   { href: '/works', label: 'Работы' },

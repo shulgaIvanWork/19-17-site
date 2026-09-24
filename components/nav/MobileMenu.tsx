@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
-import { mainNav, phoneHref, phoneLabel, serviceMenuGroups } from '@/content/nav';
+import { mailHref, mailLabel, mainNav, phoneHref, phoneLabel, serviceMenuGroups } from '@/content/nav';
 import { serviceByPath } from '@/content/services';
 import styles from './MobileMenu.module.css';
 
@@ -39,6 +39,12 @@ export function MobileMenu({ pathname, open = true, onNavigate }: Props) {
         <div className="label">Телефон</div>
         <a href={phoneHref} className={styles.phone} onClick={onNavigate}>
           {phoneLabel}
+        </a>
+        <div className="label" style={{ marginTop: 12 }}>
+          Почта
+        </div>
+        <a href={mailHref} className={styles.phone} onClick={onNavigate}>
+          {mailLabel}
         </a>
       </div>
     </div>

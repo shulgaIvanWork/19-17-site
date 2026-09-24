@@ -38,17 +38,28 @@
   color: var(--graphite);
 }
 
-.phone {
+.phone,
+.mail {
   display: block;
   width: fit-content;
-  margin-bottom: 20px;
   color: var(--carbon);
   font-size: 15px;
   line-height: 20px;
   font-weight: 500;
 }
 
-.phone:hover {
+/* Телефон и почта идут двумя строками подряд, отступ до ссылки заявки держит
+   нижняя из них. */
+.phone {
+  margin-bottom: 4px;
+}
+
+.mail {
+  margin-bottom: 20px;
+}
+
+.phone:hover,
+.mail:hover {
   color: var(--blue);
 }
 

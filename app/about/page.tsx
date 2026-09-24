@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { AboutScene } from '@/components/scenes/AboutScene';
 import { Section } from '@/components/ui/Section';
-import { phoneHref, phoneLabel } from '@/content/nav';
+import { mailHref, mailLabel, phoneHref, phoneLabel } from '@/content/nav';
 import { TeamCarousel } from '@/components/blocks/TeamCarousel';
 import { aboutHero, howWeOperate, team, teamBand } from '@/content/team';
 
@@ -20,11 +20,26 @@ export default function AboutPage() {
         <p className="lede" style={{ marginTop: 16, maxWidth: '48ch' }}>
           {aboutHero.lede}
         </p>
-        <div style={{ marginTop: 40 }}>
-          <div className="label">Телефон</div>
-          <a href={phoneHref} className="phone" style={{ marginTop: 8 }}>
-            {phoneLabel}
-          </a>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 'clamp(20px, 5vw, 72px)',
+            marginTop: 40,
+          }}
+        >
+          <div>
+            <div className="label">Телефон</div>
+            <a href={phoneHref} className="phone" style={{ marginTop: 8 }}>
+              {phoneLabel}
+            </a>
+          </div>
+          <div>
+            <div className="label">Почта</div>
+            <a href={mailHref} className="phone" style={{ marginTop: 8 }}>
+              {mailLabel}
+            </a>
+          </div>
         </div>
       </Section>
 

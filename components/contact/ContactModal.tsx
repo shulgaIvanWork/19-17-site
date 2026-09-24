@@ -8,7 +8,7 @@ import { Field } from '@/components/ui/Field';
 import { Overlay } from '@/components/ui/Overlay';
 import { policyVersion } from '@/content/legal';
 import type { Interest } from '@/content/services';
-import { phoneHref, phoneLabel } from '@/content/nav';
+import { mailHref, mailLabel, phoneHref, phoneLabel } from '@/content/nav';
 import { contactCopy } from '@/content/site';
 import { checkEnquiry } from '@/lib/enquiry';
 import styles from './ContactModal.module.css';
@@ -105,6 +105,10 @@ export function ContactModal({ interests, onInterestsChange, onClose }: Props) {
           {contactCopy.call}{' '}
           <a className={styles.phone} href={phoneHref}>
             {phoneLabel}
+          </a>{' '}
+          {contactCopy.mail}{' '}
+          <a className={styles.phone} href={mailHref}>
+            {mailLabel}
           </a>
         </p>
 

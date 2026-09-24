@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { EnquireLink } from '@/components/contact/ContactSalesButton';
-import { footerGroups, phoneHref, phoneLabel, wordmark } from '@/content/nav';
+import { footerGroups, mailHref, mailLabel, phoneHref, phoneLabel, wordmark } from '@/content/nav';
 import { footerNote } from '@/content/site';
 import styles from './Footer.module.css';
 
@@ -15,6 +15,9 @@ export function Footer() {
           <p className={styles.note}>{footerNote}</p>
           <a className={styles.phone} href={phoneHref}>
             {phoneLabel}
+          </a>
+          <a className={styles.mail} href={mailHref}>
+            {mailLabel}
           </a>
           <EnquireLink label="Обсудить задачу" className="actionlink" />
         </div>
