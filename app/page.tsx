@@ -17,7 +17,8 @@ export default function HomePage() {
       <Hero copy={heroes.home} size="tall" object />
 
       {/* Единственный полный список услуг на сайте: вкладка «Услуги» в шапке
-          ведет сюда якорем, отдельной витрины нет. */}
+          ведет на эту страницу, отдельной витрины нет. Якорь #services оставлен
+          для старых адресов, на него ведут редиректы. */}
       <Section id="services">
         <div className="gcards rail rail-one">
           {paths.map((path) => (
