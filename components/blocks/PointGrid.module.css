@@ -1,0 +1,38 @@
+/* Полоса коротких пунктов. Колонки задает атрибут data-cols: сетки g2 и g3 из
+   globals.css тут не годятся, у них свой шаг между колонками. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(22px, 2.8vw, 40px) clamp(24px, 3.4vw, 48px);
+  margin: clamp(28px, 3.4vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid[data-cols='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.point {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  min-width: 0;
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .grid,
+  .grid[data-cols='2'] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}

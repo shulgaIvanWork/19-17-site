@@ -1,0 +1,31 @@
+/* Четыре цифры в ряд. На узком экране встают по две, затем в столбец. */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 44px);
+  margin: clamp(28px, 3.4vw, 48px) 0 0;
+}
+
+.fact {
+  min-width: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--cloud);
+}
+
+.unit {
+  margin: 4px 0 0;
+}
+
+@media (max-width: 900px) {
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
