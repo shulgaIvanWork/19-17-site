@@ -17,6 +17,7 @@ export const assetVersions: Record<string, string> = {
   '/photos/team-orlov.webp': 'cfa86311',
   '/photos/team-sokolova.webp': '0c3ce1cf',
   '/photos/team-volkova.webp': '8842c2cf',
+  '/video/logo.mp4': '64532ad0',
   '/works/bakery-full.webp': 'c18755bf',
   '/works/bakery.webp': '68d3a5b0',
   '/works/cake-full.webp': '2f308cd8',

@@ -1,6 +1,7 @@
 import { ButtonLink } from '@/components/ui/Button';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { HeroObjectMount } from './HeroObjectMount';
+import { HeroVideo } from './HeroVideo';
 import { type HeroShape } from './heroTypes';
 import { serviceBySlug } from '@/content/services';
 import { settings } from '@/content/settings';
@@ -15,9 +16,12 @@ type Props = {
   secondaryHref?: string;
   /** Проволочная фигура за текстом. `true` - глобус главной. */
   object?: boolean | HeroShape;
+  /** Ролик под текстом вместо фигуры: так устроен первый экран «О нас», где
+   *  проволочного объекта нет (правка заказчика 2026-09-24). */
+  video?: string;
 };
 
-export function Hero({ copy, size = 'short', secondaryHref = '/pricing', object = false }: Props) {
+export function Hero({ copy, size = 'short', secondaryHref = '/pricing', object = false, video }: Props) {
   const shape: HeroShape | null = !object || !settings.heroObject ? null : object === true ? 'globe' : object;
   // Фигура услуги названа так же, как сама услуга, поэтому тему заявки берет
   // реестр. Отдельной таблицы «фигура - тема» больше нет: она была четвертой
@@ -40,6 +44,11 @@ export function Hero({ copy, size = 'short', secondaryHref = '/pricing', object 
       {shape && (
         <div className={styles.object}>
           <HeroObjectMount nodes={settings.heroObjectNodes} shape={shape} />
+        </div>
+      )}
+      {video && (
+        <div className={styles.videoFrame}>
+          <HeroVideo src={video} />
         </div>
       )}
       <div className={styles.cta}>
