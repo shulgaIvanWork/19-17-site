@@ -58,6 +58,14 @@
   color: var(--blue);
 }
 
+.term {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--pewter);
+}
+
 .items {
   display: flex;
   flex-direction: column;

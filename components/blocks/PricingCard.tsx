@@ -1,25 +1,10 @@
 import Link from 'next/link';
+import { Check } from '@/components/ui/Check';
 import { ContactSalesButton } from '@/components/contact/ContactSalesButton';
 import { TextLink } from '@/components/ui/TextLink';
 import type { PricingOffer } from '@/content/pricing';
 import { PricingMark } from './PricingMark';
 import styles from './PricingCard.module.css';
-
-function Check() {
-  return (
-    <svg className={styles.check} viewBox="0 0 16 16" aria-hidden="true">
-      <circle cx="8" cy="8" r="7.1" fill="none" stroke="currentColor" strokeWidth="1.35" />
-      <path
-        d="M4.6 8.15 L7.05 10.5 L11.45 5.55"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.55"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function PricingCard({ offer }: { offer: PricingOffer }) {
   const art = <PricingMark kind={offer.mark} />;
@@ -37,14 +22,20 @@ export function PricingCard({ offer }: { offer: PricingOffer }) {
         <h3 className={styles.name}>
           {offer.href ? <Link href={offer.href}>{offer.name}</Link> : offer.name}
         </h3>
-        <div className={styles.price}>{offer.price}</div>
+        {/* Срок идет внутри строки цены, а не отдельным блоком: на узком экране
+            карточка встает в ленту через subgrid, и лишняя строка сбила бы
+            выравнивание соседних карточек. */}
+        <div className={styles.price}>
+          {offer.price}
+          <span className={styles.term}>Срок: {offer.term}</span>
+        </div>
         <p className="body" style={{ marginTop: 10 }}>
           {offer.body}
         </p>
         <ul className={styles.items}>
           {offer.items.map((item) => (
             <li className={styles.item} key={item}>
-              <Check />
+              <Check className={styles.check} />
               <span className="body">{item}</span>
             </li>
           ))}
