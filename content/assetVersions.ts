@@ -3,6 +3,11 @@
  *  Файл собирает scripts/assetVersions.mjs перед dev и сборкой. Руками не
  *  править: любая правка пропадет при следующем запуске. */
 export const assetVersions: Record<string, string> = {
+  '/decor/loop.webp': 'b73e8570',
+  '/decor/network.webp': 'b87eb4a8',
+  '/decor/shield.webp': '7610f999',
+  '/decor/sphere.webp': 'bae29e39',
+  '/decor/stack.webp': 'c76eee8c',
   '/photos/founder-black.webp': '696ffc0a',
   '/photos/founder-jacket.webp': '8979ade7',
   '/photos/team-kuznetsov.webp': 'c63a7d04',
