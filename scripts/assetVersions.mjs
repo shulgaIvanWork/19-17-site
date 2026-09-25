@@ -16,7 +16,7 @@ const target = path.join(root, 'content', 'assetVersions.ts');
 
 // Версия нужна тому, что показывается на странице и может смениться под тем же
 // именем. Шрифты и прочее Next раздает сам с хешем в имени.
-const tracked = new Set(['.webp', '.avif', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.ico', '.mp4']);
+const tracked = new Set(['.webp', '.avif', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.ico']);
 
 /** Пути всех отслеживаемых файлов в виде, в каком их просит браузер. */
 async function collect(dir, prefix = '') {

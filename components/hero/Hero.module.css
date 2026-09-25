@@ -139,30 +139,3 @@
     bottom: calc(clamp(48px, 6vw, 80px) + var(--hub-pager, 0px));
   }
 }
-
-/* Ролик первого экрана «О нас». Стоит не за текстом, как проволочная фигура, а
-   под ним: анимация полноцветная, поверх нее заголовок не читался бы. Рамка
-   держит пропорцию кадра 16:9 и не дает ролику разъехаться, пока он грузится. */
-.videoFrame {
-  width: min(560px, 100%);
-  margin-top: clamp(24px, 3.4vw, 44px);
-  overflow: hidden;
-  border-radius: 16px;
-  background: var(--pale);
-  aspect-ratio: 16 / 9;
-}
-
-.video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  -webkit-user-drag: none;
-}
-
-@media (max-width: 768px) {
-  .videoFrame {
-    width: min(440px, 100%);
-    margin-top: 20px;
-  }
-}

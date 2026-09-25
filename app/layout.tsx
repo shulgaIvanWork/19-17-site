@@ -7,7 +7,6 @@ import Script from 'next/script';
 import { Manrope, Unbounded } from 'next/font/google';
 import { ClientDecor } from '@/components/site/ClientDecor';
 import { ContactProvider } from '@/components/contact/ContactContext';
-import { EdgeDecor } from '@/components/site/EdgeDecor';
 import { Footer } from '@/components/site/Footer';
 import { SiteHeader } from '@/components/nav/SiteHeader';
 import { settings } from '@/content/settings';
@@ -81,7 +80,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ClientDecor cursorHighlight={settings.cursorHighlight} />
-        <EdgeDecor />
         <ContactProvider>
           <SiteHeader />
           <main>{children}</main>

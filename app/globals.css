@@ -98,9 +98,6 @@ html {
 }
 
 body {
-  /* Система отсчета для слоя фигур по краям (EdgeDecor): слой растянут по
-     всей высоте документа, а не по экрану. */
-  position: relative;
   margin: 0;
   background: var(--white);
   background-color: var(--white);
